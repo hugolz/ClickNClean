@@ -30,4 +30,4 @@ config.json
 secrets.json
 
 # Dossiers spécifiques
-target/
+clicknclean/target/
