@@ -1,0 +1,33 @@
+# Fichiers système
+.DS_Store
+
+# Fichiers d'environnement
+.env
+
+
+# Fichiers de build
+/build
+/dist
+
+# Fichiers d'édition
+*.log
+*.swp
+*.swo
+*.tmp
+
+# Fichiers de configuration spécifiques à l'éditeur
+.vscode/
+.idea/
+
+# Fichiers de sauvegarde
+*~
+
+# Fichiers de configuration
+config.js
+config.json
+
+# Fichiers sensibles
+secrets.json
+
+# Dossiers spécifiques
+target/
