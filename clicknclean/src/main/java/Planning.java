@@ -77,7 +77,7 @@ public class Planning {
                         weekTimeSlots.add(new TimeSlot(date, startOfDay, true));
                 }
             }
-            weeklySlotsList.add(weekTimeSlots);
+            this.weeklySlotsList.add(weekTimeSlots);
         }
 
         return weeklySlotsList;
