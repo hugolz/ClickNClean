@@ -24,19 +24,11 @@ public class Admin extends User {
     /**
      * @Method Suspends a Cleaner's access to all features
      */
-    public void suspendService(int cleanerID) {
+    public void suspendUser(int userID) {
         // Insert code here
     }
 
-    public void restoreService(int cleanerID) {
-        // Insert code here
-    }
-
-    public void suspendOwner(int ownerID) {
-        // Insert code here
-    }
-
-    public void restoreOwner() {
+    public void restoreUser(int cleanerID) {
         // Insert code here
     }
 
