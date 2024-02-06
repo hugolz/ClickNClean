@@ -10,6 +10,7 @@ public class User {
 	private int phoneN;
 	private String birthDate;
 
+
 	public User(String email, String pwd, String name, String surName) {
 		this.email = email;
 		this.pwd = pwd;
