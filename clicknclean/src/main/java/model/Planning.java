@@ -4,7 +4,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 
-
 class TimeSlot {
     private LocalDate date;
     private LocalTime hour;
@@ -68,10 +67,6 @@ class CalendarWeek {
     }
 
 }
-
-
-
-
 
 
 
