@@ -8,12 +8,15 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import model.Planning;
+import tools.Db;
 
 public class Main extends Application {
     public static void main(String[] args) {
         System.out.println("Yop");
         Planning p = new Planning();
         p.main();
+        Db d = new Db();
+
         launch(args);
     }
 
