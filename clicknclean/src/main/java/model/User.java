@@ -1,9 +1,6 @@
 package model;
 
-/**
- * It is the parent class of Administrator, Owner and Cleaner. It defines the
- * characteristics of a user
- */
+
 
 public class User {
 	private String email;

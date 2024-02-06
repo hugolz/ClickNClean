@@ -4,9 +4,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 
-/**
- * Creates a TimeSlot using date, hour(time) and availability status
- */
+
 class TimeSlot {
     private LocalDate date;
     private LocalTime hour;
@@ -18,7 +16,7 @@ class TimeSlot {
     public TimeSlot(LocalDate date, LocalTime hour, int isAvailable) {
         this.date = date;
         this.hour = hour;
-       
+
         this.isAvailable = isAvailable;
 
     }
@@ -39,34 +37,22 @@ class TimeSlot {
         this.hour = hour;
     }
 
-        /**
-     * Gets availability status of a TimeSlot
-     * @Status
-     * 0 = final NOT_AVAILABLE
-     * 1 = final AVAILABLE
-     * 2 = final ENGAGED_IN_MISSION
-     */
+
     public int getIsAvailable() {
         return isAvailable;
     }
 
-        /**
-     * Sets availability status of a TimeSlot
-     * @Status
-     * 0 = final NOT_AVAILABLE
-     * 1 = final AVAILABLE
-     * 2 = final ENGAGED_IN_MISSION
-     */
+
     public void setAvailable(int isAvailable) {
         this.isAvailable = isAvailable;
     }
 
     public String toString() {
         return "TimeSlot{" +
-                "date=" + date +
-                ", hour=" + hour +
-                ", isAvailable=" + isAvailable +
-                '}';
+               "date=" + date +
+               ", hour=" + hour +
+               ", isAvailable=" + isAvailable +
+               '}';
     }
 }
 
@@ -89,34 +75,26 @@ class CalendarWeek {
 
 
 
-/**
- * Instantiates a planning object using
- * @method createWeeklyTimeSlots()
- */
+
 public class Planning {
     public ArrayList<CalendarWeek> getCalendarMonth() {
         return calendarMonth;
     }
 
     private ArrayList<CalendarWeek> calendarMonth;
-    
+
     public Planning() {
         this.calendarMonth = new ArrayList<CalendarWeek>();
         this.calendarMonth = createCalendarMonth();
     }
 
-    /**
-     * Creates an Arraylist of 5 items (5 weeks) --> calendarMonth
-     * In each week instantiates all the TimeSlots --> calendarWeek
-     * In each TimeSlot, defines the date, the time, and the availability status (true / false)
-     * Calendar starts at the fist day of the month
-     */
+
     public ArrayList<CalendarWeek> createCalendarMonth() {
         final int START_HR_LIMIT = 8;
         final int END_HR_LIMIT = 22;
 
         for (int i = 0; i < 5; i++) {
-            ArrayList<TimeSlot> days= new ArrayList<TimeSlot>();
+            ArrayList<TimeSlot> days = new ArrayList<TimeSlot>();
             LocalDate startOfWeek = LocalDate.now();
             while (startOfWeek.getDayOfYear() != 1) {
                 startOfWeek = startOfWeek.plusDays(-1);
@@ -130,21 +108,16 @@ public class Planning {
                         days.add(new TimeSlot(date, startOfDay, TimeSlot.NOT_AVAILABLE));
                     else
                         days.add(new TimeSlot(date, startOfDay, TimeSlot.AVAILABLE));
-                }  
+                }
             }
             CalendarWeek calendarWeek = new CalendarWeek(days);
             this.calendarMonth.add(calendarWeek);
         }
-        
+
         return calendarMonth;
     }
 
-    /**
-     * For each week in the list of weeks, searches each available time slots
-     * 
-     * @return
-     *         An ArrayList of available TimeSlot
-     */
+
     public ArrayList<TimeSlot> getAvailableSlots() {
         ArrayList<TimeSlot> availableList = new ArrayList<TimeSlot>();
 
@@ -158,13 +131,7 @@ public class Planning {
         return availableList;
     }
 
-    /**
-     * Sets availability status of a TimeSlot
-     * @Status
-     * 0 = final NOT_AVAILABLE
-     * 1 = final AVAILABLE
-     * 2 = final ENGAGED_IN_MISSION
-     */
+
     public void setAvailableSlots(LocalDate targetDate, LocalTime targetTime, int newStatus) {
         for (CalendarWeek calendarWeeks : calendarMonth) {
             for (TimeSlot timeSlotObserved : calendarWeeks.getCalendarDay()) {
@@ -181,13 +148,13 @@ public class Planning {
         // insert code here when db is born :)
     }
 
-    public static void main(String[] args) {
+    public static void main() {
         Planning plan = new Planning();
         int count = 0;
         for (int i = 0; i < plan.getAvailableSlots().size(); i++) {
-            count++; 
+            count++;
             System.out.println(plan.getAvailableSlots().get(i).toString());
-            } 
-        System.out.println(count);
         }
-    }  
+        System.out.println(count);
+    }
+}
