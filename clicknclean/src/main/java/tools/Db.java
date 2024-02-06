@@ -18,7 +18,7 @@ public class Db {
 
 	public Db() {
 		this.strClassName = "com.mysql.cj.jdbc.Driver";
-		this.dbName = "access";
+		this.dbName = "acces";
 		this.login = "root";
 		this.password = "";
 		this.strUrl = "jdbc:mysql://localhost:3306/" + dbName
@@ -29,17 +29,28 @@ public class Db {
 			this.conn = DriverManager.getConnection(strUrl, login, password);
 			this.stRead = conn.createStatement();
 		} catch (ClassNotFoundException e) {
-			System.err.println("Driver unloaded !");
+			System.err.println("Driver not loaded !");
 			e.printStackTrace();
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
+	}
 
+	public void test() {
+		try {
+			String query = "SELECT * FROM cleaner";
+			ResultSet resSet = this.stRead.executeQuery(query);
+			while (resSet.next()) {
+				System.out.println(resSet);
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 
 	public void read() {
 		try {
-			String strQuery = "SELECT *FROM  access;";
+			String strQuery = "SELECT *FROM human;";
 			ResultSet rsReader = stRead.executeQuery(strQuery);
 			while (rsReader.next()) {
 				System.out.print(
