@@ -3,6 +3,7 @@ import java.lang.ref.Cleaner;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+
 public class Admin extends User {
 
     public Admin(String pwd, String name, String email, String surName) {
@@ -27,6 +28,7 @@ public class Admin extends User {
     public void suspendUser(int userID) {
         // Insert code here
     }
+
 
     public void restoreUser(int cleanerID) {
         // Insert code here
