@@ -20,19 +20,19 @@ public class Mission {
     String startTime;
     String state;
 
-    public Mission( String propertyAddress, 
+    public Mission( String propertyAddress,
                     String missionDate,
                     double propertySurface,
-                    double duration, 
-                    double cost, 
-                    double commission, 
-                    String ownerId, 
+                    double duration,
+                    double cost,
+                    double commission,
+                    String ownerId,
                     String cleanerId,
-                    ArrayList<Cleaner> cleanerList, 
-                    String accessCode, 
-                    String keyBoxCode, 
+                    ArrayList<Cleaner> cleanerList,
+                    String accessCode,
+                    String keyBoxCode,
                     String specialInstructions,
-                    String startTime, 
+                    String startTime,
                     String state) {
         this.propertyAddress = propertyAddress;
         this.missionDate = missionDate;
@@ -95,7 +95,6 @@ public class Mission {
     }
 
     public void setCleanerList(int ownerLong, int ownerLat, int cleanerLong, int cleanerLat ) {
-        
         this.cleanerList = cleanerList;
     }
 
@@ -139,7 +138,7 @@ public class Mission {
         this.state = state;
     }
 
-    
-    
+
+
 
 }

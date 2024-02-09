@@ -15,13 +15,13 @@ public class APOD {
     public final int limit;
 
     public APOD(
-            @JsonProperty("type") String type,
-            @JsonProperty("version") String version,
-            @JsonProperty("features") List<Feature> features,
-            @JsonProperty("attribution") String attribution,
-            @JsonProperty("licence") String licence,
-            @JsonProperty("query") String query,
-            @JsonProperty("limit") int limit
+        @JsonProperty("type") String type,
+        @JsonProperty("version") String version,
+        @JsonProperty("features") List<Feature> features,
+        @JsonProperty("attribution") String attribution,
+        @JsonProperty("licence") String licence,
+        @JsonProperty("query") String query,
+        @JsonProperty("limit") int limit
     ) {
         this.type = type;
         this.version = version;
@@ -38,9 +38,9 @@ public class APOD {
         public final Properties properties;
 
         public Feature(
-                @JsonProperty("type") String type,
-                @JsonProperty("geometry") Geometry geometry,
-                @JsonProperty("properties") Properties properties
+            @JsonProperty("type") String type,
+            @JsonProperty("geometry") Geometry geometry,
+            @JsonProperty("properties") Properties properties
         ) {
             this.type = type;
             this.geometry = geometry;
@@ -53,8 +53,8 @@ public class APOD {
         public final ArrayList<Double> coordinates;
 
         public Geometry(
-                @JsonProperty("type") String type,
-                @JsonProperty("coordinates") ArrayList<Double> coordinates
+            @JsonProperty("type") String type,
+            @JsonProperty("coordinates") ArrayList<Double> coordinates
         ) {
             this.type = type;
             this.coordinates = coordinates;
@@ -78,20 +78,20 @@ public class APOD {
         public final String street;
 
         public Properties(
-                @JsonProperty("label") String label,
-                @JsonProperty("score") double score,
-                @JsonProperty("housenumber") String housenumber,
-                @JsonProperty("id") String id,
-                @JsonProperty("type") String featureType,
-                @JsonProperty("name") String name,
-                @JsonProperty("postcode") String postcode,
-                @JsonProperty("citycode") String citycode,
-                @JsonProperty("x") double x,
-                @JsonProperty("y") double y,
-                @JsonProperty("city") String city,
-                @JsonProperty("context") String context,
-                @JsonProperty("importance") double importance,
-                @JsonProperty("street") String street
+            @JsonProperty("label") String label,
+            @JsonProperty("score") double score,
+            @JsonProperty("housenumber") String housenumber,
+            @JsonProperty("id") String id,
+            @JsonProperty("type") String featureType,
+            @JsonProperty("name") String name,
+            @JsonProperty("postcode") String postcode,
+            @JsonProperty("citycode") String citycode,
+            @JsonProperty("x") double x,
+            @JsonProperty("y") double y,
+            @JsonProperty("city") String city,
+            @JsonProperty("context") String context,
+            @JsonProperty("importance") double importance,
+            @JsonProperty("street") String street
         ) {
             this.label = label;
             this.score = score;
