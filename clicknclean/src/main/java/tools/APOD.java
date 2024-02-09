@@ -76,8 +76,6 @@ public class APOD {
         public final String context;
         public final double importance;
         public final String street;
-        // public final String municipality;
-        // public final String population;
 
         public Properties(
             @JsonProperty("label") String label,
@@ -94,8 +92,6 @@ public class APOD {
             @JsonProperty("context") String context,
             @JsonProperty("importance") double importance,
             @JsonProperty("street") String street
-            // @JsonProperty("municipality") String municipality,
-            // @JsonProperty("population") String population
         ) {
             this.label = label;
             this.score = score;
@@ -111,8 +107,6 @@ public class APOD {
             this.context = context;
             this.importance = importance;
             this.street = street;
-            // this.municipality = municipality;
-            // this.population = population;
         }
     }
 }
