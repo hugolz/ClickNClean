@@ -28,9 +28,11 @@ public class Address {
         // create a client
         var client = HttpClient.newHttpClient();
 
+        String query = (houseNumber + "+" + label + "+" + postCode + "+" + city).replaceAll(" ", "+");
+        System.out.println("Querying adress: " + query);
         // create a request
         var request = HttpRequest.newBuilder(
-                          URI.create("https://api-adresse.data.gouv.fr/search/?q=" + address))
+                          URI.create("https://api-adresse.data.gouv.fr/search/?q=" + query))
                       .header("accept", "application/json")
                       .build();
 
@@ -47,17 +49,13 @@ public class Address {
 
         // Access the first feature's coordinates (assuming APOD class structure)
         ArrayList<Double> coordinates = response.body().get().features.get(0).geometry.coordinates;
-        // coordinates = new Pair<>(coords.get(0), coords.get(1));
-
-        // System.out.println("Coordinates: " + coordinates.getValue(1) + "," +
-        // coordinates.getValue(0));
 
         this.houseNumber = houseNumber;
         this.label = label.replaceAll(" ", "+");
         this.postCode = postCode;
         this.city = city;
-        this.longitude = coordinates.get(1);
-        this.latitude = coordinates.get(0);
+        this.longitude = coordinates.get(0);
+        this.latitude = coordinates.get(1);
     }
 
     public String getHouseNumber() {
@@ -92,6 +90,7 @@ public class Address {
         this.longitude = longitude;
     }
 
+    // Result is in meters
     public double calculateDistance(Address target) {
         final double EARTH_RADIUS = 6371.0;
         Address a1 = this;
@@ -105,15 +104,18 @@ public class Address {
         double y = (lat2Rad - lat1Rad);
         double distance = Math.sqrt(x * x + y * y) * EARTH_RADIUS;
 
-        return distance;
+        return distance * 1000;
     }
 
     public static void main(String[] args) {
         try {
-            Address ad = new Address("28", "av yves thepot", "29000", "quimper");
-            System.out.println(ad.toString());
+            Address ad1 = new Address("28", "av yves thepot", "29000", "quimper");
+            Address ad2 = new Address("1", "Pl. Louis Armand", "29000", "quimper");
+            System.out.println("Lat: " + ad1.latitude + ", Lon: " + ad1.longitude);
+            System.out.println("Lat: " + ad2.latitude + ", Lon: " + ad2.longitude);
+            System.out.println(ad1.calculateDistance(ad2) + " meters");
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("Error" + e);
         }
     }
 }
