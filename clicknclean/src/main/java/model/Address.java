@@ -1,17 +1,12 @@
 package model;
 
-import java.util.ArrayList;
-
-import tools.JavaHttpClient;
-
 public class Address {
-    String houseNumber;
-    String label;
-    String postCode;
-    String city;
-    String address;
-    double latitude;
-    double longitude;
+    private String houseNumber;
+    private String label;
+    private String postCode;
+    private String city;
+    private double latitude;
+    private double longitude;
 
     public Address(String houseNumber, String label, String postCode, String city) {
         this.houseNumber = houseNumber;
@@ -51,6 +46,23 @@ public class Address {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    
+    public double calculateDistance(Address targetA2) {
+        final double EARTH_RADIUS = 6371.0;
+        Address a1 = this;
+    
+        double lat1Rad = Math.toRadians(a1.getLatitude());
+        double lat2Rad = Math.toRadians(targetA2.getLatitude());
+        double lon1Rad = Math.toRadians(a1.getLongitude());
+        double lon2Rad = Math.toRadians(targetA2.getLongitude());
+    
+        double x = (lon2Rad - lon1Rad) * Math.cos((lat1Rad + lat2Rad) / 2);
+        double y = (lat2Rad - lat1Rad);
+        double distance = Math.sqrt(x * x + y * y) * EARTH_RADIUS;
+    
+        return distance;
     }
 
     public static void main(String[] args) {
