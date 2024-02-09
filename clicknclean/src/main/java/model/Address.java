@@ -2,8 +2,6 @@ package model;
 
 import java.util.ArrayList;
 
-import tools.JavaHttpClient;
-
 import java.util.ArrayList;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -94,14 +92,14 @@ public class Address {
         this.longitude = longitude;
     }
 
-    public double calculateDistance(Address targetA2) {
+    public double calculateDistance(Address target) {
         final double EARTH_RADIUS = 6371.0;
         Address a1 = this;
 
-        double lat1Rad = Math.toRadians(a1.getLatitude());
-        double lat2Rad = Math.toRadians(targetA2.getLatitude());
-        double lon1Rad = Math.toRadians(a1.getLongitude());
-        double lon2Rad = Math.toRadians(targetA2.getLongitude());
+        double lat1Rad = Math.toRadians(this.getLatitude());
+        double lat2Rad = Math.toRadians(target.getLatitude());
+        double lon1Rad = Math.toRadians(this.getLongitude());
+        double lon2Rad = Math.toRadians(target.getLongitude());
 
         double x = (lon2Rad - lon1Rad) * Math.cos((lat1Rad + lat2Rad) / 2);
         double y = (lat2Rad - lat1Rad);
