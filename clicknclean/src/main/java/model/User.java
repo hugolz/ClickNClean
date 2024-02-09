@@ -1,7 +1,5 @@
 package model;
 
-
-
 public class User {
 	private String email;
 	private String pwd;
@@ -9,14 +7,30 @@ public class User {
 	private String surName;
 	private int phoneN;
 	private String birthDate;
+	private boolean suspended;
 
-
-	public User(String email, String pwd, String name, String surName) {
+	public User(String email, String pwd, String name, String surName, int phoneN, String birthDate, boolean suspended,
+			String accountDate) {
 		this.email = email;
 		this.pwd = pwd;
 		this.name = name;
 		this.surName = surName;
+		this.phoneN = phoneN;
+		this.birthDate = birthDate;
+		this.suspended = suspended;
+		this.accountDate = accountDate;
 	}
+
+
+	public boolean isSuspended() {
+		return suspended;
+	}
+
+	public void setSuspended(boolean suspended) {
+		this.suspended = suspended;
+	}
+
+
 
 	private String accountDate;
 
