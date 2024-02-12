@@ -34,7 +34,7 @@ public class Connection extends Application {
 
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				new ConnectionController(loginField.getText(), passwordField.getText());
+				// new ConnectionController(loginField.getText(), passwordField.getText());
 			}
 		};
 

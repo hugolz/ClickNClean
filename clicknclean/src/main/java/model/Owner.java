@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Owner extends User {
@@ -62,6 +63,6 @@ public class Owner extends User {
 	}
 
 	public void addProperty(Property property) {
-		this.listProperty = property;
+		this.listProperty.add(property);
 	}
 }

@@ -113,11 +113,6 @@ public class Cleaner extends User {
         this.planning = new Planning();
     }
 
-    public Cleaner(int i, Address address, int j, int k, String string, String string2, String string3, String string4,
-                   String string5, boolean b, String string6, String string7, String string8, String string9, int l,
-                   LocalDate birth, String string10, boolean c) {
-    }
-
     public int getCleanerId() {
         return cleanerId;
     }

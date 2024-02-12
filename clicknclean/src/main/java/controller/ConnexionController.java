@@ -29,20 +29,20 @@ public class ConnexionController {
 
 					switch (rsReader.getString("statut")) {
 					case "Admin" :
-						WelcomeAdmin a1 = new WelcomeAdmin();
-						a1.setVisible(true);
+						// WelcomeAdmin a1 = new WelcomeAdmin();
+						// a1.setVisible(true);
 						String strQueryAdmin = "SELECT * FROM ";
 						rsReader = db1.getStRead().executeQuery(strQueryAdmin);
 						break;
 					case "Cleaner" :
-						WelcomeCleaner c1 = new WelcomeCleaner();
-						c1.setVisible(true);
+						// WelcomeCleaner c1 = new WelcomeCleaner();
+						// c1.setVisible(true);
 						String strQueryCleaner = "SELECT * FROM ";
 						rsReader = db1.getStRead().executeQuery(strQueryCleaner);
 						break;
 					case "Owner" :
-						WelcomeOwner o1 = new WelcomeOwner();
-						o1.setVisible(true);
+						// WelcomeOwner o1 = new WelcomeOwner();
+						// o1.setVisible(true);
 						String strQueryOwner = "SELECT * FROM ";
 						rsReader = db1.getStRead().executeQuery(strQueryOwner);
 						break;
