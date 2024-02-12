@@ -16,6 +16,7 @@ public class Mission {
     String startTime;
     String state;
 
+
     public Mission(
         Property property,
         LocalDate missionDate,
@@ -70,34 +71,6 @@ public class Mission {
         this.cleanerId = cleanerId;
     }
 
-
-    // public ArrayList<Cleaner> findMatchingRange() {
-    //     // Db db = new Db();
-
-    //     ArrayList<Cleaner> cleanerList = this.getCleanerList();
-    //     ArrayList<Cleaner> matchingRangeCleaners = new ArrayList<Cleaner>();
-
-    //     // cleanerList.removeIf(filter);
-    //     for (int i = 0; i < cleanerList.size(); i++) {
-    //         Cleaner currentCleaner = cleanerList.get(i);
-    //         double distanceToProperty = this.property.getPropertyAddress().calculateDistance(currentCleaner.getDepartureAddress());
-    //         // if currentCleaner.
-    //     }
-    //     // for (int i = 0; i < cleanerList.size(); i++) {
-    //     // if (currentCleaner.getKmCount() <= this.property.getPropertyAddress().calculateDistance(currentCleaner.getDepartureAddress())) {
-    //     // matchingRangeCleaners.add(currentCleaner);
-    //     // }
-    //     // }
-    //     return matchingRangeCleaners;
-    // }
-
-    // public void setCleanerList(int ownerLong, int ownerLat, int cleanerLong, int cleanerLat ) {
-    //     this.cleanerList = cleanerList;
-    // }
-
-    // public void setCleanerList(double ownerLong, double ownerLat, double cleanerLong, double cleanerLat ) {
-    //     ownerLong = 2;
-    // }
 
     public String getStartTime() {
         return startTime;
