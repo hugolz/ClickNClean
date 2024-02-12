@@ -9,7 +9,7 @@ public class Cleaner extends User{
     Planning planning;
     int cleanerID;
     Address departureAddress;
-    int kmCount;
+    int kmRange;
     int hourlyRate;
     List<String> availableDays;
     String motivation;
@@ -25,12 +25,12 @@ public class Cleaner extends User{
                     String name, 
                     String surName, 
                     int phoneN, 
-                    String birthDate, 
+                    LocalDate birthDate, 
                     boolean suspended,
 			        String accountDate,
                     int cleanerID, 
                     Address departureAddress,
-                    int kmCount, 
+                    int kmRange, 
                     int hourlyRate, 
                     Planning planning,
                     String motivation, 
@@ -44,7 +44,7 @@ public class Cleaner extends User{
         super(email, pwd, name, surName, phoneN, birthDate, suspended,accountDate);
         this.cleanerID = cleanerID;
         this.departureAddress = departureAddress;
-        this.kmCount = kmCount;
+        this.kmRange = kmRange;
         this.hourlyRate = hourlyRate;
         this.planning = new Planning();
         this.motivation = motivation;
@@ -80,12 +80,12 @@ public class Cleaner extends User{
         this.cleanerID = cleanerID;
     }
 
-    public int getKmCount() {
-        return this.kmCount;
+    public int getKmRange() {
+        return this.kmRange;
     }
 
-    public void setKmCount(int kmCount) {
-        this.kmCount = kmCount;
+    public void setKmRange(int kmRange) {
+        this.kmRange = kmRange;
     }
 
     public int getHourlyRate() {
@@ -136,11 +136,11 @@ public class Cleaner extends User{
         this.profilePhoto = profilePhoto;
     }
 
-    public boolean isconfirmed() {
+    public boolean isConfirmed() {
         return confirmed;
     }
 
-    public void setconfirmed(boolean confirmed) {
+    public void setConfirmed(boolean confirmed) {
         this.confirmed = confirmed;
     }
 

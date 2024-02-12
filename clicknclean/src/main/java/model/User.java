@@ -1,15 +1,17 @@
 package model;
 
+import java.time.LocalDate;
+
 public class User {
 	private String email;
 	private String pwd;
 	private String name;
 	private String surName;
 	private int phoneN;
-	private String birthDate;
+	private LocalDate birthDate;
 	private boolean suspended;
 
-	public User(String email, String pwd, String name, String surName, int phoneN, String birthDate, boolean suspended,
+	public User(String email, String pwd, String name, String surName, int phoneN, LocalDate birthDate, boolean suspended,
 			String accountDate) {
 		this.email = email;
 		this.pwd = pwd;
@@ -29,8 +31,6 @@ public class User {
 	public void setSuspended(boolean suspended) {
 		this.suspended = suspended;
 	}
-
-
 
 	private String accountDate;
 
@@ -74,11 +74,11 @@ public class User {
 		this.phoneN = phoneN;
 	}
 
-	public String getBirthDate() {
+	public LocalDate getBirthDate() {
 		return birthDate;
 	}
 
-	public void setBirthDate(String birthDate) {
+	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
 

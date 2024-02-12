@@ -27,7 +27,6 @@ public class Mission {
                     String cleanerId,
                     ArrayList<Cleaner> cleanerList, 
                     String startTime, 
-
                     String state) {
         this.property = property;
         this.missionDate = missionDate;
@@ -84,7 +83,8 @@ public class Mission {
         ArrayList<Cleaner> matchingRangeCleaners = new ArrayList<Cleaner>();
         
         for (int i = 0; i < getCleanerList().size(); i++) {
-            if (currentCleaner.getKmCount() <= this.property.getPropertyAddress().calculateDistance(currentCleaner.getDepartureAddress())) {
+            Cleaner currentCleaner = cleanerList.get(i);
+            if (currentCleaner.getKmRange() <= this.property.getPropertyAddress().calculateDistance(currentCleaner.getDepartureAddress())) {
                 matchingRangeCleaners.add(currentCleaner);
             }
         }
