@@ -8,7 +8,7 @@ public class Cleaner extends User{
 
     Planning planning;
     int cleanerID;
-    String departureAddress;
+    Address departureAddress;
     int kmCount;
     int hourlyRate;
     List<String> availableDays;
@@ -16,7 +16,7 @@ public class Cleaner extends User{
     String experience;
     String idPhoto;
     String profilePhoto;
-    boolean confirmedId;
+    boolean confirmed;
     String biography;
     List<String> reviews;
 
@@ -24,8 +24,12 @@ public class Cleaner extends User{
                     String pwd, 
                     String name, 
                     String surName, 
+                    int phoneN, 
+                    String birthDate, 
+                    boolean suspended,
+			        String accountDate,
                     int cleanerID, 
-                    String departureAddress,
+                    Address departureAddress,
                     int kmCount, 
                     int hourlyRate, 
                     Planning planning,
@@ -33,11 +37,11 @@ public class Cleaner extends User{
                     String experience,
                     String idPhoto, 
                     String profilePhoto, 
-                    boolean confirmedId, 
+                    boolean confirmed, 
                     String biography, 
                     List<String> reviews) {
                         
-        super(email, pwd, name, surName);
+        super(email, pwd, name, surName, phoneN, birthDate, suspended,accountDate);
         this.cleanerID = cleanerID;
         this.departureAddress = departureAddress;
         this.kmCount = kmCount;
@@ -47,7 +51,7 @@ public class Cleaner extends User{
         this.experience = experience;
         this.idPhoto = idPhoto;
         this.profilePhoto = profilePhoto;
-        this.confirmedId = confirmedId;
+        this.confirmed = confirmed;
         this.biography = biography;
         this.reviews = reviews;
     }
@@ -64,20 +68,20 @@ public class Cleaner extends User{
         return cleanerID;
     }
 
+    public Address getDepartureAddress() {
+        return departureAddress;
+    }
+
+    public void setDepartureAddress(Address departureAddress) {
+        this.departureAddress = departureAddress;
+    }
+
     public void setCleanerID(int cleanerID) {
         this.cleanerID = cleanerID;
     }
 
-    public String getDepartureAddress() {
-        return departureAddress;
-    }
-
-    public void setDepartureAddress(String departureAddress) {
-        this.departureAddress = departureAddress;
-    }
-
     public int getKmCount() {
-        return kmCount;
+        return this.kmCount;
     }
 
     public void setKmCount(int kmCount) {
@@ -132,12 +136,12 @@ public class Cleaner extends User{
         this.profilePhoto = profilePhoto;
     }
 
-    public boolean isConfirmedId() {
-        return confirmedId;
+    public boolean isconfirmed() {
+        return confirmed;
     }
 
-    public void setConfirmedId(boolean confirmedId) {
-        this.confirmedId = confirmedId;
+    public void setconfirmed(boolean confirmed) {
+        this.confirmed = confirmed;
     }
 
     public String getBiography() {
@@ -155,8 +159,6 @@ public class Cleaner extends User{
     public void setReviews(List<String> reviews) {
         this.reviews = reviews;
     }
-
-    
 
     
 }
