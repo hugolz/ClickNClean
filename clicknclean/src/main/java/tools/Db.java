@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 
 import model.Address;
 import model.Cleaner;
@@ -25,7 +26,7 @@ public class Db {
 	public Db() {
 		this.strClassName = "com.mysql.cj.jdbc.Driver";
 		this.dbName = "click_n_clean";
-		
+
 		this.login = "root";
 		this.password = "root";
 
@@ -40,7 +41,7 @@ public class Db {
 			System.err.println("Driver not loaded !");
 			e.printStackTrace();
 		} catch (SQLException e) {
-			System.err.println(e.getMessage());
+			System.err.println("[ERROR] Db could not connect to the database due to: " + e.getMessage());
 		}
 	}
 
@@ -114,8 +115,8 @@ public class Db {
 				    rSet.getString("surname"),
 				    rSet.getString("email"),
 				    rSet.getString("phone_number"),
-				    rSet.getDate("birth_date"),
-				    rSet.getDate("account_date"),
+				    rSet.getDate("birth_date").toLocalDate(),
+				    rSet.getDate("account_date").toLocalDate(),
 				    rSet.getBoolean("suspended")
 				);
 
@@ -140,9 +141,9 @@ public class Db {
 				    + "Surname[" + rsReader.getString(4) + "]\n"
 				    + "Email[" + rsReader.getString(5) + "]\n"
 				    + "Phone[" + rsReader.getString(6) + "]\n"
-					+ "Birth date[" + rsReader.getString(6) + "]\n"
-					+ "Account date[" + rsReader.getString(6) + "]\n"
-					+ "Suspend status[" + rsReader.getString(6) + "]\n");
+				    + "Birth date[" + rsReader.getString(6) + "]\n"
+				    + "Account date[" + rsReader.getString(6) + "]\n"
+				    + "Suspend status[" + rsReader.getString(6) + "]\n");
 			}
 			rsReader.close();
 		} catch (SQLException e) {
@@ -150,29 +151,63 @@ public class Db {
 		}
 	}
 
-	
+
 	public ArrayList<Cleaner> DAOLister() {
 		int i = 0;
 		ArrayList<Cleaner> cleanerList = new ArrayList<Cleaner>();
 		try {
-			String strQuery = 
-			" SELECT * FROM  cleaner"
-			+ "JOIN user  ON cleaner.id_cleaner = user.user_id;"
-			+ ";";
+			String strQuery =
+			    " SELECT * FROM  cleaner"
+			    + "JOIN user  ON cleaner.id_cleaner = user.user_id;";
 			ResultSet rsReader = stRead.executeQuery(strQuery);
 			while (rsReader.next()) {
-				Cleaner b = new Cleaner(strQuery, strQuery, strQuery, strQuery, i, strQuery, false, strQuery, i, null, i, i, null, strQuery, strQuery, strQuery, strQuery, false, strQuery, null)
-				Cleaner a = new Cleaner(rsReader.getInt("id_cleaner"),
-									rsReader.getString("name"),
-									rsReader.getString("surname")
-				                    rsReader.getString("address"),
-				                    rsReader.getInt("km_range"),
-				                    rsReader.getInt("hourly_rate"),
-				                    rsReader.getString("biography"),
-				                    rsReader.getString("photo"), 
-									rsReader.getString("motivation"),
-									rsReader.getString("experience"),
-									rsReader.getBoolean("confirmed"));
+				// Cleaner b = new Cleaner(strQuery,strQuery,strQuery,strQuery,i,strQuery,false,strQuery,i,null,i,i,null,strQuery,strQuery,strQuery,strQuery,false,strQuery,null);
+
+				int cleaner_id = rsReader.getInt("id_cleaner");
+
+				ArrayList<String> addr_split = new ArrayList<String>(
+				    Arrays.asList(
+				        rsReader.getString("address").split("+")
+				    )
+				);
+
+				if (addr_split.size() != 4) {
+					System.out.println("[Error] Could not deserialize address for cleaner with id '" + cleaner_id + "': " + addr_split);
+					continue;
+				}
+
+				Address cleaner_addr;
+				try {
+					cleaner_addr =  new Address(
+					    addr_split.get(0),
+					    addr_split.get(1),
+					    addr_split.get(2),
+					    addr_split.get(3)
+					);
+				} catch (Exception e) {
+					System.out.println("[ERROR] Could not create Address from '" + addr_split + "' due to: " + e.toString());
+					continue;
+				}
+
+				Cleaner a = new Cleaner(
+				    cleaner_id,
+				    cleaner_addr,
+				    rsReader.getInt("km_range"),
+				    rsReader.getInt("hourly_rate"),
+				    rsReader.getString("biography"),
+				    rsReader.getString("photo"),
+				    rsReader.getString("motivation"),
+				    rsReader.getString("experience"),
+				    rsReader.getBoolean("confirmed"),
+				    rsReader.getString("name"),
+				    rsReader.getString("password"),
+				    rsReader.getString("surname"),
+				    rsReader.getString("email"),
+				    rsReader.getString("phone_number"),
+				    rsReader.getDate("birth_date").toLocalDate(),
+				    rsReader.getDate("account_date").toLocalDate(),
+				    rsReader.getBoolean("suspended")
+				);
 				cleanerList.add(i, a);
 				i++;
 			}
@@ -200,8 +235,8 @@ public class Db {
 		try {
 			String strQuery = "INSERT INTO `user`"
 			                  + "(`name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `accunt_date`, `suspended`) "
-			                  + "VALUES ('" + a.getName() + "','" + a.getPwd() + "','" + a.getSurName() + "','" + a.getEmail() + "','" + a.getPhoneN() + "','"
-			                  + a.getBirthDate() + "','" + a.getAccountDate() + "','" + (a.isSuspended()? 1 : 0) + "');";
+			                  + "VALUES ('" + a.getName() + "','" + a.getPwd() + "','" + a.getSurname() + "','" + a.getEmail() + "','" + a.getPhoneNumber() + "','"
+			                  + a.getBirthLocalDate() + "','" + a.getAccountLocalDate() + "','" + (a.isSuspended() ? 1 : 0) + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -212,10 +247,10 @@ public class Db {
 			ResultSet rsReader = stRead.executeQuery(strQuery);
 			while (rsReader.next()) {
 				id = rsReader.getInt("id_user");
-			rsReader.close();
+				rsReader.close();
 			}
 		} catch (SQLException e) {
-				System.err.println(e.getMessage());
+			System.err.println(e.getMessage());
 		}
 
 		try {
@@ -223,7 +258,7 @@ public class Db {
 			String strQuery = "INSERT INTO `cleaner`"
 			                  + "(`id_cleaner`, `address`, `km_range`, `hourly_rate`, `biography`, `photo`, `motivation`, `experience`, `confirmed`) "
 			                  + "VALUES ('" + id + "','" + toQuery + "','" + a.getKmRange() + "','" + a.getHourlyRate() + "','" + a.getBiography() + "','"
-			                  + a.getProfilePhoto() + "','" + a.getMotivation() + "','" + a.getExperience() + "','" + (a.isConfirmed()? 1 : 0)  + "');";
+			                  + a.getProfilePhoto() + "','" + a.getMotivation() + "','" + a.getExperience() + "','" + (a.isConfirmedId() ? 1 : 0)  + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -256,7 +291,7 @@ public class Db {
 		}
 	}
 
-	public void main (String[] args) { 
+	public void main (String[] args) {
 
 	}
 

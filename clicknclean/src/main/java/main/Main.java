@@ -3,6 +3,8 @@ package main;
 import model.Planning;
 import tools.*;
 import view.Window;
+import view.Connection;
+import view.Owner_registration;
 
 import java.time.LocalDate;
 import java.util.concurrent.ExecutionException;
@@ -10,30 +12,33 @@ import java.util.concurrent.ExecutionException;
 import model.Address;
 import model.Cleaner;
 
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) throws InterruptedException, ExecutionException {
-        LocalDate birth = LocalDate.now();
         Db db = new Db();
-        db.DAOAdd(new Cleaner("test@test.com", 
-                                    "null", 
-                                    "Durand", 
-                                    "Martin", 
-                                    88967886, 
-                                    birth, 
-                                    false, 
-                                    LocalDate.now().toString(), 0, 
-                                    new Address("3", "av Yves thepot", 
-                                        "29000", "quimper"), 
-                                    5, 
-                                    13, 
-                                    null, 
-                                    null, 
-                                    null, 
-                                    null, 
-                                    null, 
-                                    false, 
-                                    null, 
-                                    null));
+        db.DAOAdd(
+            new Cleaner(
+                5,
+                new Address("3", "av Yves thepot",
+                            "29000", "quimper"),
+                13,
+                0,
+                "null",
+                "null",
+                "null",
+                "null",
+                false,
+                "Martin",
+                "null",
+                "Durand",
+                "test@test.com",
+                "88967886",
+                LocalDate.now(),
+                LocalDate.now(),
+                false
+            )
+        );
 
         try {
             Address.main(args);
@@ -44,10 +49,13 @@ public class Main {
         }
 
 
-        Window win = new Window();
+        // Window win = new Window();
 
-        win.run();
-    	
+        // win.run();
+
+        // new Owner_registration().main(args);
+        // new Connection().main(args);
+
 
     }
 }
