@@ -6,19 +6,19 @@ import java.util.List;
 
 public class Cleaner extends User{
 
-    Planning planning;
-    int cleanerID;
-    String departureAddress;
-    int kmCount;
-    int hourlyRate;
-    List<String> availableDays;
-    String motivation;
-    String experience;
-    String idPhoto;
-    String profilePhoto;
-    boolean confirmedId;
-    String biography;
-    List<String> reviews;
+    private Planning planning;
+    private int cleanerID;
+    private String departureAddress;
+    private int kmCount;
+    private int hourlyRate;
+    private List<String> availableDays;
+    private String motivation;
+    private String experience;
+    private String idPhoto;
+    private String profilePhoto;
+    private boolean confirmedId;
+    private String biography;
+    private List<String> reviews;
 
     public Cleaner( String email, 
                     String pwd, 

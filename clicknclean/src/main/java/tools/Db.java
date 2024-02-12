@@ -18,9 +18,9 @@ public class Db {
 
 	public Db() {
 		this.strClassName = "com.mysql.cj.jdbc.Driver";
-		this.dbName = "acces";
+		this.dbName = "click_n_clean";
 		this.login = "root";
-		this.password = "";
+		this.password = "root";
 		this.strUrl = "jdbc:mysql://localhost:3306/" + dbName
 		              + "?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Europe/Paris";
 
@@ -34,6 +34,14 @@ public class Db {
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
+	}
+
+	public Statement getStRead() {
+		return stRead;
+	}
+
+	public void setStRead(Statement stRead) {
+		this.stRead = stRead;
 	}
 
 	public void test() {
