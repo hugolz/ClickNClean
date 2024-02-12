@@ -1,69 +1,51 @@
 package model;
 
-import java.lang.ref.Cleaner;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Mission {
-    String propertyAddress;
-    String missionDate;
-    double propertySurface;
+    Property  property;
+    LocalDate missionDate;
     double duration;
     double cost;
     double commission;
     String ownerId;
     String cleanerId;
     ArrayList<Cleaner> cleanerList;
-    String accessCode;
-    String keyBoxCode;
-    String specialInstructions;
     String startTime;
     String state;
 
-    public Mission( String propertyAddress, 
-                    String missionDate,
-                    double propertySurface,
+    public Mission( 
+                    Property property,
+                    LocalDate missionDate,
                     double duration, 
                     double cost, 
                     double commission, 
                     String ownerId, 
                     String cleanerId,
                     ArrayList<Cleaner> cleanerList, 
-                    String accessCode, 
-                    String keyBoxCode, 
-                    String specialInstructions,
                     String startTime, 
                     String state) {
-        this.propertyAddress = propertyAddress;
+        this.property = property;
         this.missionDate = missionDate;
-        this.propertySurface = propertySurface;
         this.duration = duration;
         this.cost = cost;
         this.commission = commission;
         this.ownerId = ownerId;
         this.cleanerId = cleanerId;
         this.cleanerList = cleanerList;
-        this.accessCode = accessCode;
-        this.keyBoxCode = keyBoxCode;
-        this.specialInstructions = specialInstructions;
         this.startTime = startTime;
         this.state = state;
     }
 
-    public String getPropertyAddress() {
-        return propertyAddress;
-    }
 
-    public String getMissionDate() {
+    public LocalDate getMissionDate() {
         return missionDate;
     }
 
-    public void setMissionDate(String missionDate) {
+    public void setMissionDate(LocalDate missionDate) {
         this.missionDate = missionDate;
-    }
-
-    public double getPropertySurface() {
-        return propertySurface;
     }
 
     public double getDuration() {
@@ -94,33 +76,22 @@ public class Mission {
         return cleanerList;
     }
 
-    public void setCleanerList(int ownerLong, int ownerLat, int cleanerLong, int cleanerLat ) {
+    public ArrayList<Cleaner> findMatchingRange() {
+        ArrayList<Cleaner> cleanerList = this.getCleanerList();
+        ArrayList<Cleaner> matchingRangeCleaners = new ArrayList<Cleaner>();
         
-        this.cleanerList = cleanerList;
+        for (int i = 0; i < getCleanerList().size(); i++) {
+            Cleaner currentCleaner = cleanerList.get(i);
+
+            if (currentCleaner.getKmCount() <= this.property.getPropertyAddress().calculateDistance(currentCleaner.getDepartureAddress())) {
+                matchingRangeCleaners.add(currentCleaner);
+            }
+        }
+        return matchingRangeCleaners;
     }
 
-    public String getAccessCode() {
-        return accessCode;
-    }
-
-    public void setAccessCode(String accessCode) {
-        this.accessCode = accessCode;
-    }
-
-    public String getKeyBoxCode() {
-        return keyBoxCode;
-    }
-
-    public void setKeyBoxCode(String keyBoxCode) {
-        this.keyBoxCode = keyBoxCode;
-    }
-
-    public String getSpecialInstructions() {
-        return specialInstructions;
-    }
-
-    public void setSpecialInstructions(String specialInstructions) {
-        this.specialInstructions = specialInstructions;
+    public void setCleanerList(double ownerLong, double ownerLat, double cleanerLong, double cleanerLat ) {
+        ownerLong = 2;
     }
 
     public String getStartTime() {
