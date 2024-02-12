@@ -2,12 +2,14 @@ package model;
 import java.lang.ref.Cleaner;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+
 
 
 public class Admin extends User {
 
-    public Admin(String pwd, String name, String email, String surName) {
-        super(pwd, name, email, surName);
+    public Admin(String name, String pwd, String surname, String email, String phoneNumber, Date birthDate, Date accountDate, boolean suspended) {
+        super(name, pwd, surname, email, phoneNumber, birthDate, accountDate, suspended);
     }
 
 //-------------------------------------------------------------------------------------------------------------------------
