@@ -6,6 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import model.Address;
+import model.Cleaner;
 
 import model.*;
 
@@ -48,6 +52,70 @@ public class Db {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
+	}
+
+	public ArrayList<Cleaner> getCleanersInRange(Address addr) {
+		ArrayList<Cleaner> out = new ArrayList<>();
+		String query = "SELECT * FROM cleaner;";
+
+		try {
+			ResultSet rSet = this.stRead.executeQuery(query);
+			while (rSet.next()) {
+				int cleaner_id = rSet.getInt("id_cleaner");
+
+				int cleaner_range = rSet.getInt("km_range");
+
+				ArrayList<String> addr_split = new ArrayList<String>(
+				    Arrays.asList(
+				        rSet.getString("address").split("+")
+				    )
+				);
+
+				if (addr_split.size() != 4) {
+					System.out.println("[Error] Could not deserialize address for cleaner with id '" + cleaner_id + "': " + addr_split);
+					continue;
+				}
+
+				Address cleaner_addr = new Address(
+				    addr_split.get(0),
+				    addr_split.get(1),
+				    addr_split.get(2),
+				    addr_split.get(3));
+
+				double distance = addr.calculateDistance(cleaner_addr);
+
+				if (distance > cleaner_range) {
+					System.out.println("Skipped cleaner with id: '" + cleaner_id + "', not in range (" + distance + "> " + cleaner_range + ").");
+					continue;
+				}
+
+				Cleaner cleaner = new Cleaner(
+				    cleaner_id,
+				    cleaner_addr,
+				    cleaner_range,
+				    rSet.getInt("hourly_rate"),
+				    rSet.getString("biography"),
+				    rSet.getString("photo"),
+				    rSet.getString("motivation"),
+				    rSet.getString("experience"),
+				    rSet.getBoolean("confirmed"),
+				    rSet.getString("name"),
+				    rSet.getString("password"),
+				    rSet.getString("surname"),
+				    rSet.getString("email"),
+				    rSet.getString("phone_number"),
+				    rSet.getDate("birth_date"),
+				    rSet.getDate("account_date"),
+				    rSet.getBoolean("suspended")
+				);
+
+				out.add(cleaner);
+			}
+		} catch (Exception e) {
+			System.out.println("Could not query cleaners in range " + addr + "due to: " + addr);
+		}
+
+		return out;
 	}
 
 	public void read() {

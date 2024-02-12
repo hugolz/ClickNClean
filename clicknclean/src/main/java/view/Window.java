@@ -54,7 +54,6 @@ public class Window extends Application {
 		stage.setScene(scene);
 
 		return root;
-
 	}
 
 	@Override

@@ -1,11 +1,11 @@
 package model;
 
-
 import java.time.LocalDate;
 import java.util.ArrayList;
+import tools.Db;
 
 public class Mission {
-    Property  property;
+    Property property;
     LocalDate missionDate;
     double duration;
     double cost;
@@ -17,17 +17,17 @@ public class Mission {
     String state;
 
 
-    public Mission( 
-                    Property property,
-                    LocalDate missionDate,
-                    double duration, 
-                    double cost, 
-                    double commission, 
-                    String ownerId, 
-                    String cleanerId,
-                    ArrayList<Cleaner> cleanerList, 
-                    String startTime, 
-                    String state) {
+    public Mission(
+        Property property,
+        LocalDate missionDate,
+        double duration,
+        double cost,
+        double commission,
+        String ownerId,
+        String cleanerId,
+        String startTime,
+        String state
+    ) {
         this.property = property;
         this.missionDate = missionDate;
         this.duration = duration;
@@ -35,11 +35,9 @@ public class Mission {
         this.commission = commission;
         this.ownerId = ownerId;
         this.cleanerId = cleanerId;
-        this.cleanerList = cleanerList;
         this.startTime = startTime;
         this.state = state;
     }
-
 
     public LocalDate getMissionDate() {
         return missionDate;
@@ -73,31 +71,6 @@ public class Mission {
         this.cleanerId = cleanerId;
     }
 
-    public ArrayList<Cleaner> getCleanerList() {
-        return cleanerList;
-    }
-
-
-    public ArrayList<Cleaner> findMatchingRange() {
-        ArrayList<Cleaner> cleanerList = this.getCleanerList();
-        ArrayList<Cleaner> matchingRangeCleaners = new ArrayList<Cleaner>();
-        
-        for (int i = 0; i < getCleanerList().size(); i++) {
-            Cleaner currentCleaner = cleanerList.get(i);
-            if (currentCleaner.getKmRange() <= this.property.getPropertyAddress().calculateDistance(currentCleaner.getDepartureAddress())) {
-                matchingRangeCleaners.add(currentCleaner);
-            }
-        }
-        return matchingRangeCleaners;
-    }
-
-     public void setCleanerList(int ownerLong, int ownerLat, int cleanerLong, int cleanerLat ) {
-        this.cleanerList = cleanerList;
-    }
-
-    public void setCleanerList(double ownerLong, double ownerLat, double cleanerLong, double cleanerLat ) {
-        ownerLong = 2;
-    }
 
     public String getStartTime() {
         return startTime;

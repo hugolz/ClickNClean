@@ -1,13 +1,14 @@
 package model;
 
+import java.util.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Cleaner extends User{
-
+public class Cleaner extends User {
     Planning planning;
-    int cleanerID;
+    int cleanerId;
     Address departureAddress;
     int kmRange;
     int hourlyRate;
@@ -20,29 +21,32 @@ public class Cleaner extends User{
     String biography;
     List<String> reviews;
 
-    public Cleaner( String email, 
-                    String pwd, 
-                    String name, 
-                    String surName, 
-                    int phoneN, 
-                    LocalDate birthDate, 
-                    boolean suspended,
-			        String accountDate,
-                    int cleanerID, 
-                    Address departureAddress,
-                    int kmRange, 
-                    int hourlyRate, 
-                    Planning planning,
-                    String motivation, 
-                    String experience,
-                    String idPhoto, 
-                    String profilePhoto, 
-                    boolean confirmed, 
-                    String biography, 
-                    List<String> reviews) {
-                        
-        super(email, pwd, name, surName, phoneN, birthDate, suspended,accountDate);
-        this.cleanerID = cleanerID;
+
+    // Creates a Cleaner object from loaded data
+    public Cleaner(
+        int cleanerId,
+        Address departureAddress,
+        int kmRange,
+        int hourlyRate,
+        String biography,
+        String idPhoto,
+        String profilePhoto,
+        String motivation,
+        String experience,
+        boolean confirmed,
+        String name,
+        String pwd,
+        String surname,
+        String email,
+        String phoneNumber,
+        Date birthDate,
+        Date accountDate,
+        boolean suspended,
+        List<String> reviews) {
+
+        super(name, pwd, surname, email, phoneNumber, birthDate, accountDate, suspended);
+
+        this.cleanerId = cleanerId;
         this.departureAddress = departureAddress;
         this.kmRange = kmRange;
         this.hourlyRate = hourlyRate;
@@ -56,16 +60,56 @@ public class Cleaner extends User{
         this.reviews = reviews;
     }
 
+    // Creates a basic Cleaner
+    public Cleaner(
+        int cleanerId,
+        Address departureAddress,
+        int kmRange,
+        int hourlyRate,
+        String biography,
+        String photo,
+        String motivation,
+        String experience,
+        boolean confirmed,
+        String name,
+        String pwd,
+        String surname,
+        String email,
+        String phoneNumber,
+        Date birthDate,
+        Date accountDate,
+        boolean suspended
+    ) {
+        super(name, pwd, surname, email, phoneNumber, birthDate, accountDate, suspended);
+
+        this.cleanerId = cleanerId;
+        this.departureAddress = departureAddress;
+        this.kmRange = kmRange;
+        this.hourlyRate = hourlyRate;
+        this.planning = new Planning();
+        this.motivation = motivation;
+        this.experience = experience;
+        this.idPhoto = idPhoto;
+        this.profilePhoto = profilePhoto;
+        this.confirmed = confirmed;
+        this.biography = biography;
+        this.reviews = new ArrayList<>();
+    }
+
     public Planning getPlanning() {
         return planning;
     }
 
-    public void setPlanning(LocalDate targetDate, LocalTime targetTime, int newStatus ) {
-        this.planning.setAvailableSlots(targetDate, targetTime, newStatus);
+    public void setPlanning(Planning planning) {
+        this.planning = planning;
     }
 
-    public int getCleanerID() {
-        return cleanerID;
+    public int getCleanerId() {
+        return cleanerId;
+    }
+
+    public void setCleanerId(int cleanerId) {
+        this.cleanerId = cleanerId;
     }
 
     public Address getDepartureAddress() {
@@ -82,6 +126,7 @@ public class Cleaner extends User{
 
     public int getKmRange() {
         return this.kmRange;
+
     }
 
     public void setKmRange(int kmRange) {
@@ -159,6 +204,4 @@ public class Cleaner extends User{
     public void setReviews(List<String> reviews) {
         this.reviews = reviews;
     }
-
-    
 }
