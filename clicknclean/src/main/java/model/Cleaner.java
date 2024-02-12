@@ -6,20 +6,24 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cleaner extends User {
-    Planning planning;
-    int cleanerId;
-    Address departureAddress;
-    int kmRange;
-    int hourlyRate;
-    List<String> availableDays;
-    String motivation;
-    String experience;
-    String idPhoto;
-    String profilePhoto;
-    boolean confirmed;
-    String biography;
-    List<String> reviews;
+
+public class Cleaner extends User{
+
+    private Planning planning;
+    private int cleanerID;
+    private String departureAddress;
+    private int kmCount;
+    private int hourlyRate;
+    private List<String> availableDays;
+    private String motivation;
+    private String experience;
+    private String idPhoto;
+    private String profilePhoto;
+    private boolean confirmedId;
+    private String biography;
+    private List<String> reviews;
+
+
 
     // Creates a Cleaner object from loaded data
     public Cleaner(
@@ -119,8 +123,13 @@ public class Cleaner extends User {
         this.departureAddress = departureAddress;
     }
 
+    public void setCleanerID(int cleanerID) {
+        this.cleanerID = cleanerID;
+    }
+
     public int getKmRange() {
-        return kmRange;
+        return this.kmRange;
+
     }
 
     public void setKmRange(int kmRange) {

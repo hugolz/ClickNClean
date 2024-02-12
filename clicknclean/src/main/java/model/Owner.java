@@ -2,16 +2,19 @@ package model;
 
 import java.util.ArrayList;
 
-public class Owner {
-	String serviceType;
-	String ownerReviews;
-	// ArrayList<Property> listProperty;
+public class Owner extends User{
+	
+	private int ownerID;
+	private String serviceType;
+	private String ownerReviews;
+	private ArrayList<Property> listProperty;
 
-	// public Owner(String serviceType, String ownerReviews) {
-	// 	// super();
-	// 	this.serviceType = serviceType;
-	// 	this.ownerReviews = ownerReviews;
-	// }
+	public Owner(String serviceType, String ownerReviews, int ownerID, String email, String pwd,String name,String surName) {
+		super(email, pwd, name, surName);
+		this.serviceType = serviceType;
+		this.ownerReviews = ownerReviews;
+		this.ownerID = ownerID;
+	}
 
 	public void createMission() {
 		// insert code here
@@ -40,8 +43,12 @@ public class Owner {
 	public void creatProperty() {
 		// insert code here
 	}
+	
+	public void deleteProperty() {
+		
+	}
 
-	// public void addProperty(Property p) {
+	public void addProperty(Property p) {
 	// 	this.listProperty;
 	// }
 }
