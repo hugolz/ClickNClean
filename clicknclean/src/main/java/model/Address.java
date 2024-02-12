@@ -1,17 +1,12 @@
 package model;
 
 import java.util.ArrayList;
-
-import java.util.ArrayList;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.concurrent.ExecutionException;
 import tools.JsonBodyHandler;
 import tools.APOD;
-
-import org.javatuples.Pair;
 import java.lang.Throwable;
 
 public class Address {
@@ -19,7 +14,6 @@ public class Address {
     String label;
     String postCode;
     String city;
-    String address;
     double latitude;
     double longitude;
 
@@ -78,6 +72,10 @@ public class Address {
         return longitude;
     }
 
+    public String getCity() {
+        return city;
+    }
+
     public String toString() {
         return this.houseNumber + "+" + this.label + "+" + this.postCode + "+" + this.city;
     }
@@ -93,7 +91,6 @@ public class Address {
     // Result is in meters
     public double calculateDistance(Address target) {
         final double EARTH_RADIUS = 6371.0;
-        Address a1 = this;
 
         double lat1Rad = Math.toRadians(this.getLatitude());
         double lat2Rad = Math.toRadians(target.getLatitude());

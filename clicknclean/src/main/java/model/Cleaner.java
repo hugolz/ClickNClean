@@ -21,6 +21,7 @@ public class Cleaner extends User {
     String biography;
     List<String> reviews;
 
+
     // Creates a Cleaner object from loaded data
     public Cleaner(
         int cleanerId,
@@ -119,8 +120,13 @@ public class Cleaner extends User {
         this.departureAddress = departureAddress;
     }
 
+    public void setCleanerID(int cleanerID) {
+        this.cleanerID = cleanerID;
+    }
+
     public int getKmRange() {
-        return kmRange;
+        return this.kmRange;
+
     }
 
     public void setKmRange(int kmRange) {
