@@ -1,8 +1,11 @@
 package model;
 
+import java.util.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+
 
 public class Cleaner extends User{
 
@@ -20,68 +23,117 @@ public class Cleaner extends User{
     private String biography;
     private List<String> reviews;
 
-    public Cleaner( String email, 
-                    String pwd, 
-                    String name, 
-                    String surName, 
-                    int cleanerID, 
-                    String departureAddress,
-                    int kmCount, 
-                    int hourlyRate, 
-                    Planning planning,
-                    String motivation, 
-                    String experience,
-                    String idPhoto, 
-                    String profilePhoto, 
-                    boolean confirmedId, 
-                    String biography, 
-                    List<String> reviews) {
-                        
-        super(email, pwd, name, surName);
-        this.cleanerID = cleanerID;
+
+
+    // Creates a Cleaner object from loaded data
+    public Cleaner(
+        int cleanerId,
+        Address departureAddress,
+        int kmRange,
+        int hourlyRate,
+        String biography,
+        String idPhoto,
+        String profilePhoto,
+        String motivation,
+        String experience,
+        boolean confirmed,
+        String name,
+        String pwd,
+        String surname,
+        String email,
+        String phoneNumber,
+        Date birthDate,
+        Date accountDate,
+        boolean suspended,
+        List<String> reviews) {
+
+        super(name, pwd, surname, email, phoneNumber, birthDate, accountDate, suspended);
+
+        this.cleanerId = cleanerId;
         this.departureAddress = departureAddress;
-        this.kmCount = kmCount;
+        this.kmRange = kmRange;
         this.hourlyRate = hourlyRate;
         this.planning = new Planning();
         this.motivation = motivation;
         this.experience = experience;
         this.idPhoto = idPhoto;
         this.profilePhoto = profilePhoto;
-        this.confirmedId = confirmedId;
+        this.confirmed = confirmed;
         this.biography = biography;
         this.reviews = reviews;
+    }
+
+    // Creates a basic Cleaner
+    public Cleaner(
+        int cleanerId,
+        Address departureAddress,
+        int kmRange,
+        int hourlyRate,
+        String biography,
+        String photo,
+        String motivation,
+        String experience,
+        boolean confirmed,
+        String name,
+        String pwd,
+        String surname,
+        String email,
+        String phoneNumber,
+        Date birthDate,
+        Date accountDate,
+        boolean suspended
+    ) {
+        super(name, pwd, surname, email, phoneNumber, birthDate, accountDate, suspended);
+
+        this.cleanerId = cleanerId;
+        this.departureAddress = departureAddress;
+        this.kmRange = kmRange;
+        this.hourlyRate = hourlyRate;
+        this.planning = new Planning();
+        this.motivation = motivation;
+        this.experience = experience;
+        this.idPhoto = idPhoto;
+        this.profilePhoto = profilePhoto;
+        this.confirmed = confirmed;
+        this.biography = biography;
+        this.reviews = new ArrayList<>();
     }
 
     public Planning getPlanning() {
         return planning;
     }
 
-    public void setPlanning(LocalDate targetDate, LocalTime targetTime, int newStatus ) {
-        this.planning.setAvailableSlots(targetDate, targetTime, newStatus);
+    public void setPlanning(Planning planning) {
+        this.planning = planning;
     }
 
-    public int getCleanerID() {
-        return cleanerID;
+    public int getCleanerId() {
+        return cleanerId;
+    }
+
+    public void setCleanerId(int cleanerId) {
+        this.cleanerId = cleanerId;
+    }
+
+    public Address getDepartureAddress() {
+        return departureAddress;
+    }
+
+    public void setDepartureAddress(Address departureAddress) {
+        this.departureAddress = departureAddress;
     }
 
     public void setCleanerID(int cleanerID) {
         this.cleanerID = cleanerID;
     }
 
-    public String getDepartureAddress() {
-        return departureAddress;
+    public int getKmRange() {
+        return this.kmRange;
+
     }
 
-    public void setDepartureAddress(String departureAddress) {
-        this.departureAddress = departureAddress;
-    }
-
-    public int getKmCount() {
-        return kmCount;
-    }
-
-    public void setKmCount(int kmCount) {
-        this.kmCount = kmCount;
+    public void setKmRange(int kmRange) {
+        this.kmRange = kmRange;
     }
 
     public int getHourlyRate() {
@@ -132,12 +184,12 @@ public class Cleaner extends User{
         this.profilePhoto = profilePhoto;
     }
 
-    public boolean isConfirmedId() {
-        return confirmedId;
+    public boolean isConfirmed() {
+        return confirmed;
     }
 
-    public void setConfirmedId(boolean confirmedId) {
-        this.confirmedId = confirmedId;
+    public void setConfirmed(boolean confirmed) {
+        this.confirmed = confirmed;
     }
 
     public String getBiography() {
@@ -155,8 +207,4 @@ public class Cleaner extends User{
     public void setReviews(List<String> reviews) {
         this.reviews = reviews;
     }
-
-    
-
-    
 }

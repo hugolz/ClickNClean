@@ -1,21 +1,21 @@
 package model;
 
 public class Property {
-	private String propertyAddress;
+	private Address propertyAddress;
 	private int propertySurface;
-	
-	public Property(String propertyAddress, int propertySurface) {
+
+	public Property(Address propertyAddress, int propertySurface) {
 		this.propertyAddress = propertyAddress;
 		this.propertySurface = propertySurface;
 	}
 
-	public String getPropertyAddress() {
+	public Address getPropertyAddress() {
 		return propertyAddress;
 	}
 
 	public int getPropertySurface() {
 		return propertySurface;
-	} 
-	
+	}
+
 
 }

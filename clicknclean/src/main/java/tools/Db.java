@@ -6,6 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import model.Address;
+import model.Cleaner;
+
+import model.*;
 
 public class Db {
 	String strClassName;
@@ -19,8 +25,10 @@ public class Db {
 	public Db() {
 		this.strClassName = "com.mysql.cj.jdbc.Driver";
 		this.dbName = "click_n_clean";
+		
 		this.login = "root";
 		this.password = "root";
+
 		this.strUrl = "jdbc:mysql://localhost:3306/" + dbName
 		              + "?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Europe/Paris";
 
@@ -56,18 +64,85 @@ public class Db {
 		}
 	}
 
+	public ArrayList<Cleaner> getCleanersInRange(Address addr) {
+		ArrayList<Cleaner> out = new ArrayList<>();
+		String query = "SELECT * FROM cleaner;";
+
+		try {
+			ResultSet rSet = this.stRead.executeQuery(query);
+			while (rSet.next()) {
+				int cleaner_id = rSet.getInt("id_cleaner");
+
+				int cleaner_range = rSet.getInt("km_range");
+
+				ArrayList<String> addr_split = new ArrayList<String>(
+				    Arrays.asList(
+				        rSet.getString("address").split("+")
+				    )
+				);
+
+				if (addr_split.size() != 4) {
+					System.out.println("[Error] Could not deserialize address for cleaner with id '" + cleaner_id + "': " + addr_split);
+					continue;
+				}
+
+				Address cleaner_addr = new Address(
+				    addr_split.get(0),
+				    addr_split.get(1),
+				    addr_split.get(2),
+				    addr_split.get(3));
+
+				double distance = addr.calculateDistance(cleaner_addr);
+
+				if (distance > cleaner_range) {
+					System.out.println("Skipped cleaner with id: '" + cleaner_id + "', not in range (" + distance + "> " + cleaner_range + ").");
+					continue;
+				}
+
+				Cleaner cleaner = new Cleaner(
+				    cleaner_id,
+				    cleaner_addr,
+				    cleaner_range,
+				    rSet.getInt("hourly_rate"),
+				    rSet.getString("biography"),
+				    rSet.getString("photo"),
+				    rSet.getString("motivation"),
+				    rSet.getString("experience"),
+				    rSet.getBoolean("confirmed"),
+				    rSet.getString("name"),
+				    rSet.getString("password"),
+				    rSet.getString("surname"),
+				    rSet.getString("email"),
+				    rSet.getString("phone_number"),
+				    rSet.getDate("birth_date"),
+				    rSet.getDate("account_date"),
+				    rSet.getBoolean("suspended")
+				);
+
+				out.add(cleaner);
+			}
+		} catch (Exception e) {
+			System.out.println("Could not query cleaners in range " + addr + "due to: " + addr);
+		}
+
+		return out;
+	}
+
 	public void read() {
 		try {
-			String strQuery = "SELECT *FROM human;";
+			String strQuery = "SELECT * FROM user;";
 			ResultSet rsReader = stRead.executeQuery(strQuery);
 			while (rsReader.next()) {
 				System.out.print(
 				    "Id[" + rsReader.getInt(1) + "]\n"
-				    + "Password[" + rsReader.getString(2) + "]\n"
-				    + "user[" + rsReader.getString(3) + "]\n"
-				    + "pw[" + rsReader.getString(4) + "]\n"
-				    + "statut[" + rsReader.getString(5) + "]\n"
-				    + "age[" + rsReader.getString(6) + "]\n");
+				    + "Name[" + rsReader.getString(2) + "]\n"
+				    + "Pwd[" + rsReader.getString(3) + "]\n"
+				    + "Surname[" + rsReader.getString(4) + "]\n"
+				    + "Email[" + rsReader.getString(5) + "]\n"
+				    + "Phone[" + rsReader.getString(6) + "]\n"
+					+ "Birth date[" + rsReader.getString(6) + "]\n"
+					+ "Account date[" + rsReader.getString(6) + "]\n"
+					+ "Suspend status[" + rsReader.getString(6) + "]\n");
 			}
 			rsReader.close();
 		} catch (SQLException e) {
@@ -75,27 +150,37 @@ public class Db {
 		}
 	}
 
-	public ArrayList<Acces> DAOLister() {
+	
+	public ArrayList<Cleaner> DAOLister() {
 		int i = 0;
-		ArrayList<Acces> listAcces = new ArrayList<Acces>();
+		ArrayList<Cleaner> cleanerList = new ArrayList<Cleaner>();
 		try {
-			String strQuery = "SELECT * FROM  access;";
+			String strQuery = 
+			" SELECT * FROM  cleaner"
+			+ "JOIN user  ON cleaner.id_cleaner = user.user_id;"
+			+ ";";
 			ResultSet rsReader = stRead.executeQuery(strQuery);
 			while (rsReader.next()) {
-				Acces a = new Acces(rsReader.getInt(1),
-				                    rsReader.getString(2),
-				                    rsReader.getString(3),
-				                    rsReader.getString(4),
-				                    rsReader.getString(5),
-				                    rsReader.getInt(6));
-				listAcces.add(i, a);
+				Cleaner b = new Cleaner(strQuery, strQuery, strQuery, strQuery, i, strQuery, false, strQuery, i, null, i, i, null, strQuery, strQuery, strQuery, strQuery, false, strQuery, null)
+				Cleaner a = new Cleaner(rsReader.getInt("id_cleaner"),
+									rsReader.getString("name"),
+									rsReader.getString("surname")
+				                    rsReader.getString("address"),
+				                    rsReader.getInt("km_range"),
+				                    rsReader.getInt("hourly_rate"),
+				                    rsReader.getString("biography"),
+				                    rsReader.getString("photo"), 
+									rsReader.getString("motivation"),
+									rsReader.getString("experience"),
+									rsReader.getBoolean("confirmed"));
+				cleanerList.add(i, a);
 				i++;
 			}
 			rsReader.close();
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
-		return listAcces;
+		return cleanerList;
 	}
 
 	public void add(int id, String surName, String user, String pw, String status, int age) {
@@ -110,16 +195,40 @@ public class Db {
 		}
 	}
 
-	public void DAOAdd(Acces a) {
+	public void DAOAdd(Cleaner a) {
+		int id = 0;
 		try {
-			String strQuery = "INSERT INTO `access`"
-			                  + "(`id`, `prenom`, `user`, `pw`, `statut`, `age`) "
-			                  + "VALUES ('" + a.getId() + "','" + a.getSurName() + "','" + a.getUser() + "','" + a.getPw() + "','"
-			                  + a.getStatus() + "','" + a.getAge() + "');";
+			String strQuery = "INSERT INTO `user`"
+			                  + "(`name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `accunt_date`, `suspended`) "
+			                  + "VALUES ('" + a.getName() + "','" + a.getPwd() + "','" + a.getSurName() + "','" + a.getEmail() + "','" + a.getPhoneN() + "','"
+			                  + a.getBirthDate() + "','" + a.getAccountDate() + "','" + (a.isSuspended()? 1 : 0) + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
+
+		try {
+			String strQuery = "SELECT * FROM user;";
+			ResultSet rsReader = stRead.executeQuery(strQuery);
+			while (rsReader.next()) {
+				id = rsReader.getInt("id_user");
+			rsReader.close();
+			}
+		} catch (SQLException e) {
+				System.err.println(e.getMessage());
+		}
+
+		try {
+			String toQuery = (a.getDepartureAddress().getHouseNumber() + " " + a.getDepartureAddress().getLabel() + " " + a.getDepartureAddress().getPostCode() + " " + a.getDepartureAddress().getCity());
+			String strQuery = "INSERT INTO `cleaner`"
+			                  + "(`id_cleaner`, `address`, `km_range`, `hourly_rate`, `biography`, `photo`, `motivation`, `experience`, `confirmed`) "
+			                  + "VALUES ('" + id + "','" + toQuery + "','" + a.getKmRange() + "','" + a.getHourlyRate() + "','" + a.getBiography() + "','"
+			                  + a.getProfilePhoto() + "','" + a.getMotivation() + "','" + a.getExperience() + "','" + (a.isConfirmed()? 1 : 0)  + "');";
+			stRead.executeUpdate(strQuery);
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+
 	}
 
 	public void DAODelete(Acces a) {
@@ -145,6 +254,10 @@ public class Db {
 			conn.close();
 		} catch (SQLException e) {
 		}
+	}
+
+	public void main (String[] args) { 
+
 	}
 
 }

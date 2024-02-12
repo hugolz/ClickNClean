@@ -1,27 +1,48 @@
 package model;
 
-
+import java.util.Date;
 
 public class User {
-	private String email;
-	private String pwd;
 	private String name;
-	private String surName;
-	private int phoneN;
-	private String birthDate;
+	private String pwd;
+	private String surname;
+	private String email;
+	private String phoneNumber;
+	private Date birthDate;
+	private Date accountDate;
+	private boolean suspended;
 
-
-	public User(String email, String pwd, String name, String surName) {
-		this.email = email;
-		this.pwd = pwd;
+	public User(
+	    String name,
+	    String pwd,
+	    String surname,
+	    String email,
+	    String phoneNumber,
+	    Date birthDate,
+	    Date accountDate,
+	    boolean suspended
+	) {
 		this.name = name;
-		this.surName = surName;
+		this.pwd = pwd;
+		this.surname = surname;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		this.birthDate = birthDate;
+		this.accountDate = accountDate;
+		this.suspended = suspended;
 	}
 
-	private String accountDate;
+
+	public boolean isSuspended() {
+		return suspended;
+	}
+
+	public void setSuspended(boolean suspended) {
+		this.suspended = suspended;
+	}
 
 	public String getEmail() {
-		return email;
+		return this.email;
 	}
 
 	public void setEmail(String email) {
@@ -29,7 +50,7 @@ public class User {
 	}
 
 	public String getPwd() {
-		return pwd;
+		return this.pwd;
 	}
 
 	public void setPwd(String pwd) {
@@ -37,39 +58,43 @@ public class User {
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public String getSurName() {
-		return surName;
+	public String getSurname() {
+		return this.surname;
 	}
 
-	public void setSurName(String surName) {
-		this.surName = surName;
+	public void setSurname(String surname) {
+		this.surname = surname;
 	}
 
-	public int getPhoneN() {
-		return phoneN;
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public void setPhoneN(int phoneN) {
-		this.phoneN = phoneN;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
-	public String getBirthDate() {
-		return birthDate;
+	public Date getBirthDate() {
+		return this.birthDate;
 	}
 
-	public void setBirthDate(String birthDate) {
+	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
 
-	public String getAccountDate() {
+	public Date getAccountDate() {
 		return accountDate;
+	}
+
+	public void  setAccountDate(Date accountDate) {
+		this.accountDate = accountDate;
 	}
 
 	public void connection() {
