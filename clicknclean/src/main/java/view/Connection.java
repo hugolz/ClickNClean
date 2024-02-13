@@ -1,22 +1,21 @@
 package view;
 import java.io.File;
 
+import controller.ConnectionController;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
 
 public class Connection extends Application {
 	public static void main(String[] args) {
@@ -36,7 +35,10 @@ public class Connection extends Application {
 
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				// new ConnectionController(loginField.getText(), passwordField.getText());
+				new ConnectionController(
+				    loginField.getText(),
+				    passwordField.getText()
+				);
 			}
 		};
 
