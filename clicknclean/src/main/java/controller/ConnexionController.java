@@ -32,16 +32,12 @@ public class ConnexionController {
 				while(rsReader.next()) {
 					JOptionPane.showMessageDialog(null, "Connexion réussie");
 					
-					
-			
-					switch (rsReader.getString("statut")) {
+					switch (rsReader.getString("status")) {
 					case "Admin" : 
 						WelcomeAdmin a1 = new WelcomeAdmin();
 						a1.setVisible(true);
-						String strQueryAdmin = "SELECT * FROM ";
+						String strQueryAdmin = "SELECT * FROM admin WHERE id_";
 						rsReader = db1.getStRead().executeQuery(strQueryAdmin);
-						
-						
 						break;
 					case "Cleaner" :
 						WelcomeCleaner c1 = new WelcomeCleaner();
@@ -65,8 +61,8 @@ public class ConnexionController {
 				//tuer la connexion
 				
 				JOptionPane.showMessageDialog(null, "Login ou mot de passe incorrect !");
-				//Connexion c1 = new Connexion();
-				//c1.setVisible(true);
+				Connexion c1 = new Connexion();
+				c1.setVisible(true);
 				System.out.println("ce projet est vraiment génial");
 			}
 		}
