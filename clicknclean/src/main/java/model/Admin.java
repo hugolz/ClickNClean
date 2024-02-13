@@ -2,14 +2,14 @@ package model;
 import java.lang.ref.Cleaner;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
+import java.time.LocalDate;
 
 
 
 public class Admin extends User {
 
-    public Admin(String name, String pwd, String surname, String email, String phoneNumber, Date birthDate, Date accountDate, boolean suspended) {
-        super(name, pwd, surname, email, phoneNumber, birthDate, accountDate, suspended);
+    public Admin(String name, String pwd, String surname, String email, String phoneNumber, LocalDate birthLocalDate, LocalDate accountLocalDate, boolean suspended) {
+        super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended);
     }
 
 //-------------------------------------------------------------------------------------------------------------------------
@@ -101,11 +101,11 @@ public class Admin extends User {
 
     // /**
     //  * Gathers in an ArrayList all the missions on a given period
-    //  * @param startDate
-    //  * @param endDate
+    //  * @param startLocalDate
+    //  * @param endLocalDate
     //  * @return ArrayList
     //  */
-    // public ArrayList<Mission> searchDate(String startDate, String endDate) {
+    // public ArrayList<Mission> searchLocalDate(String startLocalDate, String endLocalDate) {
     //     // Insert code here (SQL API needed)
     //     ArrayList<Mission> result = new ArrayList<Mission>();
     //     return result;

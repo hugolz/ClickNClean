@@ -1,6 +1,6 @@
 package model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class User {
 	private String name;
@@ -8,8 +8,8 @@ public class User {
 	private String surname;
 	private String email;
 	private String phoneNumber;
-	private Date birthDate;
-	private Date accountDate;
+	private LocalDate birthLocalDate;
+	private LocalDate accountLocalDate;
 	private boolean suspended;
 
 	public User(
@@ -18,8 +18,8 @@ public class User {
 	    String surname,
 	    String email,
 	    String phoneNumber,
-	    Date birthDate,
-	    Date accountDate,
+	    LocalDate birthLocalDate,
+	    LocalDate accountLocalDate,
 	    boolean suspended
 	) {
 		this.name = name;
@@ -27,8 +27,8 @@ public class User {
 		this.surname = surname;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
-		this.birthDate = birthDate;
-		this.accountDate = accountDate;
+		this.birthLocalDate = birthLocalDate;
+		this.accountLocalDate = accountLocalDate;
 		this.suspended = suspended;
 	}
 
@@ -81,20 +81,20 @@ public class User {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public Date getBirthDate() {
-		return this.birthDate;
+	public LocalDate getBirthLocalDate() {
+		return this.birthLocalDate;
 	}
 
-	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
+	public void setBirthLocalDate(LocalDate birthLocalDate) {
+		this.birthLocalDate = birthLocalDate;
 	}
 
-	public Date getAccountDate() {
-		return accountDate;
+	public LocalDate getAccountLocalDate() {
+		return accountLocalDate;
 	}
 
-	public void  setAccountDate(Date accountDate) {
-		this.accountDate = accountDate;
+	public void  setAccountLocalDate(LocalDate accountLocalDate) {
+		this.accountLocalDate = accountLocalDate;
 	}
 
 	public void connection() {
