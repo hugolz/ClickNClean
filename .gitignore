@@ -1,0 +1,5 @@
+.vscode/
+clicknclean/target/
+clicknclean/.classpath
+clicknclean/.project
+clicknclean/.settings
