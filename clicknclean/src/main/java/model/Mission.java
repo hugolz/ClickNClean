@@ -6,7 +6,7 @@ import tools.Db;
 
 public class Mission {
     Property property;
-    LocalDate missionDate;
+    LocalDate missionLocalDate;
     double duration;
     double cost;
     double commission;
@@ -19,7 +19,7 @@ public class Mission {
 
     public Mission(
         Property property,
-        LocalDate missionDate,
+        LocalDate missionLocalDate,
         double duration,
         double cost,
         double commission,
@@ -29,7 +29,7 @@ public class Mission {
         String state
     ) {
         this.property = property;
-        this.missionDate = missionDate;
+        this.missionLocalDate = missionLocalDate;
         this.duration = duration;
         this.cost = cost;
         this.commission = commission;
@@ -39,12 +39,12 @@ public class Mission {
         this.state = state;
     }
 
-    public LocalDate getMissionDate() {
-        return missionDate;
+    public LocalDate getMissionLocalDate() {
+        return missionLocalDate;
     }
 
-    public void setMissionDate(LocalDate missionDate) {
-        this.missionDate = missionDate;
+    public void setMissionLocalDate(LocalDate missionLocalDate) {
+        this.missionLocalDate = missionLocalDate;
     }
 
     public double getDuration() {

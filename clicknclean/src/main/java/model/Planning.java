@@ -20,11 +20,11 @@ class TimeSlot {
 
     }
 
-    public LocalDate getDate() {
+    public LocalDate getLocalDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setLocalDate(LocalDate date) {
         this.date = date;
     }
 
@@ -127,10 +127,10 @@ public class Planning {
     }
 
 
-    public void setAvailableSlots(LocalDate targetDate, LocalTime targetTime, int newStatus) {
+    public void setAvailableSlots(LocalDate targetLocalDate, LocalTime targetTime, int newStatus) {
         for (CalendarWeek calendarWeeks : calendarMonth) {
             for (TimeSlot timeSlotObserved : calendarWeeks.getCalendarDay()) {
-                if (timeSlotObserved.getDate().equals(targetDate) && timeSlotObserved.getHour().equals(targetTime)) {
+                if (timeSlotObserved.getLocalDate().equals(targetLocalDate) && timeSlotObserved.getHour().equals(targetTime)) {
                     timeSlotObserved.setAvailable(newStatus);
                 }
             }
