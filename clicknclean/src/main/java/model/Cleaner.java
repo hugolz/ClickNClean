@@ -3,7 +3,7 @@ package model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.List;
+
 
 
 public class Cleaner extends User {
@@ -18,8 +18,9 @@ public class Cleaner extends User {
     private String motivation;
     private String experience;
     private boolean confirmedId;
-    private List<String> availableDays;
-    private List<String> reviews;
+    private ArrayList<String> availableDays;
+    private ArrayList<Integer> reviews;
+    private int status;
     private Planning planning;
 
 
@@ -44,9 +45,10 @@ public class Cleaner extends User {
         LocalDate birthLocalDate,
         LocalDate accountLocalDate,
         boolean suspended,
-        List<String> reviews) {
+        int status,
+        ArrayList<Integer> reviews) {
 
-        super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended);
+        super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, status);
 
         // this.cleanerId = cleanerId;
         // this.departureAddress = departureAddress;
@@ -94,22 +96,23 @@ public class Cleaner extends User {
         String phoneNumber,
         LocalDate birthLocalDate,
         LocalDate accountLocalDate,
-        boolean suspended
+        boolean suspended,
+        int status
     ) {
-        super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended);
+        super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, status);
 
         this.cleanerId = cleanerId;
         this.departureAddress = departureAddress;
         this.kmRange = kmRange;
         this.hourlyRate = hourlyRate;
         this.biography = biography;
-        this.idPhoto = idPhoto;
-        this.profilePhoto = profilePhoto;
+        this.idPhoto = "idPhoto";
+        this.profilePhoto = "profilePhoto";
         this.motivation = motivation;
         this.experience = experience;
-        this.confirmedId = confirmedId;
-        this.availableDays = availableDays;
-        this.reviews = new ArrayList();
+        this.confirmedId = false;
+        this.status = 2;
+        this.reviews = new ArrayList<Integer>();
         this.planning = new Planning();
     }
 
@@ -146,7 +149,7 @@ public class Cleaner extends User {
     }
 
     public String getBiography() {
-        return biography;
+        return this.biography;
     }
 
     public void setBiography(String biography) {
@@ -162,7 +165,7 @@ public class Cleaner extends User {
     }
 
     public String getProfilePhoto() {
-        return profilePhoto;
+        return this.profilePhoto;
     }
 
     public void setProfilePhoto(String profilePhoto) {
@@ -170,7 +173,7 @@ public class Cleaner extends User {
     }
 
     public String getMotivation() {
-        return motivation;
+        return this.motivation;
     }
 
     public void setMotivation(String motivation) {
@@ -178,7 +181,7 @@ public class Cleaner extends User {
     }
 
     public String getExperience() {
-        return experience;
+        return this.experience;
     }
 
     public void setExperience(String experience) {
@@ -186,31 +189,31 @@ public class Cleaner extends User {
     }
 
     public boolean isConfirmedId() {
-        return confirmedId;
+        return this.confirmedId;
     }
 
     public void setConfirmedId(boolean confirmedId) {
         this.confirmedId = confirmedId;
     }
 
-    public List<String> getAvailableDays() {
-        return availableDays;
+    public ArrayList<String> getAvailableDays() {
+        return this.availableDays;
     }
 
-    public void setAvailableDays(List<String> availableDays) {
+    public void setAvailableDays(ArrayList<String> availableDays) {
         this.availableDays = availableDays;
     }
 
-    public List<String> getReviews() {
-        return reviews;
+    public ArrayList<Integer> getReviews() {
+        return this.reviews;
     }
 
-    public void setReviews(List<String> reviews) {
+    public void setReviews(ArrayList<Integer> reviews) {
         this.reviews = reviews;
     }
 
-    public Planning getPlanning() {
-        return planning;
+    public Planning getPlanningDB() {
+        return this.planning;
     }
 
     public void setPlanning(Planning planning) {

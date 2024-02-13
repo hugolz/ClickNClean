@@ -3,7 +3,7 @@ package main;
 import model.Planning;
 import tools.*;
 import view.Window;
-import view.Connection;
+import view.ConnectionView;
 import view.Owner_registration;
 
 import java.time.LocalDate;
@@ -51,8 +51,8 @@ public class Main {
 
         // new Window().run();
 
-        new Owner_registration().main(args);
-        // new Connection().main(args);
+        //new Owner_registration().main(args);
+        new ConnectionView().main(args);
 
 
     }

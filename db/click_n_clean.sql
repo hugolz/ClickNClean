@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : mar. 13 fév. 2024 à 10:37
--- Version du serveur : 5.7.33
--- Version de PHP : 7.4.19
+-- Généré le : mar. 13 fév. 2024 à 18:37
+-- Version du serveur : 8.0.32
+-- Version de PHP : 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,15 +28,15 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `activity` (
-  `id_activity` int(11) NOT NULL,
-  `type` int(11) NOT NULL,
+  `id_activity` int NOT NULL,
+  `type` int NOT NULL,
   `opened` tinyint(1) NOT NULL,
-  `id_owner` int(11) DEFAULT NULL,
-  `id_cleaner` int(11) DEFAULT NULL,
-  `id_mission` int(11) DEFAULT NULL,
-  `id_dispute` int(11) DEFAULT NULL,
-  `id_admin` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `id_owner` int UNSIGNED DEFAULT NULL,
+  `id_cleaner` int UNSIGNED DEFAULT NULL,
+  `id_mission` int UNSIGNED DEFAULT NULL,
+  `id_dispute` int UNSIGNED DEFAULT NULL,
+  `id_admin` int UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -45,8 +45,8 @@ CREATE TABLE `activity` (
 --
 
 CREATE TABLE `admin` (
-  `id_admin` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `id_admin` int UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -55,16 +55,16 @@ CREATE TABLE `admin` (
 --
 
 CREATE TABLE `cleaner` (
-  `id_cleaner` int(11) NOT NULL,
+  `id_cleaner` int UNSIGNED NOT NULL,
   `address` varchar(80) NOT NULL,
-  `km_range` int(11) NOT NULL,
-  `hourly_rate` int(11) NOT NULL,
+  `km_range` int NOT NULL,
+  `hourly_rate` int NOT NULL,
   `biography` varchar(100) NOT NULL,
   `photo` varchar(36) NOT NULL,
   `motivation` varchar(50) NOT NULL,
   `experience` varchar(50) NOT NULL,
   `confirmed` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -73,15 +73,15 @@ CREATE TABLE `cleaner` (
 --
 
 CREATE TABLE `dispute` (
-  `id_dispute` int(11) NOT NULL,
+  `id_dispute` int NOT NULL,
   `content` varchar(200) NOT NULL,
   `decision` varchar(200) NOT NULL,
-  `id_owner` int(11) NOT NULL,
-  `id_cleaner` int(11) NOT NULL,
-  `id_mission` int(11) NOT NULL,
-  `dispute_creator_id` int(11) NOT NULL,
-  `id_admin` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `id_owner` int UNSIGNED NOT NULL,
+  `id_cleaner` int UNSIGNED NOT NULL,
+  `id_mission` int UNSIGNED NOT NULL,
+  `dispute_creator_id` int UNSIGNED NOT NULL,
+  `id_admin` int UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -90,18 +90,18 @@ CREATE TABLE `dispute` (
 --
 
 CREATE TABLE `mission` (
-  `id_mission` int(11) NOT NULL,
+  `id_mission` int NOT NULL,
   `date_start` date NOT NULL,
   `cost` double DEFAULT NULL,
   `duration` double NOT NULL,
   `commision` double DEFAULT NULL,
-  `state` int(11) NOT NULL,
+  `state` int NOT NULL,
   `before_photo` varchar(50) DEFAULT NULL,
-  `after_photo` int(11) DEFAULT NULL,
-  `id_owner` int(11) NOT NULL,
-  `id_cleaner` int(11) DEFAULT NULL,
-  `id_property` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `after_photo` int DEFAULT NULL,
+  `id_owner` int NOT NULL,
+  `id_cleaner` int DEFAULT NULL,
+  `id_property` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -110,10 +110,10 @@ CREATE TABLE `mission` (
 --
 
 CREATE TABLE `owner` (
-  `id_owner` int(11) NOT NULL,
+  `id_owner` int UNSIGNED NOT NULL,
   `account_date` date NOT NULL,
-  `type_service` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `type_service` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -122,14 +122,14 @@ CREATE TABLE `owner` (
 --
 
 CREATE TABLE `property` (
-  `id_property` int(11) NOT NULL,
+  `id_property` int NOT NULL,
   `address` varchar(25) NOT NULL,
-  `surface` int(11) NOT NULL,
-  `id_owner` int(11) NOT NULL,
-  `acces_code` int(11) DEFAULT NULL,
-  `key_box_code` int(11) DEFAULT NULL,
+  `surface` int NOT NULL,
+  `id_owner` int NOT NULL,
+  `acces_code` int DEFAULT NULL,
+  `key_box_code` int DEFAULT NULL,
   `special_instructon` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -138,12 +138,12 @@ CREATE TABLE `property` (
 --
 
 CREATE TABLE `review` (
-  `id_review` int(11) NOT NULL,
+  `id_review` int NOT NULL,
   `content` varchar(100) NOT NULL,
-  `grade` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `id_mission` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `grade` int NOT NULL,
+  `id_user` int NOT NULL,
+  `id_mission` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -152,9 +152,9 @@ CREATE TABLE `review` (
 --
 
 CREATE TABLE `status` (
-  `id_status` int(10) UNSIGNED NOT NULL,
+  `id_status` int UNSIGNED NOT NULL,
   `name_status` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `status`
@@ -172,7 +172,7 @@ INSERT INTO `status` (`id_status`, `name_status`) VALUES
 --
 
 CREATE TABLE `user` (
-  `id_user` int(11) NOT NULL,
+  `id_user` int NOT NULL,
   `name` varchar(25) NOT NULL,
   `password` varchar(35) NOT NULL,
   `surname` varchar(15) NOT NULL,
@@ -181,8 +181,8 @@ CREATE TABLE `user` (
   `birth_date` date NOT NULL,
   `accunt_date` date NOT NULL,
   `suspended` tinyint(1) NOT NULL DEFAULT '0',
-  `status` int(10) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `status` int UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Index pour les tables déchargées
@@ -276,112 +276,43 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `activity`
 --
 ALTER TABLE `activity`
-  MODIFY `id_activity` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_activity` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `dispute`
 --
 ALTER TABLE `dispute`
-  MODIFY `id_dispute` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_dispute` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `mission`
 --
 ALTER TABLE `mission`
-  MODIFY `id_mission` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_mission` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `property`
 --
 ALTER TABLE `property`
-  MODIFY `id_property` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_property` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `review`
 --
 ALTER TABLE `review`
-  MODIFY `id_review` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_review` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `status`
 --
 ALTER TABLE `status`
-  MODIFY `id_status` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_status` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- Contraintes pour les tables déchargées
---
-
---
--- Contraintes pour la table `activity`
---
-ALTER TABLE `activity`
-  ADD CONSTRAINT `admin_of_the_mission` FOREIGN KEY (`id_admin`) REFERENCES `admin` (`id_admin`),
-  ADD CONSTRAINT `cleaner_of_the_activity` FOREIGN KEY (`id_cleaner`) REFERENCES `cleaner` (`id_cleaner`),
-  ADD CONSTRAINT `dispute_of_the_mission` FOREIGN KEY (`id_dispute`) REFERENCES `dispute` (`id_dispute`),
-  ADD CONSTRAINT `mission_of_the_activity` FOREIGN KEY (`id_mission`) REFERENCES `mission` (`id_mission`),
-  ADD CONSTRAINT `owner_of_the_activity` FOREIGN KEY (`id_owner`) REFERENCES `owner` (`id_owner`);
-
---
--- Contraintes pour la table `admin`
---
-ALTER TABLE `admin`
-  ADD CONSTRAINT `admin_is_a_user` FOREIGN KEY (`id_admin`) REFERENCES `user` (`id_user`);
-
---
--- Contraintes pour la table `cleaner`
---
-ALTER TABLE `cleaner`
-  ADD CONSTRAINT `cleaner_is_an_user` FOREIGN KEY (`id_cleaner`) REFERENCES `user` (`id_user`);
-
---
--- Contraintes pour la table `dispute`
---
-ALTER TABLE `dispute`
-  ADD CONSTRAINT `admin_of_the_dispute` FOREIGN KEY (`id_admin`) REFERENCES `admin` (`id_admin`),
-  ADD CONSTRAINT `cleaner_of_the_mission_disputed` FOREIGN KEY (`id_cleaner`) REFERENCES `cleaner` (`id_cleaner`),
-  ADD CONSTRAINT `creator_of_the_dispute` FOREIGN KEY (`dispute_creator_id`) REFERENCES `user` (`id_user`),
-  ADD CONSTRAINT `mission_being_disputed` FOREIGN KEY (`id_mission`) REFERENCES `mission` (`id_mission`),
-  ADD CONSTRAINT `owner_of_the_mission_disputed` FOREIGN KEY (`id_owner`) REFERENCES `owner` (`id_owner`);
-
---
--- Contraintes pour la table `mission`
---
-ALTER TABLE `mission`
-  ADD CONSTRAINT `cleaner_of_the_mission` FOREIGN KEY (`id_cleaner`) REFERENCES `cleaner` (`id_cleaner`),
-  ADD CONSTRAINT `owner_of_the_mission` FOREIGN KEY (`id_owner`) REFERENCES `owner` (`id_owner`),
-  ADD CONSTRAINT `property_being_cleaned` FOREIGN KEY (`id_property`) REFERENCES `property` (`id_property`);
-
---
--- Contraintes pour la table `owner`
---
-ALTER TABLE `owner`
-  ADD CONSTRAINT `owner_is_a_user` FOREIGN KEY (`id_owner`) REFERENCES `user` (`id_user`);
-
---
--- Contraintes pour la table `property`
---
-ALTER TABLE `property`
-  ADD CONSTRAINT `owner_own_property` FOREIGN KEY (`id_owner`) REFERENCES `owner` (`id_owner`);
-
---
--- Contraintes pour la table `review`
---
-ALTER TABLE `review`
-  ADD CONSTRAINT `mission_of_the_review` FOREIGN KEY (`id_mission`) REFERENCES `mission` (`id_mission`),
-  ADD CONSTRAINT `target_of_the_review` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`);
-
---
--- Contraintes pour la table `user`
---
-ALTER TABLE `user`
-  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`status`) REFERENCES `status` (`id_status`);
+  MODIFY `id_user` int NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

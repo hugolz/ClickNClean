@@ -117,7 +117,8 @@ public class Db {
 				    rSet.getString("phone_number"),
 				    rSet.getDate("birth_date").toLocalDate(),
 				    rSet.getDate("account_date").toLocalDate(),
-				    rSet.getBoolean("suspended")
+				    rSet.getBoolean("suspended"), 
+					rSet.getInt("status")
 				);
 
 				out.add(cleaner);
@@ -206,7 +207,8 @@ public class Db {
 				    rsReader.getString("phone_number"),
 				    rsReader.getDate("birth_date").toLocalDate(),
 				    rsReader.getDate("account_date").toLocalDate(),
-				    rsReader.getBoolean("suspended")
+				    rsReader.getBoolean("suspended"),
+					rsReader.getInt("status")
 				);
 				cleanerList.add(i, a);
 				i++;
@@ -230,6 +232,9 @@ public class Db {
 		}
 	}
 
+
+
+	
 	public void DAOAdd(Cleaner a) {
 		int id = 0;
 		try {
@@ -263,6 +268,12 @@ public class Db {
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
+
+	}
+
+
+	public void DAOAddPlanning (int id) {
+		Planning plan = new Planning();
 
 	}
 
