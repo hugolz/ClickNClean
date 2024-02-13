@@ -17,28 +17,28 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws InterruptedException, ExecutionException {
         Db db = new Db();
-        db.DAOAdd(
-            new Cleaner(
-                5,
-                new Address("3", "av Yves thepot",
-                            "29000", "quimper"),
-                13,
-                0,
-                "null",
-                "null",
-                "null",
-                "null",
-                false,
-                "Martin",
-                "null",
-                "Durand",
-                "test@test.com",
-                "88967886",
-                LocalDate.now(),
-                LocalDate.now(),
-                false
-            )
-        );
+        // db.DAOAdd(
+        //     new Cleaner(
+        //         5,
+        //         new Address("3", "av Yves thepot",
+        //                     "29000", "quimper"),
+        //         13,
+        //         0,
+        //         "null",
+        //         "null",
+        //         "null",
+        //         "null",
+        //         false,
+        //         "Martin",
+        //         "null",
+        //         "Durand",
+        //         "test@test.com",
+        //         "88967886",
+        //         LocalDate.now(),
+        //         LocalDate.now(),
+        //         false
+        //     )
+        // );
 
         try {
             Address.main(args);
@@ -49,11 +49,9 @@ public class Main {
         }
 
 
-        // Window win = new Window();
+        // new Window().run();
 
-        // win.run();
-
-        // new Owner_registration().main(args);
+        new Owner_registration().main(args);
         // new Connection().main(args);
 
 

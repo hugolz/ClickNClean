@@ -45,11 +45,7 @@ public class Window extends Application {
 
 		Scene scene = new Scene(root, 800, 600);
 
-		File f = new File("src/main/css/style.css");
-
-		System.out.println(f.getAbsolutePath());
-
-		scene.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
+		scene.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
 
 		stage.setScene(scene);
 

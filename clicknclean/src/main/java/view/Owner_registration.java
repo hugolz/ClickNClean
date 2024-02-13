@@ -1,5 +1,7 @@
 package view;
 
+import java.io.File;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -75,6 +77,8 @@ public class Owner_registration extends Application {
 		VBox.setVgrow(button, Priority.ALWAYS);
 
 		Scene scene = new Scene(vbox, 800, 600);
+		scene.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
+
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
