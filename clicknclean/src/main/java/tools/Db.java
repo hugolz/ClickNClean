@@ -11,6 +11,10 @@ import java.util.concurrent.ExecutionException;
 
 import model.Address;
 import model.Cleaner;
+import model.User;
+import model.UserStatus;
+
+import javafx.util.Pair;
 
 import model.*;
 
@@ -117,9 +121,7 @@ public class Db {
 		return out;
 	}
 
-	public Cleaner loginCleaner(String login, String password) throws InterruptedException, ExecutionException, Exception {
-		boolean found = false;
-		Cleaner out;
+	public Pair<User, UserStatus> loginUser(String login, String password) throws InterruptedException, ExecutionException, Exception {
 		String query = "SELECT * FROM user where email  = " + login + " AND password = " + password + ";";
 
 		ResultSet rSet = this.stRead.executeQuery(query);
@@ -127,19 +129,16 @@ public class Db {
 			if (rSet.getInt("status") != 2 /* cleaner */) {
 				throw new Exception("Found a user with given email & password, but it's not a cleaner;");
 			}
-			Cleaner cleaner = new Cleaner(
-			    rSet.getInt("id_cleaner"),
-			    new Address(
-			        rSet.getString("address_display"),
-			        rSet.getString("address_coords")
-			    ),
-			    rSet.getInt("km_range"),
-			    rSet.getInt("hourly_rate"),
-			    rSet.getString("biography"),
-			    rSet.getString("photo"),
-			    rSet.getString("motivation"),
-			    rSet.getString("experience"),
-			    rSet.getBoolean("confirmed"),
+			// String name,
+			// String pwd,
+			// String surname,
+			// String email,
+			// String phoneNumber,
+			// LocalDate birthLocalDate,
+			// LocalDate accountLocalDate,
+			// boolean suspended,
+			// int status
+			User user = new User(
 			    rSet.getString("name"),
 			    rSet.getString("password"),
 			    rSet.getString("surname"),
@@ -148,13 +147,12 @@ public class Db {
 			    rSet.getDate("birth_date").toLocalDate(),
 			    rSet.getDate("account_date").toLocalDate(),
 			    rSet.getBoolean("suspended"),
-			    rSet.getInt("status")
+			    UserStatus.fromInt(rSet.getInt("status"))
 			);
-			return cleaner;
+			return new Pair<User, UserStatus>(user, UserStatus.fromInt(rSet.getInt("status")));
 		}
 
 		throw new Exception("Could not find a user with the given address / pasword");
-
 	}
 
 	public void read() {
