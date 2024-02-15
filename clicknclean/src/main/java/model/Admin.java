@@ -8,12 +8,84 @@ import java.time.LocalDate;
 
 public class Admin extends User {
 
-    public Admin(String name, String pwd, String surname, String email, String phoneNumber, LocalDate birthLocalDate, LocalDate accountLocalDate, boolean suspended) {
-        super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended);
+    private String name;
+    private String pwd;
+    private String surname;
+    private String email;
+    private String phoneNumber;
+    private int status;
+
+    public Admin(
+        String name, 
+        String pwd, 
+        String surname, 
+        String email, 
+        int status 
+        ) { super(name, pwd, surname, email, status);
+        
+        this.name = name;
+        this.pwd = pwd;
+        this.surname = surname;
+        this.email = email;
+        this.status = status;
+}
+
+    public String getName() {
+        return name;
     }
+
+
+
+
+
+    public String getSurname() {
+        return surname;
+    }
+
+
+
+
+
+    public int getStatus() {
+        return status;
+    }
+
+
+    public String getPwd() {
+        return this.pwd;
+    }
+
+
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
+    }
+
+
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+
+
+    public String getPhoneNumber() {
+        return this.phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
 
 //-------------------------------------------------------------------------------------------------------------------------
 // Manage users
+    
+
+
 
     /**
      * @Method

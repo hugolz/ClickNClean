@@ -8,6 +8,8 @@ import javax.swing.JOptionPane;
 import tools.Db;
 
 public class ConnectionController {
+
+
 	public ConnectionController(String login, String psw) {
 
 		Db db1 = new Db();
@@ -23,8 +25,8 @@ public class ConnectionController {
 				ResultSet rsReader = db1.getStRead().executeQuery(strQuery);
 
 				while (rsReader.next()) {
-					JOptionPane.showMessageDialog(null, "Connection réussie");
-					switch (rsReader.getString("statut")) {
+					JOptionPane.showMessageDialog(null, "Connexion réussie");
+					switch (rsReader.getString("status")) {
 					case "Admin" :
 						// WelcomeAdmin a1 = new WelcomeAdmin();
 						// a1.setVisible(true);
@@ -46,11 +48,14 @@ public class ConnectionController {
 					}
 				}
 
-				//tuer la connection
+
+
+
+				//tuer la connexion
 
 				JOptionPane.showMessageDialog(null, "Login ou mot de passe incorrect !");
-				// Connection c1 = new Connection();
-				// c1.setVisible(true);
+				//Connexion c1 = new Connexion();
+				//c1.setVisible(true);
 				System.out.println("ce projet est vraiment génial");
 			}
 		} catch (SQLException e) {

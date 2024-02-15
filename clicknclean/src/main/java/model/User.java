@@ -11,7 +11,15 @@ public class User {
 	private LocalDate birthLocalDate;
 	private LocalDate accountLocalDate;
 	private boolean suspended;
+	private int status; 
+	/*
+	 * Status index : 
+	 * Admin --> 0
+	 * Owner --> 1
+	 * Cleaner --> 2
+	 */
 
+	//Basic user  constructor
 	public User(
 	    String name,
 	    String pwd,
@@ -20,7 +28,8 @@ public class User {
 	    String phoneNumber,
 	    LocalDate birthLocalDate,
 	    LocalDate accountLocalDate,
-	    boolean suspended
+	    boolean suspended,
+		int status
 	) {
 		this.name = name;
 		this.pwd = pwd;
@@ -30,6 +39,23 @@ public class User {
 		this.birthLocalDate = birthLocalDate;
 		this.accountLocalDate = accountLocalDate;
 		this.suspended = suspended;
+		this.status = status;
+	}
+
+
+	//Admin-friendly constructor
+	public User(
+	    String name,
+	    String pwd,
+	    String surname,
+	    String email,
+		int status
+	) {
+		this.name = name;
+		this.pwd = pwd;
+		this.surname = surname;
+		this.email = email;
+		this.status = status;
 	}
 
 
@@ -95,6 +121,10 @@ public class User {
 
 	public void  setAccountLocalDate(LocalDate accountLocalDate) {
 		this.accountLocalDate = accountLocalDate;
+	}
+
+	public int getStatus() {
+		return this.status;
 	}
 
 	public void connection() {
