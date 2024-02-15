@@ -28,14 +28,14 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `activity` (
-  `id_activity` int(11) NOT NULL,
+  `id_activity` int(11) UNSIGNED NOT NULL,
   `type` int(11) NOT NULL,
   `opened` tinyint(1) NOT NULL,
-  `id_owner` int(11) DEFAULT NULL,
-  `id_cleaner` int(11) DEFAULT NULL,
-  `id_mission` int(11) DEFAULT NULL,
-  `id_dispute` int(11) DEFAULT NULL,
-  `id_admin` int(11) DEFAULT NULL
+  `id_owner` int(11) UNSIGNED DEFAULT NULL,
+  `id_cleaner` int(11) UNSIGNED DEFAULT NULL,
+  `id_mission` int(11) UNSIGNED DEFAULT NULL,
+  `id_dispute` int(11) UNSIGNED DEFAULT NULL,
+  `id_admin` int(11) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -45,7 +45,7 @@ CREATE TABLE `activity` (
 --
 
 CREATE TABLE `admin` (
-  `id_admin` int(11) NOT NULL
+  `id_admin` int(11) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -55,14 +55,15 @@ CREATE TABLE `admin` (
 --
 
 CREATE TABLE `cleaner` (
-  `id_cleaner` int(11) NOT NULL,
-  `address` varchar(80) NOT NULL,
+  `id_cleaner` int(11) UNSIGNED NOT NULL,
+  `address_display` varchar(100) NOT NULL,
+  `address_coords` varchar(40) NOT NULL,
   `km_range` int(11) NOT NULL,
   `hourly_rate` int(11) NOT NULL,
   `biography` varchar(100) NOT NULL,
   `photo` varchar(36) NOT NULL,
-  `motivation` varchar(50) NOT NULL,
-  `experience` varchar(50) NOT NULL,
+  `motivation` varchar(250) NOT NULL,
+  `experience` varchar(250) NOT NULL,
   `confirmed` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -73,14 +74,14 @@ CREATE TABLE `cleaner` (
 --
 
 CREATE TABLE `dispute` (
-  `id_dispute` int(11) NOT NULL,
+  `id_dispute` int(11) UNSIGNED NOT NULL,
   `content` varchar(200) NOT NULL,
   `decision` varchar(200) NOT NULL,
-  `id_owner` int(11) NOT NULL,
-  `id_cleaner` int(11) NOT NULL,
-  `id_mission` int(11) NOT NULL,
-  `dispute_creator_id` int(11) NOT NULL,
-  `id_admin` int(11) DEFAULT NULL
+  `id_owner` int(11) UNSIGNED NOT NULL,
+  `id_cleaner` int(11) UNSIGNED NOT NULL,
+  `id_mission` int(11) UNSIGNED NOT NULL,
+  `id_dispute_creator` UNSIGNED int(11) NOT NULL,
+  `id_admin` int(11) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -90,7 +91,7 @@ CREATE TABLE `dispute` (
 --
 
 CREATE TABLE `mission` (
-  `id_mission` int(11) NOT NULL,
+  `id_mission` int(11) UNSIGNED NOT NULL,
   `date_start` date NOT NULL,
   `cost` double DEFAULT NULL,
   `duration` double NOT NULL,
@@ -98,9 +99,9 @@ CREATE TABLE `mission` (
   `state` int(11) NOT NULL,
   `before_photo` varchar(50) DEFAULT NULL,
   `after_photo` int(11) DEFAULT NULL,
-  `id_owner` int(11) NOT NULL,
-  `id_cleaner` int(11) DEFAULT NULL,
-  `id_property` int(11) NOT NULL
+  `id_owner` int(11) UNSIGNED NOT NULL,
+  `id_cleaner` int(11) UNSIGNED DEFAULT NULL,
+  `id_property` int(11) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -110,7 +111,7 @@ CREATE TABLE `mission` (
 --
 
 CREATE TABLE `owner` (
-  `id_owner` int(11) NOT NULL,
+  `id_owner` int(11) UNSIGNED NOT NULL,
   `account_date` date NOT NULL,
   `type_service` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -122,10 +123,11 @@ CREATE TABLE `owner` (
 --
 
 CREATE TABLE `property` (
-  `id_property` int(11) NOT NULL,
-  `address` varchar(25) NOT NULL,
+  `id_property` int(11) UNSIGNED NOT NULL,
+  `address_display` varchar(100) NOT NULL,
+  `address_coords` varchar(40) NOT NULL,
   `surface` int(11) NOT NULL,
-  `id_owner` int(11) NOT NULL,
+  `id_owner` int(11) UNSIGNED NOT NULL,
   `acces_code` int(11) DEFAULT NULL,
   `key_box_code` int(11) DEFAULT NULL,
   `special_instructon` varchar(50) DEFAULT NULL
@@ -138,11 +140,11 @@ CREATE TABLE `property` (
 --
 
 CREATE TABLE `review` (
-  `id_review` int(11) NOT NULL,
+  `id_review` int(11) UNSIGNED NOT NULL,
   `content` varchar(100) NOT NULL,
   `grade` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `id_mission` int(11) NOT NULL
+  `id_user` int(11) UNSIGNED NOT NULL,
+  `id_mission` int(11) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -172,7 +174,7 @@ INSERT INTO `status` (`id_status`, `name_status`) VALUES
 --
 
 CREATE TABLE `user` (
-  `id_user` int(11) NOT NULL,
+  `id_user` int(11) UNSIGNED NOT NULL,
   `name` varchar(25) NOT NULL,
   `password` varchar(35) NOT NULL,
   `surname` varchar(15) NOT NULL,
