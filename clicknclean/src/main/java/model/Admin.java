@@ -1,5 +1,4 @@
 package model;
-import java.lang.ref.Cleaner;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.time.LocalDate;
@@ -27,7 +26,7 @@ public class Admin extends User {
         this.pwd = pwd;
         this.surname = surname;
         this.email = email;
-        this.status = status;
+        this.status = 1;
 }
 
     public String getName() {

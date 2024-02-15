@@ -30,7 +30,7 @@ public class Owner extends User {
 		this.serviceType = serviceType;
 		this.ownerReviews = ownerReviews;
 		this.ownerID = ownerID;
-		this.status = 1;
+		this.status = 3;
 	}
 
 
