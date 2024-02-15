@@ -181,7 +181,7 @@ CREATE TABLE `user` (
   `email` varchar(50) NOT NULL,
   `phone_number` varchar(10) NOT NULL,
   `birth_date` date NOT NULL,
-  `accunt_date` date NOT NULL,
+  `account_date` date NOT NULL,
   `suspended` tinyint(1) NOT NULL DEFAULT '0',
   `status` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

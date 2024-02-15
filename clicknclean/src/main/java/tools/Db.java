@@ -53,7 +53,6 @@ public class Db {
 		this.stRead = stRead;
 	}
 
-
 	public ArrayList<Cleaner> getCleanersInRange(Address addr) {
 		ArrayList<Cleaner> out = new ArrayList<>();
 		String query = "SELECT * FROM cleaner;";
@@ -107,7 +106,7 @@ public class Db {
 				    rSet.getDate("birth_date").toLocalDate(),
 				    rSet.getDate("account_date").toLocalDate(),
 				    rSet.getBoolean("suspended"),
-					rSet.getInt("status")
+				    rSet.getInt("status")
 				);
 
 				out.add(cleaner);
@@ -115,8 +114,47 @@ public class Db {
 		} catch (Exception e) {
 			System.out.println("Could not query cleaners in range " + addr + "due to: " + addr);
 		}
-
 		return out;
+	}
+
+	public Cleaner loginCleaner(String login, String password) throws InterruptedException, ExecutionException, Exception {
+		boolean found = false;
+		Cleaner out;
+		String query = "SELECT * FROM user where email  = " + login + " AND password = " + password + ";";
+
+		ResultSet rSet = this.stRead.executeQuery(query);
+		while (rSet.next()) {
+			if (rSet.getInt("status") != 2 /* cleaner */) {
+				throw new Exception("Found a user with given email & password, but it's not a cleaner;");
+			}
+			Cleaner cleaner = new Cleaner(
+			    rSet.getInt("id_cleaner"),
+			    new Address(
+			        rSet.getString("address_display"),
+			        rSet.getString("address_coords")
+			    ),
+			    rSet.getInt("km_range"),
+			    rSet.getInt("hourly_rate"),
+			    rSet.getString("biography"),
+			    rSet.getString("photo"),
+			    rSet.getString("motivation"),
+			    rSet.getString("experience"),
+			    rSet.getBoolean("confirmed"),
+			    rSet.getString("name"),
+			    rSet.getString("password"),
+			    rSet.getString("surname"),
+			    rSet.getString("email"),
+			    rSet.getString("phone_number"),
+			    rSet.getDate("birth_date").toLocalDate(),
+			    rSet.getDate("account_date").toLocalDate(),
+			    rSet.getBoolean("suspended"),
+			    rSet.getInt("status")
+			);
+			return cleaner;
+		}
+
+		throw new Exception("Could not find a user with the given address / pasword");
+
 	}
 
 	public void read() {
@@ -140,7 +178,6 @@ public class Db {
 			System.err.println(e.getMessage());
 		}
 	}
-
 
 	public ArrayList<Cleaner> DAOLister() {
 		int i = 0;
@@ -197,7 +234,7 @@ public class Db {
 				    rsReader.getDate("birth_date").toLocalDate(),
 				    rsReader.getDate("account_date").toLocalDate(),
 				    rsReader.getBoolean("suspended"),
-					rsReader.getInt("status")
+				    rsReader.getInt("status")
 				);
 				cleanerList.add(i, a);
 				i++;
@@ -207,18 +244,6 @@ public class Db {
 			System.err.println(e.getMessage());
 		}
 		return cleanerList;
-	}
-
-	public void add(int id, String surName, String user, String pw, String status, int age) {
-		try {
-			String strQuery = "INSERT INTO `access`"
-			                  + "(`id`, `prenom`, `user`, `pw`, `statut`, `age`) "
-			                  + "VALUES ('" + id + "','" + surName + "','" + user + "','" + pw + "','" + status + "','" + age
-			                  + "');";
-			stRead.executeUpdate(strQuery);
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}
 	}
 
 	public void DAOAddCleaner(Cleaner a) {
@@ -279,6 +304,7 @@ public class Db {
 		try {
 			conn.close();
 		} catch (SQLException e) {
+			System.out.println("[ERROR] Could not close the db's connection due to: " + e);
 		}
 	}
 
