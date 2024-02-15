@@ -53,17 +53,6 @@ public class Db {
 		this.stRead = stRead;
 	}
 
-	public void test() {
-		try {
-			String query = "SELECT * FROM cleaner";
-			ResultSet resSet = this.stRead.executeQuery(query);
-			while (resSet.next()) {
-				System.out.println(resSet);
-			}
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-	}
 
 	public ArrayList<Cleaner> getCleanersInRange(Address addr) {
 		ArrayList<Cleaner> out = new ArrayList<>();
@@ -117,7 +106,8 @@ public class Db {
 				    rSet.getString("phone_number"),
 				    rSet.getDate("birth_date").toLocalDate(),
 				    rSet.getDate("account_date").toLocalDate(),
-				    rSet.getBoolean("suspended")
+				    rSet.getBoolean("suspended"),
+					rSet.getInt("status")
 				);
 
 				out.add(cleaner);
@@ -206,7 +196,8 @@ public class Db {
 				    rsReader.getString("phone_number"),
 				    rsReader.getDate("birth_date").toLocalDate(),
 				    rsReader.getDate("account_date").toLocalDate(),
-				    rsReader.getBoolean("suspended")
+				    rsReader.getBoolean("suspended"),
+					rsReader.getInt("status")
 				);
 				cleanerList.add(i, a);
 				i++;
@@ -230,7 +221,7 @@ public class Db {
 		}
 	}
 
-	public void DAOAdd(Cleaner a) {
+	public void DAOAddCleaner(Cleaner a) {
 		int id = 0;
 		try {
 			String strQuery = "INSERT INTO `user`"

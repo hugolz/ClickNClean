@@ -14,9 +14,9 @@ public class User {
 	private int status; 
 	/*
 	 * Status index : 
-	 * Admin --> 0
-	 * Owner --> 1
+	 * Admin --> 1
 	 * Cleaner --> 2
+	 * Owner --> 3
 	 */
 
 	//Basic user  constructor
