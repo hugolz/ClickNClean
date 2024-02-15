@@ -9,6 +9,7 @@ public class Owner extends User {
 	private String serviceType;
 	private String ownerReviews;
 	private ArrayList<Property> listProperty;
+	private int status;
 
 	public Owner(
 	    String serviceType,
@@ -21,14 +22,47 @@ public class Owner extends User {
 	    String phoneNumber,
 	    LocalDate birthLocalDate,
 	    LocalDate accountLocalDate,
-	    boolean suspended
+	    boolean suspended,
+		int status
 	) {
-		super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended);
+		super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, status);
 
 		this.serviceType = serviceType;
 		this.ownerReviews = ownerReviews;
 		this.ownerID = ownerID;
+		this.status = 1;
 	}
+
+
+	public int getOwnerID() {
+		return ownerID;
+	}
+
+
+
+	public String getServiceType() {
+		return serviceType;
+	}
+
+
+
+	public String getOwnerReviews() {
+		return ownerReviews;
+	}
+
+
+
+	public ArrayList<Property> getListProperty() {
+		return listProperty;
+	}
+
+
+
+	public int getStatus() {
+		return status;
+	}
+
+
 
 	public void createMission() {
 		// insert code here

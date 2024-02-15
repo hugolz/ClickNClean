@@ -45,14 +45,7 @@ public class Owner_registration extends Application {
 
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				// new ConnectionController(
-				//     nomField.getText(),
-				//     prenomField.getText(),
-				//     mailField.getText(),
-				//     telephoneField.getText(),
-				//     dateDeNaissanceField.getText(),
-				//     typePrestationRechercheField.getText()
-				// );
+				// new ConnectionController(nomField.getText(), prenomField.getText(),mailField.getText(), telephoneField.getText(),dateDeNaissanceField.getText(), typePrestationRechercheField.getText());
 			}
 		};
 
