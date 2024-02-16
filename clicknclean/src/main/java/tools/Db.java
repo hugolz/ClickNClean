@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
@@ -243,7 +245,7 @@ public class Db {
 		return cleanerList;
 	}
 
-	
+
 	public void DAOAddCleaner(Cleaner a) {
 		int id = 0;
 		DAOaddUser(a);
@@ -387,4 +389,29 @@ public class Db {
 		}
 	}
 
+/*--------------------------------------MANAGE ACTIVITY--------------------------------------------------------------------- */
+
+	public void DAOaddActivity(Activity a) {
+		try {
+			String strQuery = "INSERT INTO `activity`"
+			                  + "(`type`, `opened`, `id_owner`, `id_cleaner`, `id_mission`, `id_dispute`, `id_admin`) "
+			                  + "VALUES ('" + a.getType() + "','" + (a.isOpened() ? 1 : 0 ) + "','" + a.getOwnerID() + "','" + a.getCleanerID() + "','" + a.getMissionID() + "','"
+			                  + a.getDisputeID() + "','" + a.getAdminID() + "');";
+			stRead.executeUpdate(strQuery);
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+	}
+/*--------------------------------------MANAGE PLANNING--------------------------------------------------------------------- */
+	public void DAOaddPlanning(LocalDate date, LocalTime hour, int availability, int cleanerID) {
+		try {
+			String strQuery = "INSERT INTO `planning`"
+							+ "(`type`, `opened`, `id_owner`, `id_cleaner`, `id_mission`, `id_dispute`, `id_admin`) "
+							+ "VALUES ('" + a.getType() + "','" + (a.isOpened() ? 1 : 0 ) + "','" + a.getOwnerID() + "','" + a.getCleanerID() + "','" + a.getMissionID() + "','"
+							+ a.getDisputeID() + "','" + a.getAdminID() + "');";
+			stRead.executeUpdate(strQuery);
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+	}
 }

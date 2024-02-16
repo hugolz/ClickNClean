@@ -77,10 +77,12 @@ public class Planning {
     }
 
     private ArrayList<CalendarWeek> calendarMonth;
+    private int cleanerID;
 
-    public Planning() {
+    public Planning(int cleanerID) {
         this.calendarMonth = new ArrayList<CalendarWeek>();
         this.calendarMonth = createCalendarMonth();
+        this.cleanerID = cleanerID;
     }
 
 
@@ -98,11 +100,14 @@ public class Planning {
             for (int d = 0; d < 7; d++) {
                 LocalDate date = startOfWeek.plusDays(d + i * 7);
                 for (int h = 0; h < 24; h++) {
-                    LocalTime startOfDay = LocalTime.of(h, 0);
-                    if (h < START_HR_LIMIT || h >= END_HR_LIMIT)
-                        days.add(new TimeSlot(date, startOfDay, TimeSlot.NOT_AVAILABLE));
-                    else
-                        days.add(new TimeSlot(date, startOfDay, TimeSlot.AVAILABLE));
+                    LocalTime hour = LocalTime.of(h, 0);
+                    if (h < START_HR_LIMIT || h >= END_HR_LIMIT) {
+                        days.add(new TimeSlot(date, hour, TimeSlot.NOT_AVAILABLE));
+                    }
+                    else {
+                        days.add(new TimeSlot(date, hour, TimeSlot.AVAILABLE));
+                    }
+                        
                 }
             }
             CalendarWeek calendarWeek = new CalendarWeek(days);
@@ -144,7 +149,7 @@ public class Planning {
     }
 
     public static void main() {
-        Planning plan = new Planning();
+        Planning plan = new Planning(5);
         int count = 0;
         for (int i = 0; i < plan.getAvailableSlots().size(); i++) {
             count++;

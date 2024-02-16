@@ -74,7 +74,7 @@ public class Cleaner extends User {
         this.confirmedId = confirmedId;
         this.availableDays = availableDays;
         this.reviews = reviews;
-        this.planning = new Planning();
+        this.planning = new Planning(this.cleanerId);
     }
 
     // Creates a basic Cleaner
@@ -112,7 +112,7 @@ public class Cleaner extends User {
         this.confirmedId = false;
         this.status = 2;
         this.reviews = new ArrayList<Integer>();
-        this.planning = new Planning();
+        this.planning = new Planning(cleanerId);
     }
 
     public int getCleanerId() {
