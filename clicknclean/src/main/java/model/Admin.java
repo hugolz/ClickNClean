@@ -2,13 +2,10 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import tools.Db;
-
 import java.time.LocalDate;
 
 public class Admin extends User {
-
     public Admin(
         String name,
         String pwd,
@@ -60,8 +57,35 @@ public class Admin extends User {
         // Insert code here
     }
 
-    public void resoveDispute(int missionID) {
-        // Insert code here
+    /**
+     * @Method resolves a dispute
+     * @param missionID
+     * @param userWinner
+     * 1 --> Cleaner wins
+     * 2 --> Owner wins
+     */
+    public void resoveDispute(int missionID, int userWinner) {
+        Db connection = new Db();
+       switch (userWinner) {
+            case 1 : 
+            {
+               connection.DAOResolveDispute(missionID, 7); 
+               break;
+            }
+
+            case 2 : 
+            {
+               connection.DAOResolveDispute(missionID, 8); 
+               break;
+            }
+            default : 
+            {
+                System.out.println("Dispute has failed to resolve on  mission : " + missionID + ", dispute status : " + userWinner);
+            }
+        connection.disconnect();
+        connection  = null;
+        // SEND ACTIVITY TO ADD HERE !!
+       }
     }
 
     // -------------------------------------------------------------------------------------------------------------------------

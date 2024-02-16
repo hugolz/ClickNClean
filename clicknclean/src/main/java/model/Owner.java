@@ -23,13 +23,13 @@ public class Owner extends User {
 	    LocalDate birthLocalDate,
 	    LocalDate accountLocalDate,
 	    boolean suspended,
-	    int status
+		  UserStatus status
 	) {
 		super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, status);
 
 		this.serviceType = serviceType;
 		this.ownerID = ownerID;
-		this.status = 3;
+		this.status = UserStatus.OWNER;
 	}
 
 // Creates an owner from loaded data
@@ -47,12 +47,12 @@ public class Owner extends User {
 	    boolean suspended,
 	    UserStatus status
 	) {
-		super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, status);
+		super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, UserStatus.OWNER);
 
 		this.serviceType = serviceType;
 		this.ownerReviews = ownerReviews;
 		this.ownerID = ownerID;
-		this.status = status;
+		this.status = UserStatus.OWNER;
 	}
 
 	public int getOwnerID() {
@@ -79,7 +79,7 @@ public class Owner extends User {
 
 
 
-	public int getStatus() {
+	public UserStatus getStatus() {
 		return status;
 	}
 

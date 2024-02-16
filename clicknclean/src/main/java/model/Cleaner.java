@@ -18,7 +18,7 @@ public class Cleaner extends User {
     private String experience;
     private boolean confirmed;
     private ArrayList<Integer> reviews;
-    private int status;
+    private UserStatus status;
     private Planning planning;
 
     // Creates a Cleaner object from loaded data
@@ -42,24 +42,9 @@ public class Cleaner extends User {
         LocalDate accountLocalDate,
         boolean suspended,
         UserStatus status,
-        ArrayList<Integer> reviews,
-        Planning planning
-    ) {
+        ArrayList<Integer> reviews) {
 
         super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, status);
-
-        // this.cleanerId = cleanerId;
-        // this.departureAddress = departureAddress;
-        // this.kmRange = kmRange;
-        // this.hourlyRate = hourlyRate;
-        // this.planning = new Planning();
-        // this.motivation = motivation;
-        // this.experience = experience;
-        // this.idPhoto = idPhoto;
-        // this.profilePhoto = profilePhoto;
-        // this.confirmed = confirmed;
-        // this.biography = biography;
-        // this.reviews = reviews;
 
         this.cleanerId = cleanerId;
         this.departureAddress = departureAddress;
@@ -72,7 +57,7 @@ public class Cleaner extends User {
         this.experience = experience;
         this.confirmed = confirmed;
         this.reviews = reviews;
-        this.planning = planning;
+        this.planning = new Planning(this.cleanerId);
     }
 
     // Creates a basic Cleaner
@@ -96,7 +81,7 @@ public class Cleaner extends User {
         boolean suspended,
         UserStatus status
     ) {
-        super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, status);
+        super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, UserStatus.CLEANER);
 
         this.cleanerId = cleanerId;
         this.departureAddress = departureAddress;
@@ -107,10 +92,10 @@ public class Cleaner extends User {
         this.profilePhoto = "profilePhoto";
         this.motivation = motivation;
         this.experience = experience;
-        this.confirmed = false;
-        this.status = status;
+        this.confirmedId = false;
+        this.status = UserStatus.CLEANER;
         this.reviews = new ArrayList<Integer>();
-        this.planning = new Planning();
+        this.planning = new Planning(cleanerId);
     }
 
     public int getCleanerId() {
@@ -209,7 +194,7 @@ public class Cleaner extends User {
         this.planning = planning;
     }
 
-    public int getStatus() {
+    public UserStatus getStatus() {
         return this.status;
     }
 

@@ -3,6 +3,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+import tools.Db;
+
 
 class TimeSlot {
     private LocalDate date;
@@ -77,14 +79,17 @@ public class Planning {
     }
 
     private ArrayList<CalendarWeek> calendarMonth;
+    private int cleanerID;
 
-    public Planning() {
+    public Planning(int cleanerID) {
         this.calendarMonth = new ArrayList<CalendarWeek>();
         this.calendarMonth = createCalendarMonth();
+        this.cleanerID = cleanerID;
     }
 
 
     public ArrayList<CalendarWeek> createCalendarMonth() {
+        Db connection = new Db();
         final int START_HR_LIMIT = 8;
         final int END_HR_LIMIT = 22;
 
@@ -98,11 +103,16 @@ public class Planning {
             for (int d = 0; d < 7; d++) {
                 LocalDate date = startOfWeek.plusDays(d + i * 7);
                 for (int h = 0; h < 24; h++) {
-                    LocalTime startOfDay = LocalTime.of(h, 0);
-                    if (h < START_HR_LIMIT || h >= END_HR_LIMIT)
-                        days.add(new TimeSlot(date, startOfDay, TimeSlot.NOT_AVAILABLE));
-                    else
-                        days.add(new TimeSlot(date, startOfDay, TimeSlot.AVAILABLE));
+                    LocalTime hour = LocalTime.of(h, 0);
+                    if (h < START_HR_LIMIT || h >= END_HR_LIMIT) {
+                        days.add(new TimeSlot(date, hour, TimeSlot.NOT_AVAILABLE));
+                        connection.DAOCreateNewPlanning(date, hour, TimeSlot.NOT_AVAILABLE, this.cleanerID);
+                    }
+                    else {
+                        days.add(new TimeSlot(date, hour, TimeSlot.AVAILABLE));
+                        connection.DAOCreateNewPlanning(date, hour, TimeSlot.AVAILABLE, this.cleanerID);
+                    }
+                        
                 }
             }
             CalendarWeek calendarWeek = new CalendarWeek(days);
@@ -144,7 +154,7 @@ public class Planning {
     }
 
     public static void main() {
-        Planning plan = new Planning();
+        Planning plan = new Planning(5);
         int count = 0;
         for (int i = 0; i < plan.getAvailableSlots().size(); i++) {
             count++;
