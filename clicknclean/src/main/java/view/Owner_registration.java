@@ -17,7 +17,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class OwnerRegistration extends Application {
+public class Owner_registration extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
