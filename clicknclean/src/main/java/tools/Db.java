@@ -242,6 +242,7 @@ public class Db {
 		}
 		return cleanerList;
 	}
+
 	
 	public void DAOAddCleaner(Cleaner a) {
 		int id = 0;
