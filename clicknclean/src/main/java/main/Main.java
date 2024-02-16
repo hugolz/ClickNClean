@@ -12,11 +12,14 @@ import java.util.concurrent.ExecutionException;
 import model.Address;
 import model.Cleaner;
 
+import model.User;
+
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException, ExecutionException {
         Db db = new Db();
+
         // db.DAOAdd(
         //     new Cleaner(
         //         5,

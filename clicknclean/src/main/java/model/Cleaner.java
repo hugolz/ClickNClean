@@ -18,7 +18,7 @@ public class Cleaner extends User {
     private String experience;
     private boolean confirmed;
     private ArrayList<Integer> reviews;
-    private int status;
+    private UserStatus status;
     private Planning planning;
 
     // Creates a Cleaner object from loaded data
@@ -209,7 +209,7 @@ public class Cleaner extends User {
         this.planning = planning;
     }
 
-    public int getStatus() {
+    public UserStatus getStatus() {
         return this.status;
     }
 
