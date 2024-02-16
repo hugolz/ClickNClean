@@ -7,13 +7,35 @@ public class Owner extends User {
 
 	private int ownerID;
 	private String serviceType;
-	private String ownerReviews;
+	private ArrayList<Review>ownerReviews;
 	private ArrayList<Property> listProperty;
 	private int status;
 
+//Creates a basic owner
 	public Owner(
+		int ownerID,
 	    String serviceType,
-	    String ownerReviews,
+	    String name,
+	    String pwd,
+	    String surname,
+	    String email,
+	    String phoneNumber,
+	    LocalDate birthLocalDate,
+	    LocalDate accountLocalDate,
+	    boolean suspended,
+		int status
+	) {
+		super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, status);
+
+		this.serviceType = serviceType;
+		this.ownerID = ownerID;
+		this.status = 3;
+	}
+
+// Creates an owner from loaded data
+	public Owner(
+	    ArrayList<Review> ownerReviews,
+		String serviceType,
 	    int ownerID,
 	    String name,
 	    String pwd,
@@ -34,6 +56,7 @@ public class Owner extends User {
 	}
 
 
+
 	public int getOwnerID() {
 		return ownerID;
 	}
@@ -46,7 +69,7 @@ public class Owner extends User {
 
 
 
-	public String getOwnerReviews() {
+	public ArrayList<Review> getOwnerReviews() {
 		return ownerReviews;
 	}
 
@@ -74,14 +97,6 @@ public class Owner extends User {
 
 	public void disputeCreate() {
 		// insert code here
-	}
-
-	public String getMission() {
-		return ownerReviews;
-	}
-
-	public String getReview() {
-		return ownerReviews;
 	}
 
 	public void setReview() {

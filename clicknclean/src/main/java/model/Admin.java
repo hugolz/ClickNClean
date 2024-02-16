@@ -1,6 +1,9 @@
 package model;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import tools.Db;
+
 import java.time.LocalDate;
 
 
@@ -96,16 +99,25 @@ public class Admin extends User {
     }
 
     /**
-     * @Method Suspends a Cleaner's access to all features
+     * @Method Suspends a user's access to all features
      */
     public void suspendUser(int userID) {
-        // Insert code here
+        Db connection = new Db();
+        connection.DAOSuspendUser(userID, true);
+        connection.disconnect();
+        connection  = null;
     }
 
-
-    public void restoreUser(int cleanerID) {
-        // Insert code here
+    /**
+     * @Method restore a user's access to all features
+     */
+    public void restoreUser(int userID) {
+        Db connection = new Db();
+        connection.DAOSuspendUser(userID, false);
+        connection.disconnect();
+        connection  = null;
     }
+
 
     public void cancelMission(int missionID) {
         // Insert code here

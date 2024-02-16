@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
-import model.Address;
-import model.Cleaner;
-
 import model.*;
 
 public class Db {
@@ -221,17 +218,12 @@ public class Db {
 		}
 	}
 
+
+/*--------------------------------------ADD A CLEANER (and User)---------------------------------------------------------- */
+
 	public void DAOAddCleaner(Cleaner a) {
 		int id = 0;
-		try {
-			String strQuery = "INSERT INTO `user`"
-			                  + "(`name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `accunt_date`, `suspended`) "
-			                  + "VALUES ('" + a.getName() + "','" + a.getPwd() + "','" + a.getSurname() + "','" + a.getEmail() + "','" + a.getPhoneNumber() + "','"
-			                  + a.getBirthLocalDate() + "','" + a.getAccountLocalDate() + "','" + (a.isSuspended() ? 1 : 0) + "');";
-			stRead.executeUpdate(strQuery);
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}
+		DAOaddUser(a);
 
 		try {
 			String strQuery = "SELECT * FROM user;";
@@ -257,18 +249,78 @@ public class Db {
 
 	}
 
-	public void DAODelete(Acces a) {
+
+/*--------------------------------------ADD AN OWNER (and User)---------------------------------------------------------- */
+
+	public void DAOAddOwner(Owner a) {
+		int id = 0;
+		DAOaddUser(a);
+
 		try {
-			String strQuery = "DELETE FROM `access` WHERE `id` = " + a.getId() + ";";
+			String strQuery = "SELECT * FROM user;";
+			ResultSet rsReader = stRead.executeQuery(strQuery);
+			while (rsReader.next()) {
+				id = rsReader.getInt("id_user");
+			} 
+			rsReader.close();
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+
+		try {
+			String strQuery = "INSERT INTO `owner`"
+			                  + "(`id_owner`, `type_service`) "
+			                  + "VALUES ('" + id + "','" + a.getServiceType() + "');";
+			stRead.executeUpdate(strQuery);
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+
+	}
+
+
+/*--------------------------------------ADD AN ADMIN (and User)---------------------------------------------------------- */
+
+	public void DAOAddAdmin(Admin a) {
+		int id = 0;
+		DAOaddUser(a);
+
+		try {
+			String strQuery = "SELECT * FROM user;";
+			ResultSet rsReader = stRead.executeQuery(strQuery);
+			while (rsReader.next()) {
+				id = rsReader.getInt("id_user");
+			} 
+			rsReader.close();
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+
+		try {
+			String strQuery = "INSERT INTO `admin`"
+							+ "(`id_admin`) "
+							+ "VALUES ('" + id + "');";
+			stRead.executeUpdate(strQuery);
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+
+	}
+
+/*--------------------------------------MANAGE RIGHTS ON USER / CLEANER--------------------------------------------------- */
+
+	public void DAOSuspendUser(int userID, boolean suspend) {
+		try {
+			String strQuery = "UPDATE user SET suspended = " + (suspend ? 1 : 0) + "WHERE id_user = "+ userID + ";";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
 	}
 
-	public void delete(int id) {
+	public void DAOConfirmCleaner(int cleanerId) {
 		try {
-			String strQuery = "DELETE FROM `access` WHERE `id` = " + id + ";";
+			String strQuery = "UPDATE cleaner SET confirmed = 1 WHERE id_cleaner = "+ cleanerId + ";";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -284,6 +336,31 @@ public class Db {
 
 	public void main (String[] args) {
 
+	}
+
+/*--------------------------------------MANAGE RIGHTS ON USER / CLEANER--------------------------------------------------- */
+
+	public void DAOResolveDispute(int missionID, int state) {
+		try {
+			String strQuery = "UPDATE mission SET state = " + state + "WHERE id_mission = "+ missionID + ";";
+			stRead.executeUpdate(strQuery);
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+	}
+
+/*--------------------------------------TOOLS METHODS--------------------------------------------------------------------- */
+
+	public <T extends User> void DAOaddUser(T a) {
+		try {
+			String strQuery = "INSERT INTO `user`"
+			                  + "(`name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `accunt_date`, `suspended`) "
+			                  + "VALUES ('" + a.getName() + "','" + a.getPwd() + "','" + a.getSurname() + "','" + a.getEmail() + "','" + a.getPhoneNumber() + "','"
+			                  + a.getBirthLocalDate() + "','" + a.getAccountLocalDate() + "','" + (a.isSuspended() ? 1 : 0) + "');";
+			stRead.executeUpdate(strQuery);
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
 	}
 
 }
