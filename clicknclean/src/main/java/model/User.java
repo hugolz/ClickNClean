@@ -28,7 +28,6 @@ public class User {
 	    String email,
 	    String phoneNumber,
 	    LocalDate birthLocalDate,
-	    LocalDate accountLocalDate,
 	    boolean suspended,
 	    UserStatus status
 	) {
@@ -38,7 +37,7 @@ public class User {
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 		this.birthLocalDate = birthLocalDate;
-		this.accountLocalDate = accountLocalDate;
+		this.accountLocalDate = LocalDate.now();
 		this.suspended = suspended;
 		this.status = status;
 	}
