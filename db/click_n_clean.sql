@@ -80,7 +80,7 @@ CREATE TABLE `dispute` (
   `id_owner` int(11) UNSIGNED NOT NULL,
   `id_cleaner` int(11) UNSIGNED NOT NULL,
   `id_mission` int(11) UNSIGNED NOT NULL,
-  `id_dispute_creator` UNSIGNED int(11) NOT NULL,
+  `id_dispute_creator` int(11) UNSIGNED NOT NULL,
   `id_admin` int(11) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -223,7 +223,7 @@ ALTER TABLE `dispute`
   ADD KEY `owner_of_the_mission_disputed` (`id_owner`),
   ADD KEY `cleaner_of_the_mission_disputed` (`id_cleaner`),
   ADD KEY `mission_being_disputed` (`id_mission`),
-  ADD KEY `creator_of_the_dispute` (`dispute_creator_id`),
+  ADD KEY `creator_of_the_dispute` (`id_dispute_creator`),
   ADD KEY `admin_of_the_dispute` (`id_admin`);
 
 --
@@ -284,25 +284,25 @@ ALTER TABLE `activity`
 -- AUTO_INCREMENT pour la table `dispute`
 --
 ALTER TABLE `dispute`
-  MODIFY `id_dispute` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_dispute` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `mission`
 --
 ALTER TABLE `mission`
-  MODIFY `id_mission` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_mission` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `property`
 --
 ALTER TABLE `property`
-  MODIFY `id_property` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_property` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `review`
 --
 ALTER TABLE `review`
-  MODIFY `id_review` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_review` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `status`
@@ -314,7 +314,7 @@ ALTER TABLE `status`
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_user` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- Contraintes pour les tables déchargées
@@ -348,7 +348,7 @@ ALTER TABLE `cleaner`
 ALTER TABLE `dispute`
   ADD CONSTRAINT `admin_of_the_dispute` FOREIGN KEY (`id_admin`) REFERENCES `admin` (`id_admin`),
   ADD CONSTRAINT `cleaner_of_the_mission_disputed` FOREIGN KEY (`id_cleaner`) REFERENCES `cleaner` (`id_cleaner`),
-  ADD CONSTRAINT `creator_of_the_dispute` FOREIGN KEY (`dispute_creator_id`) REFERENCES `user` (`id_user`),
+  ADD CONSTRAINT `creator_of_the_dispute` FOREIGN KEY (`id_dispute_creator`) REFERENCES `user` (`id_user`),
   ADD CONSTRAINT `mission_being_disputed` FOREIGN KEY (`id_mission`) REFERENCES `mission` (`id_mission`),
   ADD CONSTRAINT `owner_of_the_mission_disputed` FOREIGN KEY (`id_owner`) REFERENCES `owner` (`id_owner`);
 
