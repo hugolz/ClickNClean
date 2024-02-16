@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : mar. 13 fév. 2024 à 10:37
--- Version du serveur : 5.7.33
--- Version de PHP : 7.4.19
+-- Généré le : ven. 16 fév. 2024 à 10:17
+-- Version du serveur : 8.0.32
+-- Version de PHP : 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,15 +28,15 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `activity` (
-  `id_activity` int(11) UNSIGNED NOT NULL,
-  `type` int(11) NOT NULL,
+  `id_activity` int NOT NULL,
+  `type` int NOT NULL,
   `opened` tinyint(1) NOT NULL,
-  `id_owner` int(11) UNSIGNED DEFAULT NULL,
-  `id_cleaner` int(11) UNSIGNED DEFAULT NULL,
-  `id_mission` int(11) UNSIGNED DEFAULT NULL,
-  `id_dispute` int(11) UNSIGNED DEFAULT NULL,
-  `id_admin` int(11) UNSIGNED DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `id_owner` int UNSIGNED DEFAULT NULL,
+  `id_cleaner` int UNSIGNED DEFAULT NULL,
+  `id_mission` int UNSIGNED DEFAULT NULL,
+  `id_dispute` int UNSIGNED DEFAULT NULL,
+  `id_admin` int UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -45,8 +45,8 @@ CREATE TABLE `activity` (
 --
 
 CREATE TABLE `admin` (
-  `id_admin` int(11) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `id_admin` int UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -55,18 +55,18 @@ CREATE TABLE `admin` (
 --
 
 CREATE TABLE `cleaner` (
-  `id_cleaner` int(11) UNSIGNED NOT NULL,
+  `id_cleaner` int UNSIGNED NOT NULL,
   `address_display` varchar(100) NOT NULL,
   `address_coords` varchar(40) NOT NULL,
-  `km_range` int(11) NOT NULL,
-  `hourly_rate` int(11) NOT NULL,
+  `km_range` int NOT NULL,
+  `hourly_rate` int NOT NULL,
   `biography` varchar(100) NOT NULL,
   `photo_profile` varchar(36) NOT NULL,
   `photo_id` varchar(36) NOT NULL,
   `motivation` varchar(250) NOT NULL,
   `experience` varchar(250) NOT NULL,
   `confirmed` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -75,15 +75,15 @@ CREATE TABLE `cleaner` (
 --
 
 CREATE TABLE `dispute` (
-  `id_dispute` int(11) UNSIGNED NOT NULL,
+  `id_dispute` int UNSIGNED NOT NULL,
   `content` varchar(200) NOT NULL,
   `decision` varchar(200) NOT NULL,
-  `id_owner` int(11) UNSIGNED NOT NULL,
-  `id_cleaner` int(11) UNSIGNED NOT NULL,
-  `id_mission` int(11) UNSIGNED NOT NULL,
-  `id_dispute_creator` int(11) UNSIGNED NOT NULL,
-  `id_admin` int(11) UNSIGNED DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `id_owner` int UNSIGNED NOT NULL,
+  `id_cleaner` int UNSIGNED NOT NULL,
+  `id_mission` int UNSIGNED NOT NULL,
+  `id_dispute_creator` int UNSIGNED NOT NULL,
+  `id_admin` int UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -92,18 +92,18 @@ CREATE TABLE `dispute` (
 --
 
 CREATE TABLE `mission` (
-  `id_mission` int(11) UNSIGNED NOT NULL,
+  `id_mission` int UNSIGNED NOT NULL,
   `date_start` date NOT NULL,
   `cost` double DEFAULT NULL,
   `duration` double NOT NULL,
   `commision` double DEFAULT NULL,
-  `state` int(11) NOT NULL,
+  `state` int NOT NULL,
   `before_photo` varchar(50) DEFAULT NULL,
-  `after_photo` int(11) DEFAULT NULL,
-  `id_owner` int(11) UNSIGNED NOT NULL,
-  `id_cleaner` int(11) UNSIGNED DEFAULT NULL,
-  `id_property` int(11) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `after_photo` int DEFAULT NULL,
+  `id_owner` int UNSIGNED NOT NULL,
+  `id_cleaner` int UNSIGNED DEFAULT NULL,
+  `id_property` int UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -112,10 +112,23 @@ CREATE TABLE `mission` (
 --
 
 CREATE TABLE `owner` (
-  `id_owner` int(11) UNSIGNED NOT NULL,
+  `id_owner` int UNSIGNED NOT NULL,
   `account_date` date NOT NULL,
-  `type_service` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `type_service` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `planning`
+--
+
+CREATE TABLE `planning` (
+  `id_cleaner` int UNSIGNED NOT NULL,
+  `date` date NOT NULL,
+  `time` datetime NOT NULL,
+  `availability` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -124,15 +137,15 @@ CREATE TABLE `owner` (
 --
 
 CREATE TABLE `property` (
-  `id_property` int(11) UNSIGNED NOT NULL,
+  `id_property` int UNSIGNED NOT NULL,
   `address_display` varchar(100) NOT NULL,
   `address_coords` varchar(40) NOT NULL,
-  `surface` int(11) NOT NULL,
-  `id_owner` int(11) UNSIGNED NOT NULL,
-  `acces_code` int(11) DEFAULT NULL,
-  `key_box_code` int(11) DEFAULT NULL,
+  `surface` int NOT NULL,
+  `id_owner` int UNSIGNED NOT NULL,
+  `acces_code` int DEFAULT NULL,
+  `key_box_code` int DEFAULT NULL,
   `special_instructon` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -141,12 +154,12 @@ CREATE TABLE `property` (
 --
 
 CREATE TABLE `review` (
-  `id_review` int(11) UNSIGNED NOT NULL,
+  `id_review` int UNSIGNED NOT NULL,
   `content` varchar(100) NOT NULL,
-  `grade` int(11) NOT NULL,
-  `id_user` int(11) UNSIGNED NOT NULL,
-  `id_mission` int(11) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `grade` int NOT NULL,
+  `id_user` int UNSIGNED NOT NULL,
+  `id_mission` int UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -155,9 +168,9 @@ CREATE TABLE `review` (
 --
 
 CREATE TABLE `status` (
-  `id_status` int(10) UNSIGNED NOT NULL,
+  `id_status` int UNSIGNED NOT NULL,
   `name_status` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `status`
@@ -175,7 +188,7 @@ INSERT INTO `status` (`id_status`, `name_status`) VALUES
 --
 
 CREATE TABLE `user` (
-  `id_user` int(11) UNSIGNED NOT NULL,
+  `id_user` int UNSIGNED NOT NULL,
   `name` varchar(25) NOT NULL,
   `password` varchar(35) NOT NULL,
   `surname` varchar(15) NOT NULL,
@@ -184,8 +197,8 @@ CREATE TABLE `user` (
   `birth_date` date NOT NULL,
   `account_date` date NOT NULL,
   `suspended` tinyint(1) NOT NULL DEFAULT '0',
-  `status` int(10) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `status` int UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Index pour les tables déchargées
@@ -244,6 +257,12 @@ ALTER TABLE `owner`
   ADD KEY `owner_is_a_user` (`id_owner`);
 
 --
+-- Index pour la table `planning`
+--
+ALTER TABLE `planning`
+  ADD KEY `cleaner_owns_a_planning` (`id_cleaner`);
+
+--
 -- Index pour la table `property`
 --
 ALTER TABLE `property`
@@ -279,43 +298,43 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `activity`
 --
 ALTER TABLE `activity`
-  MODIFY `id_activity` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_activity` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `dispute`
 --
 ALTER TABLE `dispute`
-  MODIFY `id_dispute` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_dispute` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `mission`
 --
 ALTER TABLE `mission`
-  MODIFY `id_mission` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_mission` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `property`
 --
 ALTER TABLE `property`
-  MODIFY `id_property` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_property` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `review`
 --
 ALTER TABLE `review`
-  MODIFY `id_review` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_review` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `status`
 --
 ALTER TABLE `status`
-  MODIFY `id_status` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_status` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_user` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- Contraintes pour les tables déchargées
@@ -366,6 +385,12 @@ ALTER TABLE `mission`
 --
 ALTER TABLE `owner`
   ADD CONSTRAINT `owner_is_a_user` FOREIGN KEY (`id_owner`) REFERENCES `user` (`id_user`);
+
+--
+-- Contraintes pour la table `planning`
+--
+ALTER TABLE `planning`
+  ADD CONSTRAINT `cleaner_owns_a_planning` FOREIGN KEY (`id_cleaner`) REFERENCES `cleaner` (`id_cleaner`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Contraintes pour la table `property`

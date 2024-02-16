@@ -28,8 +28,8 @@ public class Cleaner extends User {
         int kmRange,
         int hourlyRate,
         String biography,
-        String idPhoto,
         String profilePhoto,
+        String idPhoto,
         String motivation,
         String experience,
         boolean confirmed,
@@ -47,19 +47,6 @@ public class Cleaner extends User {
     ) {
 
         super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, status);
-
-        // this.cleanerId = cleanerId;
-        // this.departureAddress = departureAddress;
-        // this.kmRange = kmRange;
-        // this.hourlyRate = hourlyRate;
-        // this.planning = new Planning();
-        // this.motivation = motivation;
-        // this.experience = experience;
-        // this.idPhoto = idPhoto;
-        // this.profilePhoto = profilePhoto;
-        // this.confirmed = confirmed;
-        // this.biography = biography;
-        // this.reviews = reviews;
 
         this.cleanerId = cleanerId;
         this.departureAddress = departureAddress;
@@ -96,7 +83,7 @@ public class Cleaner extends User {
         boolean suspended,
         UserStatus status
     ) {
-        super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, status);
+        super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, UserStatus.CLEANER);
 
         this.cleanerId = cleanerId;
         this.departureAddress = departureAddress;
@@ -108,9 +95,9 @@ public class Cleaner extends User {
         this.motivation = motivation;
         this.experience = experience;
         this.confirmed = false;
-        this.status = status;
+        this.status = UserStatus.CLEANER;
         this.reviews = new ArrayList<Integer>();
-        this.planning = new Planning();
+        this.planning = new Planning(cleanerId);
     }
 
     public int getCleanerId() {

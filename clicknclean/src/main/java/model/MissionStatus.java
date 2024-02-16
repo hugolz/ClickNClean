@@ -10,10 +10,10 @@ public enum MissionStatus {
 
     public static MissionStatus fromInt(int status) throws Exception{
         switch (status) {
-        case 1:
+        case 0:
             return MissionStatus.TODO;
         default:
-            throw new Exception("Given int status could not be converted into MissionStatus: " + status);
+            throw new Exception("Given UserStatus status could not be converted into MissionStatus: " + status);
         }
     }
 
