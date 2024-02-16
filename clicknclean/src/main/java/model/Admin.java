@@ -14,7 +14,7 @@ public class Admin extends User {
     private String surname;
     private String email;
     private String phoneNumber;
-    private int status;
+    private UserStatus status;
 
     public Admin(
         int adminID,
@@ -22,15 +22,19 @@ public class Admin extends User {
         String pwd, 
         String surname, 
         String email, 
-        int status 
+        UserStatus status 
         ) { super(name, pwd, surname, email, status);
         
         this.name = name;
         this.pwd = pwd;
         this.surname = surname;
         this.email = email;
-        this.status = 1;
+        this.status = UserStatus.ADMIN;
 }
+
+    public int getAdminID() {
+        return adminID;
+    }
 
     public String getName() {
         return name;
@@ -48,7 +52,7 @@ public class Admin extends User {
 
 
 
-    public int getStatus() {
+    public UserStatus getStatus() {
         return status;
     }
 

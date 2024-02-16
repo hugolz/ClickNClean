@@ -3,6 +3,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+import tools.Db;
+
 
 class TimeSlot {
     private LocalDate date;
@@ -87,6 +89,7 @@ public class Planning {
 
 
     public ArrayList<CalendarWeek> createCalendarMonth() {
+        Db connection = new Db();
         final int START_HR_LIMIT = 8;
         final int END_HR_LIMIT = 22;
 
@@ -103,9 +106,11 @@ public class Planning {
                     LocalTime hour = LocalTime.of(h, 0);
                     if (h < START_HR_LIMIT || h >= END_HR_LIMIT) {
                         days.add(new TimeSlot(date, hour, TimeSlot.NOT_AVAILABLE));
+                        connection.DAOCreateNewPlanning(date, hour, TimeSlot.NOT_AVAILABLE, this.cleanerID);
                     }
                     else {
                         days.add(new TimeSlot(date, hour, TimeSlot.AVAILABLE));
+                        connection.DAOCreateNewPlanning(date, hour, TimeSlot.AVAILABLE, this.cleanerID);
                     }
                         
                 }

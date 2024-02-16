@@ -4,7 +4,7 @@ import model.Planning;
 import tools.*;
 import view.Window;
 import view.Connection;
-import view.OwnerRegistration;
+import view.Owner_registration;
 
 import java.time.LocalDate;
 import java.util.concurrent.ExecutionException;
@@ -51,7 +51,7 @@ public class Main {
 
         // new Window().run();
 
-        new OwnerRegistration().main(args);
+        new Owner_registration().main(args);
         // new Connection().main(args);
 
 
