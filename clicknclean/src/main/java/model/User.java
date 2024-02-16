@@ -43,6 +43,10 @@ public class User {
 		this.status = status;
 	}
 
+	public User(String name) {
+		this.name = name;
+	}
+
 
 	//Admin-friendly constructor
 	public User(

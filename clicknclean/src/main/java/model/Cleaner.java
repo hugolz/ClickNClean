@@ -28,8 +28,8 @@ public class Cleaner extends User {
         int kmRange,
         int hourlyRate,
         String biography,
-        String idPhoto,
         String profilePhoto,
+        String idPhoto,
         String motivation,
         String experience,
         boolean confirmed,
@@ -42,7 +42,9 @@ public class Cleaner extends User {
         LocalDate accountLocalDate,
         boolean suspended,
         UserStatus status,
-        ArrayList<Integer> reviews) {
+        ArrayList<Integer> reviews,
+        Planning planning
+    ) {
 
         super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, status);
 
@@ -57,7 +59,7 @@ public class Cleaner extends User {
         this.experience = experience;
         this.confirmed = confirmed;
         this.reviews = reviews;
-        this.planning = new Planning(this.cleanerId);
+        this.planning = planning;
     }
 
     // Creates a basic Cleaner
@@ -92,7 +94,7 @@ public class Cleaner extends User {
         this.profilePhoto = "profilePhoto";
         this.motivation = motivation;
         this.experience = experience;
-        this.confirmedId = false;
+        this.confirmed = false;
         this.status = UserStatus.CLEANER;
         this.reviews = new ArrayList<Integer>();
         this.planning = new Planning(cleanerId);
