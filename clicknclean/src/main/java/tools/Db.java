@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
+import com.google.protobuf.Internal;
+
+import javafx.util.Pair;
+
 import model.*;
 
 public class Db {
@@ -52,7 +56,7 @@ public class Db {
 
 	public ArrayList<Cleaner> getCleanersInRange(Address addr) {
 		ArrayList<Cleaner> out = new ArrayList<>();
-		String query = "SELECT * FROM cleaner;";
+		String query = "SELECT * FROM cleaner JOIN ON user USING cleaner.id_cleaner = user.id_user;";
 
 		try {
 			ResultSet rSet = this.stRead.executeQuery(query);
@@ -61,22 +65,10 @@ public class Db {
 
 				int cleaner_range = rSet.getInt("km_range");
 
-				ArrayList<String> addr_split = new ArrayList<String>(
-				    Arrays.asList(
-				        rSet.getString("address").split("+")
-				    )
-				);
-
-				if (addr_split.size() != 4) {
-					System.out.println("[Error] Could not deserialize address for cleaner with id '" + cleaner_id + "': " + addr_split);
-					continue;
-				}
-
 				Address cleaner_addr = new Address(
-				    addr_split.get(0),
-				    addr_split.get(1),
-				    addr_split.get(2),
-				    addr_split.get(3));
+				    rSet.getString("address_coords"),
+				    rSet.getString("address_display")
+				);
 
 				double distance = addr.calculateDistance(cleaner_addr);
 
@@ -85,6 +77,7 @@ public class Db {
 					continue;
 				}
 
+				// TODO: Something is terribly wrong here, you query name, password etc, but thoses are user specific, but we don't query user here				Cleaner cleaner = new Cleaner(
 				Cleaner cleaner = new Cleaner(
 				    cleaner_id,
 				    cleaner_addr,
@@ -114,24 +107,76 @@ public class Db {
 		return out;
 	}
 
-	public Pair<User, UserStatus> loginUser(String login, String password) throws InterruptedException, ExecutionException, Exception {
+	public Pair<Integer, UserStatus> loginUser(String login, String password) throws InterruptedException, ExecutionException, Exception {
 		String query = "SELECT * FROM user where email  = " + login + " AND password = " + password + ";";
 
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
-			if (rSet.getInt("status") != 2 /* cleaner */) {
-				throw new Exception("Found a user with given email & password, but it's not a cleaner;");
+			return new Pair<Integer, UserStatus>(
+			           rSet.getInt("id_user"),
+			           UserStatus.fromInt(rSet.getInt("status"))
+			       );
+		}
+
+		throw new Exception("Could not find a user with the given address / pasword");
+	}
+
+
+	public Cleaner loginCleaner(int id_user, User user) throws InterruptedException, ExecutionException, Exception {
+		String query = "SELECT * FROM cleaner JOIN user ON (cleaner.id_cleaner = user.id_user) WHERE id_cleaner = " + id_user;
+
+		ResultSet rSet = this.stRead.executeQuery(query);
+		while (rSet.next()) {
+			if (UserStatus.fromInt(rSet.getInt("status")) != UserStatus.CLEANER) {
+				throw new Exception("Found a user with given id, but it's not a cleaner;");
 			}
-			// String name,
-			// String pwd,
-			// String surname,
-			// String email,
-			// String phoneNumber,
-			// LocalDate birthLocalDate,
-			// LocalDate accountLocalDate,
-			// boolean suspended,
-			// int status
-			User user = new User(
+
+			Cleaner cleaner = new Cleaner(
+			    rSet.getInt("id_cleaner"),
+			    new Address(
+			        rSet.getString("address_coords"),
+			        rSet.getString("address_display")
+			    ),
+			    rSet.getInt("km_range"),
+			    rSet.getInt("hourly_rate"),
+			    rSet.getString("biography"),
+			    rSet.getString("photo_profile"),
+			    rSet.getString("photo_id"),
+			    rSet.getString("motivation"),
+			    rSet.getString("experience"),
+			    rSet.getBoolean("confirmed"),
+			    rSet.getString("name"),
+			    rSet.getString("password"),
+			    rSet.getString("surname"),
+			    rSet.getString("email"),
+			    rSet.getString("phone_number"),
+			    rSet.getDate("birth_date").toLocalDate(),
+			    rSet.getDate("account_date").toLocalDate(),
+			    rSet.getBoolean("suspended"),
+			    rSet.getInt("status"),
+			    new ArrayList<Integer>(), // reviews,
+			    new Planning() // planning,
+			);
+			// TODO: Load planning and reviews
+			return cleaner;
+		}
+
+		throw new Exception("Could not find any cleaner with the given id");
+	}
+
+	public Owner loginOwner(int id_user) throws InterruptedException, ExecutionException, Exception {
+		String query = "SELECT * FROM owner JOIN user ON (owner.id_owner = user.id_user) WHERE id_owner = " + id_user;
+
+		ResultSet rSet = this.stRead.executeQuery(query);
+		while (rSet.next()) {
+			if (UserStatus.fromInt(rSet.getInt("status")) != UserStatus.OWNER) {
+				throw new Exception("Found a user with given id, but it's not an owner;");
+			}
+
+			Owner owner = new Owner(
+			    new ArrayList<Review>(), // ownerReviews
+			    rSet.getString("serviceType"), //
+			    rSet.getInt("id_owner"),
 			    rSet.getString("name"),
 			    rSet.getString("password"),
 			    rSet.getString("surname"),
@@ -142,7 +187,34 @@ public class Db {
 			    rSet.getBoolean("suspended"),
 			    UserStatus.fromInt(rSet.getInt("status"))
 			);
-			return new Pair<User, UserStatus>(user, UserStatus.fromInt(rSet.getInt("status")));
+			return owner;
+		}
+
+		throw new Exception("Could not find any owner with the given id");
+	}
+
+	public Admin loginAdmin(int id_user) throws InterruptedException, ExecutionException, Exception {
+		String query = "SELECT * FROM admin JOIN user ON (admin.id_admin = user.id_user) WHERE id_admin = " + id_user;
+
+		ResultSet rSet = this.stRead.executeQuery(query);
+		while (rSet.next()) {
+			if (UserStatus.fromInt(rSet.getInt("status")) != UserStatus.ADMIN) {
+				throw new Exception("Found a user with given email & password, but it's not a cleaner;");
+			}
+
+			Admin admin = new Admin(
+			    rSet.getString("name"),
+			    rSet.getString("password"),
+			    rSet.getString("surname"),
+			    rSet.getString("email"),
+			    rSet.getString("phone_number"),
+			    rSet.getDate("birth_date").toLocalDate(),
+			    rSet.getDate("account_date").toLocalDate(),
+			    rSet.getBoolean("suspended"),
+			    UserStatus.fromInt(rSet.getInt("status"))
+			);
+
+			return admin;
 		}
 
 		throw new Exception("Could not find a user with the given address / pasword");
@@ -237,7 +309,7 @@ public class Db {
 		return cleanerList;
 	}
 
-	
+
 	public void DAOAddCleaner(Cleaner a) {
 		int id = 0;
 		DAOaddUser(a);
@@ -267,7 +339,7 @@ public class Db {
 	}
 
 
-/*--------------------------------------ADD AN OWNER (and User)---------------------------------------------------------- */
+	/*--------------------------------------ADD AN OWNER (and User)---------------------------------------------------------- */
 
 	public void DAOAddOwner(Owner a) {
 		int id = 0;
@@ -278,7 +350,7 @@ public class Db {
 			ResultSet rsReader = stRead.executeQuery(strQuery);
 			while (rsReader.next()) {
 				id = rsReader.getInt("id_user");
-			} 
+			}
 			rsReader.close();
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -296,7 +368,7 @@ public class Db {
 	}
 
 
-/*--------------------------------------ADD AN ADMIN (and User)---------------------------------------------------------- */
+	/*--------------------------------------ADD AN ADMIN (and User)---------------------------------------------------------- */
 
 	public void DAOAddAdmin(Admin a) {
 		int id = 0;
@@ -307,7 +379,7 @@ public class Db {
 			ResultSet rsReader = stRead.executeQuery(strQuery);
 			while (rsReader.next()) {
 				id = rsReader.getInt("id_user");
-			} 
+			}
 			rsReader.close();
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -315,8 +387,8 @@ public class Db {
 
 		try {
 			String strQuery = "INSERT INTO `admin`"
-							+ "(`id_admin`) "
-							+ "VALUES ('" + id + "');";
+			                  + "(`id_admin`) "
+			                  + "VALUES ('" + id + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -324,11 +396,11 @@ public class Db {
 
 	}
 
-/*--------------------------------------MANAGE RIGHTS ON USER / CLEANER--------------------------------------------------- */
+	/*--------------------------------------MANAGE RIGHTS ON USER / CLEANER--------------------------------------------------- */
 
 	public void DAOSuspendUser(int userID, boolean suspend) {
 		try {
-			String strQuery = "UPDATE user SET suspended = " + (suspend ? 1 : 0) + "WHERE id_user = "+ userID + ";";
+			String strQuery = "UPDATE user SET suspended = " + (suspend ? 1 : 0) + "WHERE id_user = " + userID + ";";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -337,7 +409,7 @@ public class Db {
 
 	public void DAOConfirmCleaner(int cleanerId) {
 		try {
-			String strQuery = "UPDATE cleaner SET confirmed = 1 WHERE id_cleaner = "+ cleanerId + ";";
+			String strQuery = "UPDATE cleaner SET confirmed = 1 WHERE id_cleaner = " + cleanerId + ";";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -356,18 +428,18 @@ public class Db {
 
 	}
 
-/*--------------------------------------MANAGE RIGHTS ON USER / CLEANER--------------------------------------------------- */
+	/*--------------------------------------MANAGE RIGHTS ON USER / CLEANER--------------------------------------------------- */
 
 	public void DAOResolveDispute(int missionID, int state) {
 		try {
-			String strQuery = "UPDATE mission SET state = " + state + "WHERE id_mission = "+ missionID + ";";
+			String strQuery = "UPDATE mission SET state = " + state + "WHERE id_mission = " + missionID + ";";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
 	}
 
-/*--------------------------------------TOOLS METHODS--------------------------------------------------------------------- */
+	/*--------------------------------------TOOLS METHODS--------------------------------------------------------------------- */
 
 	public <T extends User> void DAOaddUser(T a) {
 		try {

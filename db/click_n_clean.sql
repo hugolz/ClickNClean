@@ -61,7 +61,8 @@ CREATE TABLE `cleaner` (
   `km_range` int(11) NOT NULL,
   `hourly_rate` int(11) NOT NULL,
   `biography` varchar(100) NOT NULL,
-  `photo` varchar(36) NOT NULL,
+  `photo_profile` varchar(36) NOT NULL,
+  `photo_id` varchar(36) NOT NULL,
   `motivation` varchar(250) NOT NULL,
   `experience` varchar(250) NOT NULL,
   `confirmed` tinyint(1) NOT NULL
