@@ -13,7 +13,7 @@ public class Owner extends User {
 
 //Creates a basic owner
 	public Owner(
-		int ownerID,
+	    int ownerID,
 	    String serviceType,
 	    String name,
 	    String pwd,
@@ -23,7 +23,7 @@ public class Owner extends User {
 	    LocalDate birthLocalDate,
 	    LocalDate accountLocalDate,
 	    boolean suspended,
-		UserStatus status
+		  UserStatus status
 	) {
 		super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, status);
 
@@ -35,7 +35,7 @@ public class Owner extends User {
 // Creates an owner from loaded data
 	public Owner(
 	    ArrayList<Review> ownerReviews,
-		String serviceType,
+	    String serviceType,
 	    int ownerID,
 	    String name,
 	    String pwd,
@@ -45,17 +45,15 @@ public class Owner extends User {
 	    LocalDate birthLocalDate,
 	    LocalDate accountLocalDate,
 	    boolean suspended,
-		UserStatus status
+	    UserStatus status
 	) {
-		super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, status);
+		super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, UserStatus.OWNER);
 
 		this.serviceType = serviceType;
 		this.ownerReviews = ownerReviews;
 		this.ownerID = ownerID;
 		this.status = UserStatus.OWNER;
 	}
-
-
 
 	public int getOwnerID() {
 		return ownerID;

@@ -16,13 +16,10 @@ public class Cleaner extends User {
     private String profilePhoto;
     private String motivation;
     private String experience;
-    private boolean confirmedId;
-    private ArrayList<String> availableDays;
+    private boolean confirmed;
     private ArrayList<Integer> reviews;
     private UserStatus status;
     private Planning planning;
-
-
 
     // Creates a Cleaner object from loaded data
     public Cleaner(
@@ -58,10 +55,8 @@ public class Cleaner extends User {
         this.profilePhoto = profilePhoto;
         this.motivation = motivation;
         this.experience = experience;
-        this.confirmedId = confirmedId;
-        this.availableDays = availableDays;
+        this.confirmed = confirmed;
         this.reviews = reviews;
-        this.status = UserStatus.CLEANER;
         this.planning = new Planning(this.cleanerId);
     }
 
@@ -86,7 +81,7 @@ public class Cleaner extends User {
         boolean suspended,
         UserStatus status
     ) {
-        super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, status);
+        super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, UserStatus.CLEANER);
 
         this.cleanerId = cleanerId;
         this.departureAddress = departureAddress;
@@ -176,19 +171,11 @@ public class Cleaner extends User {
     }
 
     public boolean isConfirmedId() {
-        return this.confirmedId;
+        return this.confirmed;
     }
 
-    public void setConfirmedId(boolean confirmedId) {
-        this.confirmedId = confirmedId;
-    }
-
-    public ArrayList<String> getAvailableDays() {
-        return this.availableDays;
-    }
-
-    public void setAvailableDays(ArrayList<String> availableDays) {
-        this.availableDays = availableDays;
+    public void setConfirmedId(boolean confirmed) {
+        this.confirmed = confirmed;
     }
 
     public ArrayList<Integer> getReviews() {
