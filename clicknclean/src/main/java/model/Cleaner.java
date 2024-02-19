@@ -69,6 +69,7 @@ public class Cleaner extends User {
     // Creates a basic Cleaner
     public Cleaner(
         
+        int cleanerID,
         Address departureAddress,
         int kmRange,
         int hourlyRate,
@@ -84,12 +85,10 @@ public class Cleaner extends User {
         String phoneNumber,
         LocalDate birthLocalDate,
         LocalDate accountLocalDate,
-        boolean suspended,
-        UserStatus status
+        boolean suspended
     ) {
-        super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, status);
+        super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, UserStatus.CLEANER);
 
-        Db connection = new Db();
         this.departureAddress = departureAddress;
         this.kmRange = kmRange;
         this.hourlyRate = hourlyRate;
@@ -99,10 +98,7 @@ public class Cleaner extends User {
         this.motivation = motivation;
         this.experience = experience;
         this.confirmedId = false;
-        this.status = UserStatus.CLEANER;
         this.reviews = new ArrayList<Integer>();
-        
-        connection.DAOAddCleaner(this);
     }
 
     public int getCleanerId() {
