@@ -10,12 +10,8 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import javafx.util.Pair;
-
-import javafx.util.Pair;
-
 import model.*;
 
 public class Db {
@@ -85,7 +81,7 @@ public class Db {
 				// Cleaner(
 				Cleaner cleaner = new Cleaner(
 				    
-					
+					cleaner_id,
 				    cleaner_addr,
 				    cleaner_range,
 				    rSet.getInt("hourly_rate"),
@@ -101,8 +97,7 @@ public class Db {
 				    rSet.getString("phone_number"),
 				    rSet.getDate("birth_date").toLocalDate(),
 				    rSet.getDate("account_date").toLocalDate(),
-				    rSet.getBoolean("suspended"),
-				    UserStatus.fromInt(rSet.getInt("status"))
+				    rSet.getBoolean("suspended")
 				);
 
 				out.add(cleaner);
@@ -245,113 +240,24 @@ public class Db {
 
 
 
-
-	public ArrayList<Cleaner> DAOLister() throws Exception {
-		int i = 0;
-		ArrayList<Cleaner> cleanerList = new ArrayList<Cleaner>();
+	public int DAOAddCleaner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, UserStatus status, Address departureAddress, int kmRange, int hourlyRate, String bio, String photo, String motivation, String experience, boolean isConfirmed, String photoProfile, String photoLive) {
+		int cleanerID = DAOaddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.CLEANER);
 		try {
-			String strQuery = " SELECT * FROM  cleaner"
-			                  + "JOIN user  ON cleaner.id_cleaner = user.user_id;";
-			ResultSet rsReader = stRead.executeQuery(strQuery);
-			while (rsReader.next()) {
-				// Cleaner b = new
-				// Cleaner(strQuery,strQuery,strQuery,strQuery,i,strQuery,false,strQuery,i,null,i,i,null,strQuery,strQuery,strQuery,strQuery,false,strQuery,null);
-
-				int cleaner_id = rsReader.getInt("id_cleaner");
-
-				ArrayList<String> addr_split = new ArrayList<String>(
-				    Arrays.asList(
-				        rsReader.getString("address").split("+")));
-
-				if (addr_split.size() != 4) {
-					System.out.println("[Error] Could not deserialize address for cleaner with id '" + cleaner_id
-					                   + "': " + addr_split);
-					continue;
-				}
-
-				Address cleaner_addr;
-				try {
-					cleaner_addr = new Address(
-					    addr_split.get(0),
-					    addr_split.get(1),
-					    addr_split.get(2),
-					    addr_split.get(3));
-				} catch (Exception e) {
-					System.out.println(
-					    "[ERROR] Could not create Address from '" + addr_split + "' due to: " + e.toString());
-					continue;
-				}
-
-				Cleaner a = new Cleaner(
-				    cleaner_id,
-				    cleaner_addr,
-				    rsReader.getInt("km_range"),
-				    rsReader.getInt("hourly_rate"),
-				    rsReader.getString("biography"),
-				    rsReader.getString("photo"),
-				    rsReader.getString("motivation"),
-				    rsReader.getString("experience"),
-				    rsReader.getBoolean("confirmed"),
-				    rsReader.getString("name"),
-				    rsReader.getString("password"),
-				    rsReader.getString("surname"),
-				    rsReader.getString("email"),
-				    rsReader.getString("phone_number"),
-				    rsReader.getDate("birth_date").toLocalDate(),
-				    rsReader.getDate("account_date").toLocalDate(),
-				    rsReader.getBoolean("suspended"),
-				    UserStatus.fromInt(rsReader.getInt("status"))
-				);
-				cleanerList.add(i, a);
-				i++;
-			}
-			rsReader.close();
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		} catch (Exception e ) {
-			System.err.println(e.getMessage());
-		}
-		return cleanerList;
-	}
-
-	public void DAOAddCleaner(Cleaner a) {
-
-		int id = 0;
-		DAOaddUser(a);
-
-		try {
-			String strQuery = "SELECT * FROM user;";
-			ResultSet rsReader = stRead.executeQuery(strQuery);
-			while (rsReader.next()) {
-				id = rsReader.getInt("id_user");
-				rsReader.close();
-			}
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}
-
-		Planning 
-
-		try {
-			// String toQuery = (a.getDepartureAddress().getHouseNumber() + " " +
-			// a.getDepartureAddress().getLabel() + " " +
-			// a.getDepartureAddress().getPostCode() + " " +
-			// a.getDepartureAddress().getCity());
 			String strQuery = "INSERT INTO `cleaner`"
-			                  + "(`id_cleaner`, `address`, `km_range`, `hourly_rate`, `biography`, `photo`, `motivation`, `experience`, `confirmed`) "
 
-			                  + "VALUES ('" + id + "','" + a.getDepartureAddress().asString() + "','" + a.getKmRange() + "','" + a.getHourlyRate() + "','" + a.getBiography() + "','"
-			                  + a.getProfilePhoto() + "','" + a.getMotivation() + "','" + a.getExperience() + "','" + (a.isConfirmedId() ? 1 : 0)  + "');";
+			                  + "(`id_cleaner`, `address_display`, `latitude`, `longitude`, `km_range`, `hourly_rate`, `biography`, `photo`, `motivation`, `experience`, `confirmed`, `photo_profile`, `photo_live`) "
+			                  + "VALUES ('" + cleanerID + "','" + departureAddress.asString() + "','" + departureAddress.getLatitude() +  "','" + departureAddress.getLongitude() + "','" + kmRange + "','" + hourlyRate + "','" + bio + "','"
+			                  + photo + "','" + motivation + "','" + experience + "','" + (isConfirmed ? 1 : 0)  + "','" + photoProfile + "','" + photoLive +"');";
 
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
-		System.out.println(id);
-		return id;
+		return cleanerID;
 	}
 
 	/*--------------------------------------ADD AN OWNER (and User)---------------------------------------------------------- */
+
 
 	public void DAOAddOwner(Owner a) {
 		int id = 0;
@@ -376,10 +282,10 @@ public class Db {
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
-
 	}
 
 	/*--------------------------------------ADD AN ADMIN (and User)---------------------------------------------------------- */
+
 
 	public void DAOAddAdmin(Admin a) {
 		int id = 0;
@@ -450,20 +356,39 @@ public class Db {
 		}
 	}
 
-	/*--------------------------------------TOOLS METHODS--------------------------------------------------------------------- */
 
-	public <T extends User> void DAOaddUser(T a) {
+/*--------------------------------------TOOLS METHODS--------------------------------------------------------------------- */
+	
+	public <T extends User> int DAOaddUser(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, UserStatus status) {
+		
+		int id = 0;
+		LocalDate accountDate = LocalDate.now();
+		Date sqlBirthDate = Date.valueOf(birthDate);
+		Date sqlAccountdate = Date.valueOf(accountDate);		
+
 		try {
 			String strQuery = "INSERT INTO `user`"
 
-			                  + "(`name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `account_date`, `suspended`) "
-			                  + "VALUES ('" + a.getName() + "','" + a.getPwd() + "','" + a.getSurname() + "','" + a.getEmail() + "','" + a.getPhoneNumber() + "','"
-			                  + a.getBirthLocalDate() + "','" + a.getAccountLocalDate() + "','" + (a.isSuspended() ? 1 : 0) + "');";
+			                  + "(`name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `account_date`, `suspended`, `status`) "
+			                  + "VALUES ('" + name + "','" + pwd + "','" + surname + "','" + email + "','" + phoneN + "','"
+			                  + sqlBirthDate + "','" + sqlAccountdate + "','" + (isSuspended ? 1 : 0) + "','" + status.asInt() + "');";
 
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
+
+		try {
+			String strQuery = "SELECT * FROM user;";
+			ResultSet rsReader = stRead.executeQuery(strQuery);
+			while (rsReader.next()) {
+				id = rsReader.getInt("id_user");
+			} 
+			rsReader.close();
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+		return id;
 	}
 
 	/*--------------------------------------MANAGE ACTIVITY--------------------------------------------------------------------- */
