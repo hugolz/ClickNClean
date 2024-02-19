@@ -2,13 +2,10 @@ package model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-
+import model.planning.Planning;
 import tools.Db;
 
-
-
 public class Cleaner extends User {
-
     private int cleanerId;
     private Address departureAddress;
     private int kmRange;
@@ -20,7 +17,6 @@ public class Cleaner extends User {
     private String experience;
     private boolean confirmed;
     private ArrayList<Integer> reviews;
-    private UserStatus status;
     private Planning planning;
 
     // Creates a Cleaner object from loaded data
@@ -42,12 +38,11 @@ public class Cleaner extends User {
         String phoneNumber,
         LocalDate birthLocalDate,
         boolean suspended,
-        UserStatus status,
         ArrayList<Integer> reviews,
         Planning planning
     ) {
 
-        super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, status);
+        super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, UserStatus.CLEANER);
 
         this.cleanerId = cleanerId;
         this.departureAddress = departureAddress;
@@ -65,7 +60,7 @@ public class Cleaner extends User {
 
     // Creates a basic Cleaner
     public Cleaner(
-        
+
         Address departureAddress,
         int kmRange,
         int hourlyRate,
@@ -80,12 +75,11 @@ public class Cleaner extends User {
         String email,
         String phoneNumber,
         LocalDate birthLocalDate,
-        LocalDate accountLocalDate,
         boolean suspended,
         UserStatus status
     ) {
 
-        super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, UserStatus.CLEANER);
+        super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, UserStatus.CLEANER);
 
 
         Db connection = new Db();
@@ -98,9 +92,8 @@ public class Cleaner extends User {
         this.motivation = motivation;
         this.experience = experience;
         this.confirmed = false;
-        this.status = UserStatus.CLEANER;
         this.reviews = new ArrayList<Integer>();
-        
+
         connection.DAOAddCleaner(this);
     }
 
@@ -200,9 +193,9 @@ public class Cleaner extends User {
         this.planning = planning;
     }
 
-    public UserStatus getStatus() {
-        return this.status;
-    }
+    // public UserStatus getStatus() {
+    //     return this.status;
+    // }
 
 
 }

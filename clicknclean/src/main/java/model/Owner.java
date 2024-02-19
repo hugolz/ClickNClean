@@ -26,7 +26,7 @@ public class Owner extends User {
 
 	) {
 
-		super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, UserStatus.OWNER);
+		super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, UserStatus.OWNER);
 
 
 		this.serviceType = serviceType;
@@ -46,12 +46,10 @@ public class Owner extends User {
 	    String phoneNumber,
 	    LocalDate birthLocalDate,
 	    LocalDate accountLocalDate,
-	    boolean suspended,
-	    UserStatus status
+	    boolean suspended
 	) {
 
-		super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, UserStatus.OWNER);
-
+		super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, UserStatus.OWNER);
 
 		this.serviceType = serviceType;
 		this.ownerReviews = ownerReviews;

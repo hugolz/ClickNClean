@@ -1,11 +1,13 @@
 package main;
 
-import model.Planning;
+import model.planning.Planning;
+import model.planning.TimeSlot;
 import tools.*;
 import view.Window;
 import view.Connection;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.concurrent.ExecutionException;
 
 import model.Address;
@@ -13,17 +15,22 @@ import model.Cleaner;
 
 import model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException, ExecutionException {
+        ArrayList<TimeSlot> slots = new ArrayList<>();
 
-        Planning plan = new Planning(1);
-        plan.getAvailableSlots();
-        
-     
+        slots.add(new TimeSlot(LocalDateTime.now(), 1.5));
+        slots.add(new TimeSlot(LocalDateTime.now(), 5.5));
+        slots.add(new TimeSlot(LocalDateTime.now(), 0.5));
+        slots.add(new TimeSlot(LocalDateTime.now(), 2.5));
+
+        Planning planning = new Planning(slots);
 
         Db db = new Db();
+        db.writePlanning(planning, 0);
 
         // db.DAOAdd(
         //     new Cleaner(
@@ -60,7 +67,7 @@ public class Main {
 
         // new Window().run();
 
-       
+
         new Connection().main(args);
 
 
