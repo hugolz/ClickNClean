@@ -4,7 +4,6 @@ import model.Planning;
 import tools.*;
 import view.Window;
 import view.Connection;
-import view.Owner_registration;
 
 import java.time.LocalDate;
 import java.util.concurrent.ExecutionException;
@@ -18,6 +17,12 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException, ExecutionException {
+
+        Planning plan = new Planning(1);
+        plan.getAvailableSlots();
+        
+     
+
         Db db = new Db();
 
         // db.DAOAdd(
@@ -43,6 +48,7 @@ public class Main {
         //     )
         // );
 
+
         try {
             Address.main(args);
             // a.main(args);
@@ -54,8 +60,8 @@ public class Main {
 
         // new Window().run();
 
-        new Owner_registration().main(args);
-        // new Connection().main(args);
+       
+        new Connection().main(args);
 
 
     }

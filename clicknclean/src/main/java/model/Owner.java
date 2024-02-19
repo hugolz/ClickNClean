@@ -25,7 +25,9 @@ public class Owner extends User {
 	    boolean suspended
 
 	) {
+
 		super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, UserStatus.OWNER);
+
 
 		this.serviceType = serviceType;
 		this.ownerID = ownerID;
@@ -47,7 +49,9 @@ public class Owner extends User {
 	    boolean suspended,
 	    UserStatus status
 	) {
+
 		super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, UserStatus.OWNER);
+
 
 		this.serviceType = serviceType;
 		this.ownerReviews = ownerReviews;
