@@ -3,6 +3,8 @@ package model;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import tools.Db;
+
 
 
 public class Cleaner extends User {
@@ -39,14 +41,13 @@ public class Cleaner extends User {
         String email,
         String phoneNumber,
         LocalDate birthLocalDate,
-        LocalDate accountLocalDate,
         boolean suspended,
         UserStatus status,
         ArrayList<Integer> reviews,
         Planning planning
     ) {
 
-        super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, status);
+        super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, status);
 
         this.cleanerId = cleanerId;
         this.departureAddress = departureAddress;
@@ -64,7 +65,7 @@ public class Cleaner extends User {
 
     // Creates a basic Cleaner
     public Cleaner(
-        int cleanerId,
+        
         Address departureAddress,
         int kmRange,
         int hourlyRate,
@@ -83,9 +84,11 @@ public class Cleaner extends User {
         boolean suspended,
         UserStatus status
     ) {
+
         super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, UserStatus.CLEANER);
 
-        this.cleanerId = cleanerId;
+
+        Db connection = new Db();
         this.departureAddress = departureAddress;
         this.kmRange = kmRange;
         this.hourlyRate = hourlyRate;
@@ -97,7 +100,8 @@ public class Cleaner extends User {
         this.confirmed = false;
         this.status = UserStatus.CLEANER;
         this.reviews = new ArrayList<Integer>();
-        this.planning = new Planning(cleanerId);
+        
+        connection.DAOAddCleaner(this);
     }
 
     public int getCleanerId() {
@@ -109,7 +113,7 @@ public class Cleaner extends User {
     }
 
     public Address getDepartureAddress() {
-        return departureAddress;
+        return this.departureAddress;
     }
 
     public void setDepartureAddress(Address departureAddress) {

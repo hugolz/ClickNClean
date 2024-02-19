@@ -74,21 +74,16 @@ class CalendarWeek {
 
 
 public class Planning {
-    public ArrayList<CalendarWeek> getCalendarMonth() {
-        return calendarMonth;
-    }
 
     private ArrayList<CalendarWeek> calendarMonth;
-    private int cleanerID;
-
+  
     public Planning(int cleanerID) {
-        this.calendarMonth = new ArrayList<CalendarWeek>();
-        this.calendarMonth = createCalendarMonth();
-        this.cleanerID = cleanerID;
+        this.calendarMonth = createCalendarMonth(cleanerID);
     }
 
 
-    public ArrayList<CalendarWeek> createCalendarMonth() {
+    public ArrayList<CalendarWeek> createCalendarMonth(int cleanerID) {
+        this.calendarMonth = new ArrayList<CalendarWeek>();
         Db connection = new Db();
         final int START_HR_LIMIT = 8;
         final int END_HR_LIMIT = 22;
@@ -96,7 +91,7 @@ public class Planning {
         for (int i = 0; i < 5; i++) {
             ArrayList<TimeSlot> days = new ArrayList<TimeSlot>();
             LocalDate startOfWeek = LocalDate.now();
-            while (startOfWeek.getDayOfYear() != 1) {
+            while (startOfWeek.getDayOfMonth() != 1) {
                 startOfWeek = startOfWeek.plusDays(-1);
             }
 
@@ -106,11 +101,11 @@ public class Planning {
                     LocalTime hour = LocalTime.of(h, 0);
                     if (h < START_HR_LIMIT || h >= END_HR_LIMIT) {
                         days.add(new TimeSlot(date, hour, TimeSlot.NOT_AVAILABLE));
-                        connection.DAOCreateNewPlanning(date, hour, TimeSlot.NOT_AVAILABLE, this.cleanerID);
+                        connection.DAOCreateNewPlanning(date, hour, TimeSlot.NOT_AVAILABLE, cleanerID);
                     }
                     else {
                         days.add(new TimeSlot(date, hour, TimeSlot.AVAILABLE));
-                        connection.DAOCreateNewPlanning(date, hour, TimeSlot.AVAILABLE, this.cleanerID);
+                        connection.DAOCreateNewPlanning(date, hour, TimeSlot.AVAILABLE, cleanerID);
                     }
                         
                 }
@@ -118,7 +113,8 @@ public class Planning {
             CalendarWeek calendarWeek = new CalendarWeek(days);
             this.calendarMonth.add(calendarWeek);
         }
-
+        connection.disconnect();
+        connection = null;
         return calendarMonth;
     }
 
@@ -128,7 +124,7 @@ public class Planning {
 
         for (CalendarWeek calendarWeeks : calendarMonth) {
             for (TimeSlot timeSlotObserved : calendarWeeks.getCalendarDay()) {
-                if (timeSlotObserved.getIsAvailable() == TimeSlot.NOT_AVAILABLE) {
+                if (timeSlotObserved.getIsAvailable() == TimeSlot.AVAILABLE) {
                     availableList.add(timeSlotObserved);
                 }
             }
@@ -145,12 +141,6 @@ public class Planning {
                 }
             }
         }
-    }
-
-    public void getPlanningDB() {
-        ArrayList<ArrayList<TimeSlot>> calendarMonth = new ArrayList<ArrayList<TimeSlot>>();
-        int count = 0;
-        // insert code here when db is born :)
     }
 
     public static void main() {

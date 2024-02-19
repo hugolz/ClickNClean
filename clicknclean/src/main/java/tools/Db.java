@@ -1,10 +1,12 @@
 package tools;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -82,7 +84,8 @@ public class Db {
 				// thoses are user specific, but we don't query user here Cleaner cleaner = new
 				// Cleaner(
 				Cleaner cleaner = new Cleaner(
-				    cleaner_id,
+				    
+					
 				    cleaner_addr,
 				    cleaner_range,
 				    rSet.getInt("hourly_rate"),
@@ -153,7 +156,6 @@ public class Db {
 			    rSet.getString("email"),
 			    rSet.getString("phone_number"),
 			    rSet.getDate("birth_date").toLocalDate(),
-			    rSet.getDate("account_date").toLocalDate(),
 			    rSet.getBoolean("suspended"),
 			    UserStatus.fromInt(rSet.getInt("status")),
 			    new ArrayList<Integer>(), // reviews,
@@ -241,6 +243,9 @@ public class Db {
 		}
 	}
 
+
+
+
 	public ArrayList<Cleaner> DAOLister() throws Exception {
 		int i = 0;
 		ArrayList<Cleaner> cleanerList = new ArrayList<Cleaner>();
@@ -310,6 +315,7 @@ public class Db {
 	}
 
 	public void DAOAddCleaner(Cleaner a) {
+
 		int id = 0;
 		DAOaddUser(a);
 
@@ -324,6 +330,8 @@ public class Db {
 			System.err.println(e.getMessage());
 		}
 
+		Planning 
+
 		try {
 			// String toQuery = (a.getDepartureAddress().getHouseNumber() + " " +
 			// a.getDepartureAddress().getLabel() + " " +
@@ -331,15 +339,16 @@ public class Db {
 			// a.getDepartureAddress().getCity());
 			String strQuery = "INSERT INTO `cleaner`"
 			                  + "(`id_cleaner`, `address`, `km_range`, `hourly_rate`, `biography`, `photo`, `motivation`, `experience`, `confirmed`) "
-			                  + "VALUES ('" + id + "','" + a.getDepartureAddress().toString() + "','" + a.getKmRange() + "','"
-			                  + a.getHourlyRate() + "','" + a.getBiography() + "','"
-			                  + a.getProfilePhoto() + "','" + a.getMotivation() + "','" + a.getExperience() + "','"
-			                  + (a.isConfirmedId() ? 1 : 0) + "');";
+
+			                  + "VALUES ('" + id + "','" + a.getDepartureAddress().asString() + "','" + a.getKmRange() + "','" + a.getHourlyRate() + "','" + a.getBiography() + "','"
+			                  + a.getProfilePhoto() + "','" + a.getMotivation() + "','" + a.getExperience() + "','" + (a.isConfirmedId() ? 1 : 0)  + "');";
+
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
-
+		System.out.println(id);
+		return id;
 	}
 
 	/*--------------------------------------ADD AN OWNER (and User)---------------------------------------------------------- */
@@ -446,11 +455,11 @@ public class Db {
 	public <T extends User> void DAOaddUser(T a) {
 		try {
 			String strQuery = "INSERT INTO `user`"
-			                  + "(`name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `accunt_date`, `suspended`) "
-			                  + "VALUES ('" + a.getName() + "','" + a.getPwd() + "','" + a.getSurname() + "','" + a.getEmail()
-			                  + "','" + a.getPhoneNumber() + "','"
-			                  + a.getBirthLocalDate() + "','" + a.getAccountLocalDate() + "','" + (a.isSuspended() ? 1 : 0)
-			                  + "');";
+
+			                  + "(`name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `account_date`, `suspended`) "
+			                  + "VALUES ('" + a.getName() + "','" + a.getPwd() + "','" + a.getSurname() + "','" + a.getEmail() + "','" + a.getPhoneNumber() + "','"
+			                  + a.getBirthLocalDate() + "','" + a.getAccountLocalDate() + "','" + (a.isSuspended() ? 1 : 0) + "');";
+
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -472,10 +481,14 @@ public class Db {
 	}
 	/*--------------------------------------MANAGE PLANNING--------------------------------------------------------------------- */
 	public void DAOCreateNewPlanning(LocalDate date, LocalTime hour, int availability, int cleanerID) {
+		Date sqlDate = Date.valueOf(date);
+		Time sqlTime = Time.valueOf(hour);
 		try {
 			String strQuery = "INSERT INTO `planning`"
-			                  + "(`id_cleaner`, `date`, `time`, `availability`) "
-			                  + "VALUES ('" + date + "','" + hour  + "','" + availability + "','" + cleanerID + "');";
+
+							+ "(`date`, `time`, `availability`, `id_cleaner`) "
+							+ "VALUES ('" + sqlDate + "','" + sqlTime  + "','" + availability + "','" + cleanerID + "');";
+
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());

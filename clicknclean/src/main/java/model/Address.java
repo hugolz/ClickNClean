@@ -41,7 +41,8 @@ public class Address {
         // Access the first feature's coordinates (assuming APOD class structure)
         ArrayList<Double> coordinates = response.body().get().features.get(0).geometry.coordinates;
 
-        this.display = houseNumber + label + postCode + city;
+        this.display = houseNumber +  " " + label +  " " + postCode + " " + city;
+        System.out.println(this.display);
         this.longitude = coordinates.get(0);
         this.latitude = coordinates.get(1);
     }
@@ -67,16 +68,8 @@ public class Address {
         return longitude;
     }
 
-    public String toString() {
+    public String asString() {
         return this.display;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
     }
 
     // Result is in meters
