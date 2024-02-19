@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : ven. 16 fév. 2024 à 15:02
+-- Généré le : lun. 19 fév. 2024 à 15:29
 -- Version du serveur : 8.0.32
 -- Version de PHP : 8.1.10
 
@@ -57,12 +57,15 @@ CREATE TABLE `admin` (
 CREATE TABLE `cleaner` (
   `id_cleaner` int UNSIGNED NOT NULL,
   `address_display` varchar(100) NOT NULL,
-  `address_coords` varchar(40) NOT NULL,
+  `latitude` double NOT NULL,
+  `longitude` double NOT NULL,
   `km_range` int NOT NULL,
   `hourly_rate` int NOT NULL,
   `biography` varchar(100) NOT NULL,
+  `photo` varchar(36) NOT NULL,
   `photo_profile` varchar(36) NOT NULL,
-  `photo_id` varchar(36) NOT NULL,
+  `photo_live` varchar(36) NOT NULL,
+
   `motivation` varchar(250) NOT NULL,
   `experience` varchar(250) NOT NULL,
   `confirmed` tinyint(1) NOT NULL
@@ -108,6 +111,18 @@ CREATE TABLE `mission` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `mission_proposal`
+--
+
+CREATE TABLE `mission_proposal` (
+  `id_mission` int NOT NULL,
+  `id_cleaner` int NOT NULL,
+  `starting_hour` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `owner`
 --
 
@@ -139,7 +154,8 @@ CREATE TABLE `planning` (
 CREATE TABLE `property` (
   `id_property` int UNSIGNED NOT NULL,
   `address_display` varchar(100) NOT NULL,
-  `address_coords` varchar(40) NOT NULL,
+  `latitude` double NOT NULL,
+  `longitude` double NOT NULL,
   `surface` int NOT NULL,
   `id_owner` int UNSIGNED NOT NULL,
   `acces_code` int DEFAULT NULL,
@@ -199,13 +215,6 @@ CREATE TABLE `user` (
   `suspended` tinyint(1) NOT NULL DEFAULT '0',
   `status` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Déchargement des données de la table `user`
---
-
-INSERT INTO `user` (`id_user`, `name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `account_date`, `suspended`, `status`) VALUES
-(1, 'John', 'jj', 'Doe', 'John@doe.fr', '0606060606', '2024-02-20', '2024-02-16', 0, 2);
 
 --
 -- Index pour les tables déchargées
@@ -341,7 +350,7 @@ ALTER TABLE `status`
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_user` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Contraintes pour les tables déchargées
@@ -392,12 +401,6 @@ ALTER TABLE `mission`
 --
 ALTER TABLE `owner`
   ADD CONSTRAINT `owner_is_a_user` FOREIGN KEY (`id_owner`) REFERENCES `user` (`id_user`);
-
---
--- Contraintes pour la table `planning`
---
-ALTER TABLE `planning`
-  ADD CONSTRAINT `cleaner_owns_a_planning` FOREIGN KEY (`id_cleaner`) REFERENCES `cleaner` (`id_cleaner`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Contraintes pour la table `property`

@@ -15,7 +15,8 @@ public class Cleaner extends User {
     private String profilePhoto;
     private String motivation;
     private String experience;
-    private boolean confirmed;
+    private boolean confirmedId;
+
     private ArrayList<Integer> reviews;
     private Planning planning;
 
@@ -53,14 +54,15 @@ public class Cleaner extends User {
         this.profilePhoto = profilePhoto;
         this.motivation = motivation;
         this.experience = experience;
-        this.confirmed = confirmed;
+
+        this.confirmedId = confirmed;
+
         this.reviews = reviews;
         this.planning = planning;
     }
 
     // Creates a basic Cleaner
     public Cleaner(
-
         Address departureAddress,
         int kmRange,
         int hourlyRate,
@@ -75,14 +77,14 @@ public class Cleaner extends User {
         String email,
         String phoneNumber,
         LocalDate birthLocalDate,
-        boolean suspended,
-        UserStatus status
+
+        LocalDate accountLocalDate,
+        boolean suspended
     ) {
 
         super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, UserStatus.CLEANER);
 
 
-        Db connection = new Db();
         this.departureAddress = departureAddress;
         this.kmRange = kmRange;
         this.hourlyRate = hourlyRate;
@@ -91,10 +93,9 @@ public class Cleaner extends User {
         this.profilePhoto = "profilePhoto";
         this.motivation = motivation;
         this.experience = experience;
-        this.confirmed = false;
-        this.reviews = new ArrayList<Integer>();
 
-        connection.DAOAddCleaner(this);
+        this.confirmedId = false;
+        this.reviews = new ArrayList<Integer>();
     }
 
     public int getCleanerId() {
@@ -170,11 +171,13 @@ public class Cleaner extends User {
     }
 
     public boolean isConfirmedId() {
-        return this.confirmed;
+
+        return this.confirmedId;
     }
 
     public void setConfirmedId(boolean confirmed) {
-        this.confirmed = confirmed;
+        this.confirmedId = confirmed;
+
     }
 
     public ArrayList<Integer> getReviews() {
