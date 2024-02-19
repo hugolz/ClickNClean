@@ -3,8 +3,7 @@ package main;
 import model.Planning;
 import tools.*;
 import view.Window;
-import view.Connection;
-import view.Owner_registration;
+
 
 import java.time.LocalDate;
 import java.util.concurrent.ExecutionException;
@@ -17,6 +16,10 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws InterruptedException, ExecutionException {
         Db db = new Db();
+        Window w = new Window();
+        w.run();
+       
+        
         // db.DAOAdd(
         //     new Cleaner(
         //         5,
@@ -51,7 +54,7 @@ public class Main {
 
         // new Window().run();
 
-        new Owner_registration().main(args);
+       // new Owner_registration().main(args);
         // new Connection().main(args);
 
 
