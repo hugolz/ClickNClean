@@ -17,7 +17,9 @@ public class Admin extends User {
         boolean suspended,
         UserStatus status
     ) {
+
         super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, status);
+
     }
 
     // -------------------------------------------------------------------------------------------------------------------------

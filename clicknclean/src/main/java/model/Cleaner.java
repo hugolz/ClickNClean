@@ -19,6 +19,7 @@ public class Cleaner extends User {
     private String motivation;
     private String experience;
     private boolean confirmedId;
+
     private ArrayList<Integer> reviews;
     private UserStatus status;
     private Planning planning;
@@ -58,7 +59,9 @@ public class Cleaner extends User {
         this.profilePhoto = profilePhoto;
         this.motivation = motivation;
         this.experience = experience;
+
         this.confirmedId = confirmed;
+
         this.reviews = reviews;
         this.planning = planning;
     }
@@ -84,7 +87,9 @@ public class Cleaner extends User {
         LocalDate accountLocalDate,
         boolean suspended
     ) {
+
         super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, UserStatus.CLEANER);
+
 
         this.departureAddress = departureAddress;
         this.kmRange = kmRange;
@@ -171,11 +176,13 @@ public class Cleaner extends User {
     }
 
     public boolean isConfirmedId() {
+
         return this.confirmedId;
     }
 
     public void setConfirmedId(boolean confirmed) {
         this.confirmedId = confirmed;
+
     }
 
     public ArrayList<Integer> getReviews() {

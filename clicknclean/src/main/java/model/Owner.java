@@ -29,6 +29,7 @@ public class Owner extends User {
 		super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, UserStatus.OWNER);
 
 
+
 		this.serviceType = serviceType;
 		this.ownerID = ownerID;
 		this.status = UserStatus.OWNER;
@@ -50,7 +51,9 @@ public class Owner extends User {
 	    UserStatus status
 	) {
 
+
 		super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, UserStatus.OWNER);
+
 
 
 		this.serviceType = serviceType;

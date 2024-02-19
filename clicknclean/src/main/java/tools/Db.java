@@ -12,8 +12,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import javafx.util.Pair;
-
-
 import model.*;
 
 public class Db {
@@ -245,14 +243,12 @@ public class Db {
 	public int DAOAddCleaner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, UserStatus status, Address departureAddress, int kmRange, int hourlyRate, String bio, String photo, String motivation, String experience, boolean isConfirmed, String photoProfile, String photoLive) {
 		int cleanerID = DAOaddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.CLEANER);
 		try {
-			// String toQuery = (a.getDepartureAddress().getHouseNumber() + " " +
-			// a.getDepartureAddress().getLabel() + " " +
-			// a.getDepartureAddress().getPostCode() + " " +
-			// a.getDepartureAddress().getCity());
 			String strQuery = "INSERT INTO `cleaner`"
+
 			                  + "(`id_cleaner`, `address_display`, `latitude`, `longitude`, `km_range`, `hourly_rate`, `biography`, `photo`, `motivation`, `experience`, `confirmed`, `photo_profile`, `photo_live`) "
 			                  + "VALUES ('" + cleanerID + "','" + departureAddress.asString() + "','" + departureAddress.getLatitude() +  "','" + departureAddress.getLongitude() + "','" + kmRange + "','" + hourlyRate + "','" + bio + "','"
 			                  + photo + "','" + motivation + "','" + experience + "','" + (isConfirmed ? 1 : 0)  + "','" + photoProfile + "','" + photoLive +"');";
+
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -262,7 +258,22 @@ public class Db {
 
 	/*--------------------------------------ADD AN OWNER (and User)---------------------------------------------------------- */
 
-	public void DAOAddOwner(Owner a, int id) {
+
+	public void DAOAddOwner(Owner a) {
+		int id = 0;
+		DAOaddUser(a);
+
+		try {
+			String strQuery = "SELECT * FROM user;";
+			ResultSet rsReader = stRead.executeQuery(strQuery);
+			while (rsReader.next()) {
+				id = rsReader.getInt("id_user");
+			}
+			rsReader.close();
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+
 		try {
 			String strQuery = "INSERT INTO `owner`"
 			                  + "(`id_owner`, `type_service`) "
@@ -275,7 +286,22 @@ public class Db {
 
 	/*--------------------------------------ADD AN ADMIN (and User)---------------------------------------------------------- */
 
-	public void DAOAddAdmin(int id) {
+
+	public void DAOAddAdmin(Admin a) {
+		int id = 0;
+		DAOaddUser(a);
+
+		try {
+			String strQuery = "SELECT * FROM user;";
+			ResultSet rsReader = stRead.executeQuery(strQuery);
+			while (rsReader.next()) {
+				id = rsReader.getInt("id_user");
+			}
+			rsReader.close();
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+
 		try {
 			String strQuery = "INSERT INTO `admin`"
 			                  + "(`id_admin`) "
@@ -330,6 +356,7 @@ public class Db {
 		}
 	}
 
+
 /*--------------------------------------TOOLS METHODS--------------------------------------------------------------------- */
 	
 	public <T extends User> int DAOaddUser(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, UserStatus status) {
@@ -341,9 +368,11 @@ public class Db {
 
 		try {
 			String strQuery = "INSERT INTO `user`"
+
 			                  + "(`name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `account_date`, `suspended`, `status`) "
 			                  + "VALUES ('" + name + "','" + pwd + "','" + surname + "','" + email + "','" + phoneN + "','"
 			                  + sqlBirthDate + "','" + sqlAccountdate + "','" + (isSuspended ? 1 : 0) + "','" + status.asInt() + "');";
+
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());

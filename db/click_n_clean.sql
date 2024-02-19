@@ -65,6 +65,7 @@ CREATE TABLE `cleaner` (
   `photo` varchar(36) NOT NULL,
   `photo_profile` varchar(36) NOT NULL,
   `photo_live` varchar(36) NOT NULL,
+
   `motivation` varchar(250) NOT NULL,
   `experience` varchar(250) NOT NULL,
   `confirmed` tinyint(1) NOT NULL
