@@ -13,7 +13,7 @@ public class Owner extends User {
 
 //Creates a basic owner
 	public Owner(
-		int ownerID,
+	    int ownerID,
 	    String serviceType,
 	    String name,
 	    String pwd,
@@ -22,10 +22,12 @@ public class Owner extends User {
 	    String phoneNumber,
 	    LocalDate birthLocalDate,
 	    LocalDate accountLocalDate,
-	    boolean suspended,
-		UserStatus status
+	    boolean suspended
+
 	) {
-		super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, status);
+
+		super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, UserStatus.OWNER);
+
 
 		this.serviceType = serviceType;
 		this.ownerID = ownerID;
@@ -35,7 +37,7 @@ public class Owner extends User {
 // Creates an owner from loaded data
 	public Owner(
 	    ArrayList<Review> ownerReviews,
-		String serviceType,
+	    String serviceType,
 	    int ownerID,
 	    String name,
 	    String pwd,
@@ -45,9 +47,11 @@ public class Owner extends User {
 	    LocalDate birthLocalDate,
 	    LocalDate accountLocalDate,
 	    boolean suspended,
-		UserStatus status
+	    UserStatus status
 	) {
-		super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, status);
+
+		super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, UserStatus.OWNER);
+
 
 		this.serviceType = serviceType;
 		this.ownerReviews = ownerReviews;
@@ -55,37 +59,25 @@ public class Owner extends User {
 		this.status = UserStatus.OWNER;
 	}
 
-
-
 	public int getOwnerID() {
 		return ownerID;
 	}
-
-
 
 	public String getServiceType() {
 		return serviceType;
 	}
 
-
-
 	public ArrayList<Review> getOwnerReviews() {
 		return ownerReviews;
 	}
-
-
 
 	public ArrayList<Property> getListProperty() {
 		return listProperty;
 	}
 
-
-
 	public UserStatus getStatus() {
 		return status;
 	}
-
-
 
 	public void createMission() {
 		// insert code here

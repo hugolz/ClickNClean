@@ -10,9 +10,9 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import javafx.util.Pair;
+
 
 import model.*;
 
@@ -57,7 +57,7 @@ public class Db {
 
 	public ArrayList<Cleaner> getCleanersInRange(Address addr) {
 		ArrayList<Cleaner> out = new ArrayList<>();
-		String query = "SELECT * FROM cleaner;";
+		String query = "SELECT * FROM cleaner JOIN ON user USING cleaner.id_cleaner = user.id_user;";
 
 		try {
 			ResultSet rSet = this.stRead.executeQuery(query);
@@ -66,30 +66,21 @@ public class Db {
 
 				int cleaner_range = rSet.getInt("km_range");
 
-				ArrayList<String> addr_split = new ArrayList<String>(
-				    Arrays.asList(
-				        rSet.getString("address").split("+")
-				    )
-				);
-
-				if (addr_split.size() != 4) {
-					System.out.println("[Error] Could not deserialize address for cleaner with id '" + cleaner_id + "': " + addr_split);
-					continue;
-				}
-
 				Address cleaner_addr = new Address(
-				    addr_split.get(0),
-				    addr_split.get(1),
-				    addr_split.get(2),
-				    addr_split.get(3));
+				    rSet.getString("address_coords"),
+				    rSet.getString("address_display"));
 
 				double distance = addr.calculateDistance(cleaner_addr);
 
-				if (distance > cleaner_range) {
-					System.out.println("Skipped cleaner with id: '" + cleaner_id + "', not in range (" + distance + "> " + cleaner_range + ").");
+				if (distance * 1000 /* m to km */ > cleaner_range) {
+					System.out.println("Skipped cleaner with id: '" + cleaner_id + "', not in range (" + distance + "> "
+					                   + cleaner_range + ").");
 					continue;
 				}
 
+				// TODO: Something is terribly wrong here, you query name, password etc, but
+				// thoses are user specific, but we don't query user here Cleaner cleaner = new
+				// Cleaner(
 				Cleaner cleaner = new Cleaner(
 				    
 					cleaner_id,
@@ -119,24 +110,43 @@ public class Db {
 		return out;
 	}
 
-	public Pair<User, UserStatus> loginUser(String login, String password) throws InterruptedException, ExecutionException, Exception {
+	public Pair<Integer, UserStatus> loginUser(String login, String password)
+	throws InterruptedException, ExecutionException, Exception {
 		String query = "SELECT * FROM user where email  = " + login + " AND password = " + password + ";";
 
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
-			if (rSet.getInt("status") != 2 /* cleaner */) {
-				throw new Exception("Found a user with given email & password, but it's not a cleaner;");
+			return new Pair<Integer, UserStatus>(
+			           rSet.getInt("id_user"),
+			           UserStatus.fromInt(rSet.getInt("status")));
+		}
+
+		throw new Exception("Could not find a user with the given address / pasword");
+	}
+
+	public Cleaner loginCleaner(int id_user) throws InterruptedException, ExecutionException, Exception {
+		String query = "SELECT * FROM cleaner JOIN user ON (cleaner.id_cleaner = user.id_user) WHERE id_cleaner = "
+		               + id_user;
+
+		ResultSet rSet = this.stRead.executeQuery(query);
+		while (rSet.next()) {
+			if (UserStatus.fromInt(rSet.getInt("status")) != UserStatus.CLEANER) {
+				throw new Exception("Found a user with given id, but it's not a cleaner;");
 			}
-			// String name,
-			// String pwd,
-			// String surname,
-			// String email,
-			// String phoneNumber,
-			// LocalDate birthLocalDate,
-			// LocalDate accountLocalDate,
-			// boolean suspended,
-			// UserStatus status
-			User user = new User(
+
+			Cleaner cleaner = new Cleaner(
+			    rSet.getInt("id_cleaner"),
+			    new Address(
+			        rSet.getString("address_coords"),
+			        rSet.getString("address_display")),
+			    rSet.getInt("km_range"),
+			    rSet.getInt("hourly_rate"),
+			    rSet.getString("biography"),
+			    rSet.getString("photo_profile"),
+			    rSet.getString("photo_id"),
+			    rSet.getString("motivation"),
+			    rSet.getString("experience"),
+			    rSet.getBoolean("confirmed"),
 			    rSet.getString("name"),
 			    rSet.getString("password"),
 			    rSet.getString("surname"),
@@ -144,9 +154,65 @@ public class Db {
 			    rSet.getString("phone_number"),
 			    rSet.getDate("birth_date").toLocalDate(),
 			    rSet.getBoolean("suspended"),
-			    UserStatus.fromInt(rSet.getInt("status"))
+			    UserStatus.fromInt(rSet.getInt("status")),
+			    new ArrayList<Integer>(), // reviews,
+			    new Planning(rSet.getInt("id_cleaner")) // planning,
 			);
-			return new Pair<User, UserStatus>(user, UserStatus.fromInt(rSet.getInt("status")));
+			// TODO: Load planning and reviews
+			return cleaner;
+		}
+
+		throw new Exception("Could not find any cleaner with the given id");
+	}
+
+	public Owner loginOwner(int id_user) throws InterruptedException, ExecutionException, Exception {
+		String query = "SELECT * FROM owner JOIN user ON (owner.id_owner = user.id_user) WHERE id_owner = " + id_user;
+
+		ResultSet rSet = this.stRead.executeQuery(query);
+		while (rSet.next()) {
+			if (UserStatus.fromInt(rSet.getInt("status")) != UserStatus.OWNER) {
+				throw new Exception("Found a user with given id, but it's not an owner;");
+			}
+
+			Owner owner = new Owner(
+			    new ArrayList<Review>(), // ownerReviews
+			    rSet.getString("serviceType"), //
+			    rSet.getInt("id_owner"),
+			    rSet.getString("name"),
+			    rSet.getString("password"),
+			    rSet.getString("surname"),
+			    rSet.getString("email"),
+			    rSet.getString("phone_number"),
+			    rSet.getDate("birth_date").toLocalDate(),
+			    rSet.getDate("account_date").toLocalDate(),
+			    rSet.getBoolean("suspended"),
+			    UserStatus.fromInt(rSet.getInt("status")));
+			return owner;
+		}
+
+		throw new Exception("Could not find any owner with the given id");
+	}
+
+	public Admin loginAdmin(int id_user) throws InterruptedException, ExecutionException, Exception {
+		String query = "SELECT * FROM admin JOIN user ON (admin.id_admin = user.id_user) WHERE id_admin = " + id_user;
+
+		ResultSet rSet = this.stRead.executeQuery(query);
+		while (rSet.next()) {
+			if (UserStatus.fromInt(rSet.getInt("status")) != UserStatus.ADMIN) {
+				throw new Exception("Found a user with given email & password, but it's not a cleaner;");
+			}
+			Admin admin = new Admin(
+			    rSet.getString("name"),
+			    rSet.getString("password"),
+			    rSet.getString("surname"),
+			    rSet.getString("email"),
+			    rSet.getString("phone_number"),
+			    rSet.getDate("birth_date").toLocalDate(),
+			    rSet.getDate("account_date").toLocalDate(),
+			    rSet.getBoolean("suspended"),
+			    UserStatus.fromInt(rSet.getInt("status")));
+
+			return admin;
 		}
 
 		throw new Exception("Could not find a user with the given address / pasword");
@@ -179,7 +245,10 @@ public class Db {
 	public int DAOAddCleaner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, UserStatus status, Address departureAddress, int kmRange, int hourlyRate, String bio, String photo, String motivation, String experience, boolean isConfirmed, String photoProfile, String photoLive) {
 		int cleanerID = DAOaddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.CLEANER);
 		try {
-			//String toQuery = (a.getDepartureAddress().getHouseNumber() + " " + a.getDepartureAddress().getLabel() + " " + a.getDepartureAddress().getPostCode() + " " + a.getDepartureAddress().getCity());
+			// String toQuery = (a.getDepartureAddress().getHouseNumber() + " " +
+			// a.getDepartureAddress().getLabel() + " " +
+			// a.getDepartureAddress().getPostCode() + " " +
+			// a.getDepartureAddress().getCity());
 			String strQuery = "INSERT INTO `cleaner`"
 			                  + "(`id_cleaner`, `address_display`, `latitude`, `longitude`, `km_range`, `hourly_rate`, `biography`, `photo`, `motivation`, `experience`, `confirmed`, `photo_profile`, `photo_live`) "
 			                  + "VALUES ('" + cleanerID + "','" + departureAddress.asString() + "','" + departureAddress.getLatitude() +  "','" + departureAddress.getLongitude() + "','" + kmRange + "','" + hourlyRate + "','" + bio + "','"
@@ -191,8 +260,7 @@ public class Db {
 		return cleanerID;
 	}
 
-
-/*--------------------------------------ADD AN OWNER (and User)---------------------------------------------------------- */
+	/*--------------------------------------ADD AN OWNER (and User)---------------------------------------------------------- */
 
 	public void DAOAddOwner(Owner a, int id) {
 		try {
@@ -205,14 +273,13 @@ public class Db {
 		}
 	}
 
-
-/*--------------------------------------ADD AN ADMIN (and User)---------------------------------------------------------- */
+	/*--------------------------------------ADD AN ADMIN (and User)---------------------------------------------------------- */
 
 	public void DAOAddAdmin(int id) {
 		try {
 			String strQuery = "INSERT INTO `admin`"
-							+ "(`id_admin`) "
-							+ "VALUES ('" + id + "');";
+			                  + "(`id_admin`) "
+			                  + "VALUES ('" + id + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -220,11 +287,11 @@ public class Db {
 
 	}
 
-/*--------------------------------------MANAGE RIGHTS ON USER / CLEANER--------------------------------------------------- */
+	/*--------------------------------------MANAGE RIGHTS ON USER / CLEANER--------------------------------------------------- */
 
 	public void DAOSuspendUser(int userID, boolean suspend) {
 		try {
-			String strQuery = "UPDATE user SET suspended = " + (suspend ? 1 : 0) + "WHERE id_user = "+ userID + ";";
+			String strQuery = "UPDATE user SET suspended = " + (suspend ? 1 : 0) + "WHERE id_user = " + userID + ";";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -233,7 +300,7 @@ public class Db {
 
 	public void DAOConfirmCleaner(int cleanerId) {
 		try {
-			String strQuery = "UPDATE cleaner SET confirmed = 1 WHERE id_cleaner = "+ cleanerId + ";";
+			String strQuery = "UPDATE cleaner SET confirmed = 1 WHERE id_cleaner = " + cleanerId + ";";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -248,15 +315,15 @@ public class Db {
 		}
 	}
 
-	public void main (String[] args) {
+	public void main(String[] args) {
 
 	}
 
-/*--------------------------------------MANAGE RIGHTS ON USER / CLEANER--------------------------------------------------- */
+	/*--------------------------------------MANAGE RIGHTS ON USER / CLEANER--------------------------------------------------- */
 
 	public void DAOResolveDispute(int missionID, int state) {
 		try {
-			String strQuery = "UPDATE mission SET state = " + state + "WHERE id_mission = "+ missionID + ";";
+			String strQuery = "UPDATE mission SET state = " + state + "WHERE id_mission = " + missionID + ";";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -295,7 +362,7 @@ public class Db {
 		return id;
 	}
 
-/*--------------------------------------MANAGE ACTIVITY--------------------------------------------------------------------- */
+	/*--------------------------------------MANAGE ACTIVITY--------------------------------------------------------------------- */
 
 	public void DAOaddActivity(Activity a) {
 		try {
@@ -308,14 +375,16 @@ public class Db {
 			System.err.println(e.getMessage());
 		}
 	}
-/*--------------------------------------MANAGE PLANNING--------------------------------------------------------------------- */
+	/*--------------------------------------MANAGE PLANNING--------------------------------------------------------------------- */
 	public void DAOCreateNewPlanning(LocalDate date, LocalTime hour, int availability, int cleanerID) {
 		Date sqlDate = Date.valueOf(date);
 		Time sqlTime = Time.valueOf(hour);
 		try {
 			String strQuery = "INSERT INTO `planning`"
+
 							+ "(`date`, `time`, `availability`, `id_cleaner`) "
 							+ "VALUES ('" + sqlDate + "','" + sqlTime  + "','" + availability + "','" + cleanerID + "');";
+
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
