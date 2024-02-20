@@ -8,12 +8,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
+import model.Property;
 import javafx.util.Pair;
 
 import javafx.util.Pair;
@@ -21,6 +24,8 @@ import model.planning.Planning;
 import model.planning.TimeSlot;
 import model.Address;
 import model.Cleaner;
+import model.Mission;
+import model.MissionStatus;
 import model.UserStatus;
 import model.Owner;
 import model.Admin;
@@ -42,8 +47,8 @@ public class Db {
 		this.strClassName = "com.mysql.cj.jdbc.Driver";
 		this.dbName = "click_n_clean";
 
-		this.login = "root";
-		this.password = "";
+		this.login = "rootx";
+		this.password = "rootx";
 
 		this.strUrl = "jdbc:mysql://localhost:3306/" + dbName
 		              + "?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Europe/Paris";
@@ -454,15 +459,14 @@ public class Db {
 		}
 	}
 
-	/*--------------------------------------MANAGEPROPERTIES--------------------------------------------------------------------- */
+	/*--------------------------------------MANAGE PROPERTIES-------------------------------------------------------------- */
 	public void DAOCreateNewProperty(
 		Address propertyAddress, 
 		int propertySurface,
 		String accesCode,
 		String keyBoxCode, 
 		String specialInstruction, 
-		int ownerId, 
-		int propertyId) {
+		int ownerId) {
 		try {
 			String strQuery = "INSERT INTO `property`"
 			                  + "(`address_display`, `latitude`, `longitude`, `surface`, `id_owner`, `acces_code`, `key_box_code`, `special_instruction`) "
@@ -473,4 +477,30 @@ public class Db {
 			System.err.println(e.getMessage());
 		}
 	}
+
+/*--------------------------------------MANAGE PROPERTIES-------------------------------------------------------------- */
+	public void DAOCreateNewMission( 
+		Property property,
+		LocalDate missionDate,
+		double duration,
+		double commission,
+		int ownerId,
+		String cleanerId,
+		ArrayList<Cleaner> cleanerList,
+		String startTime,
+		MissionStatus state) {
+		
+		duration = Mission.setDuration(property.getPropertySurface());
+		
+		try {
+			String strQuery = "INSERT INTO `mission`"
+							+ "`date_start`, `cost`, `duration`, `commision`, `state`, `before_photo`, `after_photo`, `id_owner`, `id_cleaner`, `id_property`) "
+							+ "VALUES ('" + missionDate + "','" + null + "','" + duration + "','" + null + "','" + MissionStatus.PUBLISHED + "','"
+							+ null + "','" + null  + "','" + ownerId  +  "','" +  null + "','" + property.getPropertyId() + "');";
+			stRead.executeUpdate(strQuery);
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+	}
+
 }

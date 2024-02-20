@@ -55,6 +55,31 @@ public class Mission {
         return duration;
     }
 
+
+
+
+/**
+ * Changes duration using mission's property surface 
+ *  → < 30m2 → 1h
+    → 30-40m2 → 2h
+    → 40-60m2 → 2h30
+    → 60-80m2 → 3h
+    → 80-100m2 → 3h30
+    → >100m2 → 4h
+ * @param surface
+ */
+    public static double setDuration(int surface) {
+        double duration = 0;
+        if (surface <= 30) duration = 1.0;
+        else if (surface > 30 && surface <= 40) duration = 2.;
+        else if (surface > 40 && surface <= 60) duration = 2.5;
+        else if (surface > 60 && surface <= 80) duration = 3.;
+        else if (surface > 80 && surface <= 100) duration = 3.5;
+        else if (surface > 100) duration = 4.;
+
+        return duration;
+    }
+
     public double getCost() {
         return cost;
     }
@@ -96,8 +121,8 @@ public class Mission {
         return missionProposals;
     }
 
-    public void setMissionProposals(HashMap<Cleaner, LocalDateTime> missionProposals) {
-        this.missionProposals = missionProposals;
+    public void addMissionProposals(Cleaner cleaner, LocalDateTime startingHour) {
+        this.missionProposals.put(cleaner, startingHour);
     }
 
     

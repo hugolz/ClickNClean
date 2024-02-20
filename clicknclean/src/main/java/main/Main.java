@@ -16,9 +16,36 @@ import model.UserStatus;
 
 public class Main {
 
-    public static void testUser() throws SQLException, ExecutionException, InterruptedException {
+
+    int ownerId = 0;
+
+    public static void testProperty() throws SQLException, InterruptedException, ExecutionException {
+        Db connection = new Db();
+        connection.DAOCreateNewProperty(
+            new Address("1", "Pl. Louis Armand", "29000", "quimper"), 
+            35, 
+            null, 
+            null, 
+            null, 
+            0);
+        connection.disconnect();
+        connection = null;
+    }
+
+
+    public static void testOwner() {
+        Db connection = new Db();
+        connection.DAOAddOwner("Lezoual'ch", "noobie", "gogo", "email", "null", LocalDate.now(), false, "null");
+        connection.disconnect();
+        connection =null;
+    }
+
+    public static void testUser()  throws SQLException, ExecutionException, InterruptedException {
+
         Db connection = new Db();
         connection.DAOaddUser("John", "null", "null", "null", "null", LocalDate.now(), false, UserStatus.ADMIN);
+        connection.disconnect();
+        connection = null;
     }
 
     public static void testCleaner() throws SQLException, InterruptedException, ExecutionException {
@@ -45,13 +72,15 @@ public class Main {
 
     public static void testPlanning() throws Exception, SQLException, InterruptedException, ExecutionException {
 
+
     };
+
 
     public static void main(String[] args) throws SQLException, InterruptedException, ExecutionException {
 
       
         try {
-            testCleaner();
+            testProperty();
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         } catch (Exception e) {
