@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
 
 import tools.Db;
 
@@ -61,6 +60,19 @@ public class Planning {
     // return calendarMonth;
     // }
 
+    public String toString() {
+        String out = new String();
+
+        out += "Class Planning{Slots: {";
+
+        for (TimeSlot ts : this.slots) {
+            out += ts.toString();
+        }
+
+        out += "}}";
+        return out;
+    }
+
     public ArrayList<TimeSlot> getTimeSlots() {
         return this.slots;
     }
@@ -79,5 +91,36 @@ public class Planning {
             System.out.println(slot.toString());
         }
         System.out.println(plan.slots.size());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof Planning)) {
+            return false;
+        }
+
+        Planning p = (Planning) o;
+
+
+        if (this.getTimeSlots().size() != p.getTimeSlots().size()) {
+            return false;
+        }
+
+        int i = 0;
+        while (i < this.slots.size()) {
+            if (!this.getTimeSlots().get(i).equals(p.getTimeSlots().get(i))) {
+                System.out.println("Time slot check failled at " + i);
+                return false;
+            }
+
+            i++;
+        }
+
+        return true;
     }
 }

@@ -112,7 +112,6 @@ public class Db {
 				    rSet.getString("phone_number"),
 				    rSet.getDate("birth_date").toLocalDate(),
 				    rSet.getBoolean("suspended"));
-
 				out.add(cleaner);
 			}
 			rSet.close();
@@ -264,7 +263,8 @@ public class Db {
 				TimeSlot ts = new TimeSlot(
 				    rSet.getTimestamp("datetime").toLocalDateTime(),
 				    rSet.getDouble("durationH"),
-				    rSet.getInt("availability"));
+				    rSet.getInt("id_mission")
+				);
 
 				slots.add(ts);
 			}
@@ -280,7 +280,7 @@ public class Db {
 		try {
 			for (TimeSlot ts : planning.getTimeSlots()) {
 				String strQuery = "INSERT INTO `planning`"
-				                  + "(`id_cleaner`, `datetime`, `duration`, `id_mission`)"
+				                  + "(`id_cleaner`, `datetime`, `durationH`, `id_mission`)"
 				                  + "VALUES ('" + id_user + "','" + ts.getLocalDateTime() + "','" + ts.getDurationH() + "','" + ( ts.getIsAvailable() ? ts.getIdMission() : null) + "');";
 				stRead.executeUpdate(strQuery);
 			}
@@ -291,16 +291,13 @@ public class Db {
 	}
 
 
-
-  	/*--------------------------------------ADD A CLEANER (and User)---------------------------------------------------------- */
-          
 	public int DAOAddCleaner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, Address departureAddress, int kmRange, int hourlyRate, String bio, String photo, String motivation, String experience, boolean isConfirmed, String photoProfile, String photoLive) {
 		int cleanerID = DAOaddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.CLEANER);
 		try {
 			String strQuery = "INSERT INTO `cleaner`"
 			                  + "(`id_cleaner`, `address_display`, `latitude`, `longitude`, `km_range`, `hourly_rate`, `biography`, `photo`, `motivation`, `experience`, `confirmed`, `photo_profile`, `photo_live`) "
 			                  + "VALUES ('" + cleanerID + "','" + departureAddress.asString() + "','" + departureAddress.getLatitude() +  "','" + departureAddress.getLongitude() + "','" + kmRange + "','" + hourlyRate + "','" + bio + "','"
-			                  + photo + "','" + motivation + "','" + experience + "','" + (isConfirmed ? 1 : 0)  + "','" + photoProfile + "','" + photoLive +"');";			stRead.executeUpdate(strQuery);
+			                  + photo + "','" + motivation + "','" + experience + "','" + (isConfirmed ? 1 : 0)  + "','" + photoProfile + "','" + photoLive + "');";			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
@@ -309,6 +306,7 @@ public class Db {
 	}
 
 	/*--------------------------------------ADD AN OWNER (and User)---------------------------------------------------------- */
+
 
 
 	public int DAOAddOwner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, String serviceType) {
@@ -322,7 +320,34 @@ public class Db {
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
-		return ownerId;
+  }
+
+	/*--------------------------------------ADD AN ADMIN (and User)---------------------------------------------------------- */
+
+
+	public void DAOAddAdmin(Admin a) {
+		int id = 0;
+		// DAOaddUser(a);
+
+		try {
+			String strQuery = "SELECT * FROM user;";
+			ResultSet rsReader = stRead.executeQuery(strQuery);
+			while (rsReader.next()) {
+				id = rsReader.getInt("id_user");
+			}
+			rsReader.close();
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+
+		try {
+			String strQuery = "INSERT INTO `admin`"
+			                  + "(`id_admin`) "
+			                  + "VALUES ('" + id + "');";
+			stRead.executeUpdate(strQuery);
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
 	}
 
 	/*--------------------------------------MANAGE RIGHTS ON USER / CLEANER--------------------------------------------------- */
@@ -369,14 +394,14 @@ public class Db {
 	}
 
 
-/*--------------------------------------TOOLS METHODS--------------------------------------------------------------------- */
-	
+	/*--------------------------------------TOOLS METHODS--------------------------------------------------------------------- */
+
 	public <T extends User> int DAOaddUser(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, UserStatus status) {
-		
+
 		int id = 0;
 		LocalDate accountDate = LocalDate.now();
 		Date sqlBirthDate = Date.valueOf(birthDate);
-		Date sqlAccountdate = Date.valueOf(accountDate);		
+		Date sqlAccountdate = Date.valueOf(accountDate);
 
 		try {
 			String strQuery = "INSERT INTO `user`"
@@ -395,7 +420,7 @@ public class Db {
 			ResultSet rsReader = stRead.executeQuery(strQuery);
 			while (rsReader.next()) {
 				id = rsReader.getInt("id_user");
-			} 
+			}
 			rsReader.close();
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
