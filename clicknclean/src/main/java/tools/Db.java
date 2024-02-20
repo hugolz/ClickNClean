@@ -106,8 +106,7 @@ public class Db {
 				    rSet.getString("email"),
 				    rSet.getString("phone_number"),
 				    rSet.getDate("birth_date").toLocalDate(),
-				    // rSet.getDate("account_date").toLocalDate(),
-				    rSet.getBoolean("suspended"),
+				    rSet.getBoolean("suspended"));
 
 				out.add(cleaner);
 			}

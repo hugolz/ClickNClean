@@ -1,12 +1,13 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import tools.Db;
+import java.util.HashMap;
 
 public class Mission {
     Property property;
-    LocalDate missionLocalDate;
+    LocalDate missionDate;
     double duration;
     double cost;
     double commission;
@@ -14,22 +15,23 @@ public class Mission {
     String cleanerId;
     ArrayList<Cleaner> cleanerList;
     String startTime;
-    String state;
-
+    MissionStatus state;
+    HashMap<Cleaner, LocalDateTime> missionProposals;
 
     public Mission(
         Property property,
-        LocalDate missionLocalDate,
+        LocalDate missionDate,
         double duration,
         double cost,
         double commission,
         String ownerId,
         String cleanerId,
         String startTime,
-        String state
+        MissionStatus state,
+        HashMap<Cleaner, LocalDateTime> missionProposals
     ) {
         this.property = property;
-        this.missionLocalDate = missionLocalDate;
+        this.missionDate = missionDate;
         this.duration = duration;
         this.cost = cost;
         this.commission = commission;
@@ -37,14 +39,16 @@ public class Mission {
         this.cleanerId = cleanerId;
         this.startTime = startTime;
         this.state = state;
+        this.missionProposals = missionProposals;
+
     }
 
-    public LocalDate getMissionLocalDate() {
-        return missionLocalDate;
+    public LocalDate getMissionDate() {
+        return missionDate;
     }
 
-    public void setMissionLocalDate(LocalDate missionLocalDate) {
-        this.missionLocalDate = missionLocalDate;
+    public void setMissionDate(LocalDate missionDate) {
+        this.missionDate = missionDate;
     }
 
     public double getDuration() {
@@ -80,15 +84,23 @@ public class Mission {
         this.startTime = startTime;
     }
 
-    public String getState() {
+    public MissionStatus getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(MissionStatus state) {
         this.state = state;
     }
 
+    public HashMap<Cleaner, LocalDateTime> getMissionProposals() {
+        return missionProposals;
+    }
 
+    public void setMissionProposals(HashMap<Cleaner, LocalDateTime> missionProposals) {
+        this.missionProposals = missionProposals;
+    }
+
+    
 
 
 }
