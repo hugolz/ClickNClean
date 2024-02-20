@@ -24,23 +24,21 @@ public class Main {
     public static void testCleaner() throws SQLException, InterruptedException, ExecutionException {
         Db connection = new Db();
         int cleanerID = connection.DAOAddCleaner(
-                            "Doe",
-                            "null",
-                            "John",
-                            null,
-                            null,
-                            LocalDate.now(),
-                            false,
-                            null,
-                            new Address("28", "av yves thepot", "29000", "quimper"),
-                            0, 0,
-                            null,
-                            null,
-                            null,
-                            null,
-                            false,
-                            null,
-                            null);
+            "Doe", 
+            "null", 
+            "John", 
+            null, 
+            null, 
+            LocalDate.now(), 
+            false,           
+            new Address("28","av yves thepot" , "29000", "quimper"),
+            0, 0,
+            null, 
+            null, 
+            null, 
+            null, false, 
+            null, 
+            null);
         connection.disconnect();
         connection = null;
     }
@@ -50,13 +48,8 @@ public class Main {
     };
 
     public static void main(String[] args) throws SQLException, InterruptedException, ExecutionException {
-        try {
-            testPlanning();
 
-        } catch (Exception e) {
-
-        }
-
+      
         try {
             testCleaner();
         } catch (SQLException e) {

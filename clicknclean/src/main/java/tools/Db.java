@@ -106,9 +106,7 @@ public class Db {
 				    rSet.getString("email"),
 				    rSet.getString("phone_number"),
 				    rSet.getDate("birth_date").toLocalDate(),
-				    // rSet.getDate("account_date").toLocalDate(),
-				    rSet.getBoolean("suspended")
-				);
+				    rSet.getBoolean("suspended"));
 				out.add(cleaner);
 			}
 			rSet.close();
@@ -245,6 +243,8 @@ public class Db {
 		}
 	}
 
+
+
 	public Planning readPlanning(int id_user) throws Exception {
 		String query = "SELECT * FROM planning JOIN user ON (planning.id_cleaner = user.id_user) WHERE id_cleaner = "
 		               + id_user;
@@ -285,7 +285,8 @@ public class Db {
 		}
 	}
 
-	public int DAOAddCleaner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, UserStatus status, Address departureAddress, int kmRange, int hourlyRate, String bio, String photo, String motivation, String experience, boolean isConfirmed, String photoProfile, String photoLive) {
+
+	public int DAOAddCleaner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, Address departureAddress, int kmRange, int hourlyRate, String bio, String photo, String motivation, String experience, boolean isConfirmed, String photoProfile, String photoLive) {
 		int cleanerID = DAOaddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.CLEANER);
 		try {
 			String strQuery = "INSERT INTO `cleaner`"
@@ -302,30 +303,19 @@ public class Db {
 	/*--------------------------------------ADD AN OWNER (and User)---------------------------------------------------------- */
 
 
-	public void DAOAddOwner(Owner a) {
-		int id = 0;
-		// DAOaddUser(a);
 
-		try {
-			String strQuery = "SELECT * FROM user;";
-			ResultSet rsReader = stRead.executeQuery(strQuery);
-			while (rsReader.next()) {
-				id = rsReader.getInt("id_user");
-			}
-			rsReader.close();
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}
+	public int DAOAddOwner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, String serviceType) {
+		int ownerId = DAOaddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.OWNER);
 
 		try {
 			String strQuery = "INSERT INTO `owner`"
 			                  + "(`id_owner`, `type_service`) "
-			                  + "VALUES ('" + id + "','" + a.getServiceType() + "');";
+			                  + "VALUES ('" + ownerId + "','" + serviceType + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
-	}
+  }
 
 	/*--------------------------------------ADD AN ADMIN (and User)---------------------------------------------------------- */
 
@@ -353,7 +343,6 @@ public class Db {
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
-
 	}
 
 	/*--------------------------------------MANAGE RIGHTS ON USER / CLEANER--------------------------------------------------- */
@@ -388,7 +377,7 @@ public class Db {
 
 	}
 
-	/*--------------------------------------MANAGE RIGHTS ON USER / CLEANER--------------------------------------------------- */
+	/*--------------------------------------MANAGE MISSIONS--------------------------------------------------- */
 
 	public void DAOResolveDispute(int missionID, int state) {
 		try {
@@ -459,6 +448,26 @@ public class Db {
 			                  + "(`date`, `time`, `availability`, `id_cleaner`) "
 			                  + "VALUES ('" + sqlDate + "','" + sqlTime + "','" + availability + "','" + cleanerID + "');";
 
+			stRead.executeUpdate(strQuery);
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+	}
+
+	/*--------------------------------------MANAGEPROPERTIES--------------------------------------------------------------------- */
+	public void DAOCreateNewProperty(
+		Address propertyAddress, 
+		int propertySurface,
+		String accesCode,
+		String keyBoxCode, 
+		String specialInstruction, 
+		int ownerId, 
+		int propertyId) {
+		try {
+			String strQuery = "INSERT INTO `property`"
+			                  + "(`address_display`, `latitude`, `longitude`, `surface`, `id_owner`, `acces_code`, `key_box_code`, `special_instruction`) "
+			                  + "VALUES ('" + propertyAddress.asString() + "','" + propertyAddress.getLatitude() + "','" + propertyAddress.getLongitude() + "','" + propertySurface + "','" + ownerId + "','"
+			                  + accesCode + "','" + keyBoxCode  + "','" + specialInstruction  + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
