@@ -1,0 +1,7 @@
+.root{
+    -fx-background: rgb(22, 22, 22);
+}
+
+.button{
+    -fx-text-fill: rgb(5, 10, 50);
+}
