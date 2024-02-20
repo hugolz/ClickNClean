@@ -77,8 +77,6 @@ public class Cleaner extends User {
         String email,
         String phoneNumber,
         LocalDate birthLocalDate,
-
-        LocalDate accountLocalDate,
         boolean suspended
     ) {
 
