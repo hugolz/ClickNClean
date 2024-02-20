@@ -6,13 +6,14 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 import tools.Db;
+import view.Window;
 
 public class ConnectionController {
 
 
-	public ConnectionController(String login, String psw) {
+	public ConnectionController(String login, String psw, Window window) {
 
-		Db db1 = new Db();
+		Db db1 = new Db(); 
 
 		try {
 			String strQuery = "SELECT * FROM user WHERE email = '" + login + "' AND password = '" + psw + "';";
@@ -28,21 +29,18 @@ public class ConnectionController {
 					JOptionPane.showMessageDialog(null, "Connexion réussie");
 					switch (rsReader.getString("status")) {
 					case "Admin" :
-						// WelcomeAdmin a1 = new WelcomeAdmin();
-						// a1.setVisible(true);
-						String strQueryAdmin = "SELECT * FROM admin WHERE id_";
+						window.displayWelcomeAdmin();
+						String strQueryAdmin = "SELECT * FROM admin WHERE id_;";
 						rsReader = db1.getStRead().executeQuery(strQueryAdmin);
 						break;
 					case "Cleaner" :
-						// WelcomeCleaner c1 = new WelcomeCleaner();
-						// c1.setVisible(true);
-						String strQueryCleaner = "SELECT * FROM ";
+						window.displayWelcomeCleaner();
+						String strQueryCleaner = "SELECT * FROM ;";
 						rsReader = db1.getStRead().executeQuery(strQueryCleaner);
 						break;
 					case "Owner" :
-						// WelcomeOwner o1 = new WelcomeOwner();
-						// o1.setVisible(true);
-						String strQueryOwner = "SELECT * FROM ";
+						window.displayWelcomeOwner();
+						String strQueryOwner = "SELECT * FROM ;";
 						rsReader = db1.getStRead().executeQuery(strQueryOwner);
 						break;
 					}
@@ -51,13 +49,14 @@ public class ConnectionController {
 
 
 
-				//tuer la connexion
+				
 
-				JOptionPane.showMessageDialog(null, "Login ou mot de passe incorrect !");
-				//Connexion c1 = new Connexion();
+				JOptionPane.showMessageDialog(null, "Email ou mot de passe incorrect !");
+				//ConnectionView c1 = new ConnectionView();
 				//c1.setVisible(true);
-				System.out.println("ce projet est vraiment génial");
+
 			}
+		//rsReader.close();
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
