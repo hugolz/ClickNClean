@@ -10,10 +10,7 @@ import tools.APOD;
 import java.lang.Throwable;
 
 public class Address {
-    String houseNumber;
-    String label;
-    String postCode;
-    String city;
+    String display;
     double latitude;
     double longitude;
 
@@ -44,24 +41,23 @@ public class Address {
         // Access the first feature's coordinates (assuming APOD class structure)
         ArrayList<Double> coordinates = response.body().get().features.get(0).geometry.coordinates;
 
-        this.houseNumber = houseNumber;
-        this.label = label.replaceAll(" ", "+");
-        this.postCode = postCode;
-        this.city = city;
+        this.display = houseNumber +  " " + label +  " " + postCode + " " + city;
+        System.out.println(this.display);
         this.longitude = coordinates.get(0);
         this.latitude = coordinates.get(1);
     }
 
-    public String getHouseNumber() {
-        return houseNumber;
-    }
+    public Address(String display, String coords) throws Exception {
 
-    public String getLabel() {
-        return label;
-    }
+        String[] coords_split = coords.split(",");
 
-    public String getPostCode() {
-        return postCode;
+        if (coords_split.length != 2) {
+            throw new Exception("Invalid coords");
+        }
+
+        this.latitude = Integer.parseInt(coords_split[0]);
+        this.longitude = Integer.parseInt(coords_split[1]);
+        this.display = display;
     }
 
     public double getLatitude() {
@@ -72,20 +68,8 @@ public class Address {
         return longitude;
     }
 
-    public String getCity() {
-        return city;
-    }
-
-    public String toString() {
-        return this.houseNumber + "+" + this.label + "+" + this.postCode + "+" + this.city;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+    public String asString() {
+        return this.display;
     }
 
     // Result is in meters

@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDate;
 
+
 public class User {
 	private String name;
 	private String pwd;
@@ -11,9 +12,9 @@ public class User {
 	private LocalDate birthLocalDate;
 	private LocalDate accountLocalDate;
 	private boolean suspended;
-	private int status; 
+	private UserStatus status;
 	/*
-	 * Status index : 
+	 * Status index :
 	 * Admin --> 1
 	 * Cleaner --> 2
 	 * Owner --> 3
@@ -27,9 +28,8 @@ public class User {
 	    String email,
 	    String phoneNumber,
 	    LocalDate birthLocalDate,
-	    LocalDate accountLocalDate,
 	    boolean suspended,
-		int status
+	    UserStatus status
 	) {
 		this.name = name;
 		this.pwd = pwd;
@@ -37,9 +37,13 @@ public class User {
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 		this.birthLocalDate = birthLocalDate;
-		this.accountLocalDate = accountLocalDate;
+		this.accountLocalDate = LocalDate.now();
 		this.suspended = suspended;
 		this.status = status;
+	}
+
+	public User(String name) {
+		this.name = name;
 	}
 
 
@@ -49,7 +53,7 @@ public class User {
 	    String pwd,
 	    String surname,
 	    String email,
-		int status
+	    UserStatus status
 	) {
 		this.name = name;
 		this.pwd = pwd;
@@ -123,7 +127,7 @@ public class User {
 		this.accountLocalDate = accountLocalDate;
 	}
 
-	public int getStatus() {
+	public UserStatus getStatus() {
 		return this.status;
 	}
 

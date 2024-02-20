@@ -3,6 +3,8 @@ package model;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import tools.Db;
+
 
 
 public class Cleaner extends User {
@@ -16,13 +18,10 @@ public class Cleaner extends User {
     private String profilePhoto;
     private String motivation;
     private String experience;
-    private boolean confirmedId;
-    private ArrayList<String> availableDays;
+    private boolean confirmed;
     private ArrayList<Integer> reviews;
-    private int status;
+    private UserStatus status;
     private Planning planning;
-
-
 
     // Creates a Cleaner object from loaded data
     public Cleaner(
@@ -31,8 +30,8 @@ public class Cleaner extends User {
         int kmRange,
         int hourlyRate,
         String biography,
-        String idPhoto,
         String profilePhoto,
+        String idPhoto,
         String motivation,
         String experience,
         boolean confirmed,
@@ -42,25 +41,13 @@ public class Cleaner extends User {
         String email,
         String phoneNumber,
         LocalDate birthLocalDate,
-        LocalDate accountLocalDate,
         boolean suspended,
-        int status,
-        ArrayList<Integer> reviews) {
+        UserStatus status,
+        ArrayList<Integer> reviews,
+        Planning planning
+    ) {
 
-        super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, status);
-
-        // this.cleanerId = cleanerId;
-        // this.departureAddress = departureAddress;
-        // this.kmRange = kmRange;
-        // this.hourlyRate = hourlyRate;
-        // this.planning = new Planning();
-        // this.motivation = motivation;
-        // this.experience = experience;
-        // this.idPhoto = idPhoto;
-        // this.profilePhoto = profilePhoto;
-        // this.confirmed = confirmed;
-        // this.biography = biography;
-        // this.reviews = reviews;
+        super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, status);
 
         this.cleanerId = cleanerId;
         this.departureAddress = departureAddress;
@@ -71,15 +58,14 @@ public class Cleaner extends User {
         this.profilePhoto = profilePhoto;
         this.motivation = motivation;
         this.experience = experience;
-        this.confirmedId = confirmedId;
-        this.availableDays = availableDays;
+        this.confirmed = confirmed;
         this.reviews = reviews;
-        this.planning = new Planning();
+        this.planning = planning;
     }
 
     // Creates a basic Cleaner
     public Cleaner(
-        int cleanerId,
+        
         Address departureAddress,
         int kmRange,
         int hourlyRate,
@@ -96,11 +82,13 @@ public class Cleaner extends User {
         LocalDate birthLocalDate,
         LocalDate accountLocalDate,
         boolean suspended,
-        int status
+        UserStatus status
     ) {
-        super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, status);
 
-        this.cleanerId = cleanerId;
+        super(name, pwd, surname, email, phoneNumber, birthLocalDate, accountLocalDate, suspended, UserStatus.CLEANER);
+
+
+        Db connection = new Db();
         this.departureAddress = departureAddress;
         this.kmRange = kmRange;
         this.hourlyRate = hourlyRate;
@@ -109,10 +97,11 @@ public class Cleaner extends User {
         this.profilePhoto = "profilePhoto";
         this.motivation = motivation;
         this.experience = experience;
-        this.confirmedId = false;
-        this.status = 2;
+        this.confirmed = false;
+        this.status = UserStatus.CLEANER;
         this.reviews = new ArrayList<Integer>();
-        this.planning = new Planning();
+        
+        connection.DAOAddCleaner(this);
     }
 
     public int getCleanerId() {
@@ -124,7 +113,7 @@ public class Cleaner extends User {
     }
 
     public Address getDepartureAddress() {
-        return departureAddress;
+        return this.departureAddress;
     }
 
     public void setDepartureAddress(Address departureAddress) {
@@ -188,19 +177,11 @@ public class Cleaner extends User {
     }
 
     public boolean isConfirmedId() {
-        return this.confirmedId;
+        return this.confirmed;
     }
 
-    public void setConfirmedId(boolean confirmedId) {
-        this.confirmedId = confirmedId;
-    }
-
-    public ArrayList<String> getAvailableDays() {
-        return this.availableDays;
-    }
-
-    public void setAvailableDays(ArrayList<String> availableDays) {
-        this.availableDays = availableDays;
+    public void setConfirmedId(boolean confirmed) {
+        this.confirmed = confirmed;
     }
 
     public ArrayList<Integer> getReviews() {
@@ -219,7 +200,7 @@ public class Cleaner extends User {
         this.planning = planning;
     }
 
-    public int getStatus() {
+    public UserStatus getStatus() {
         return this.status;
     }
 
