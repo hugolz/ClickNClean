@@ -28,15 +28,13 @@ public class Main {
             null, 
             null, 
             LocalDate.now(), 
-            false, 
-            null, 
+            false,           
             new Address("28","av yves thepot" , "29000", "quimper"),
             0, 0,
             null, 
             null, 
             null, 
-            null, 
-            false, 
+            null, false, 
             null, 
             null);
         connection.disconnect();
