@@ -1,25 +1,16 @@
 package main;
 
-import model.Planning;
-import model.User;
-import model.UserStatus;
-import model.Cleaner;
+import model.planning.Planning;
+import model.planning.TimeSlot;
 import tools.*;
 import view.Window;
-<<<<<<< HEAD
-
-=======
-import view.Connection;
->>>>>>> fed0f4bfa4ec26993e2619a04320aa51304a3dea
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.concurrent.ExecutionException;
 
-import model.Address;
-
-
- 
+import model.Address; 
 
 public class Main {
 
@@ -58,19 +49,11 @@ public class Main {
     public static void main(String[] args) throws SQLException, InterruptedException, ExecutionException {
         Planning plan = new Planning(1);
         plan.getAvailableSlots();
-<<<<<<< HEAD
-        
-     
 
-        Db db = new Db();
-<<<<<<< HEAD
+        // Db db = new Db();
         Window w = new Window();
         w.run();
-       
-        
-=======
-
->>>>>>> fed0f4bfa4ec26993e2619a04320aa51304a3dea
+      
         // db.DAOAdd(
         //     new Cleaner(
         //         5,
@@ -93,38 +76,24 @@ public class Main {
         //         false
         //     )
         // );
-=======
-
+      
         try {
             testCleaner();
         } catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}catch (Exception e){
-			System.err.println(e.getMessage());
+			      System.err.println(e.getMessage());
+		    }catch (Exception e){
+			      System.err.println(e.getMessage());
         }
-
-
->>>>>>> 81423c019c0eeee0f40ecde25f31a5ff9d1acc86
-
 
         try {
             Address.main(args);
             // a.main(args);
-
         } catch (Exception e) {
             System.out.println("Error" + e);
         }
 
 
         // new Window().run();
-
-<<<<<<< HEAD
-       // new Owner_registration().main(args);
-        // new Connection().main(args);
-=======
-       
-        new Connection().main(args);
->>>>>>> fed0f4bfa4ec26993e2619a04320aa51304a3dea
 
 
     }
