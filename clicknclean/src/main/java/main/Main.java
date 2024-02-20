@@ -1,15 +1,14 @@
 package main;
 
-import model.Planning;
-import model.User;
-import model.UserStatus;
-import model.Cleaner;
+import model.planning.Planning;
+import model.planning.TimeSlot;
 import tools.*;
 import view.Window;
 import view.Connection;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.concurrent.ExecutionException;
 
 import model.Address;
@@ -63,9 +62,6 @@ public class Main {
 			System.err.println(e.getMessage());
         }
 
-
-
-
         try {
             Address.main(args);
             // a.main(args);
@@ -77,7 +73,7 @@ public class Main {
 
         // new Window().run();
 
-       
+
         new Connection().main(args);
 
 

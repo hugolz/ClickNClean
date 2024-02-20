@@ -140,9 +140,9 @@ CREATE TABLE `owner` (
 
 CREATE TABLE `planning` (
   `id_cleaner` int UNSIGNED NOT NULL,
-  `date` date NOT NULL,
-  `time` time NOT NULL,
-  `availability` int NOT NULL
+  `datetime` datetime NOT NULL,
+  `duration` double not NULL,
+  `id_mission` int
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
