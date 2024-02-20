@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import tools.Db;
 import java.time.LocalDate;
 
@@ -17,9 +16,7 @@ public class Admin extends User {
         boolean suspended,
         UserStatus status
     ) {
-
         super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, status);
-
     }
 
     // -------------------------------------------------------------------------------------------------------------------------
@@ -68,26 +65,23 @@ public class Admin extends User {
      */
     public void resoveDispute(int missionID, int userWinner) {
         Db connection = new Db();
-       switch (userWinner) {
-            case 1 : 
-            {
-               connection.DAOResolveDispute(missionID, 7); 
-               break;
-            }
+        switch (userWinner) {
+        case 1 : {
+            connection.DAOResolveDispute(missionID, 7);
+            break;
+        }
 
-            case 2 : 
-            {
-               connection.DAOResolveDispute(missionID, 8); 
-               break;
-            }
-            default : 
-            {
-                System.out.println("Dispute has failed to resolve on  mission : " + missionID + ", dispute status : " + userWinner);
-            }
+        case 2 : {
+            connection.DAOResolveDispute(missionID, 8);
+            break;
+        }
+        default : {
+            System.out.println("Dispute has failed to resolve on  mission : " + missionID + ", dispute status : " + userWinner);
+        }
         connection.disconnect();
         connection  = null;
-        // SEND ACTIVITY TO ADD HERE !!
-       }
+            // SEND ACTIVITY TO ADD HERE !!
+        }
     }
 
     // -------------------------------------------------------------------------------------------------------------------------
