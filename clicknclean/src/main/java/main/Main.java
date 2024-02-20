@@ -8,14 +8,15 @@ import view.Window;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import model.Address;
-import model.UserStatus; 
+import model.UserStatus;
 
 public class Main {
 
-    public static void testUser()  throws SQLException, ExecutionException, InterruptedException {
+    public static void testUser() throws SQLException, ExecutionException, InterruptedException {
         Db connection = new Db();
         connection.DAOaddUser("John", "null", "null", "null", "null", LocalDate.now(), false, UserStatus.ADMIN);
     }
@@ -40,19 +41,21 @@ public class Main {
             null);
         connection.disconnect();
         connection = null;
-
-
-        
-
     }
+
+    public static void testPlanning() throws Exception, SQLException, InterruptedException, ExecutionException {
+
+    };
+
     public static void main(String[] args) throws SQLException, InterruptedException, ExecutionException {
+
       
         try {
             testCleaner();
         } catch (SQLException e) {
-			      System.err.println(e.getMessage());
-		    }catch (Exception e){
-			      System.err.println(e.getMessage());
+            System.err.println(e.getMessage());
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
         }
 
         try {
@@ -62,9 +65,7 @@ public class Main {
             System.out.println("Error" + e);
         }
 
-
         // new Window().run();
-
 
     }
 }
