@@ -12,7 +12,7 @@ public class Property {
 	private int propertyId;
 
 	public Property(Address propertyAddress, int propertySurface, double latitude, double longitude, String accesCode,
-			String keyBoxCode, String specialInstruction, int ownerId, int propertyId) {
+	                String keyBoxCode, String specialInstruction, int ownerId, int propertyId) {
 		this.propertyAddress = propertyAddress;
 		this.propertySurface = propertySurface;
 		this.latitude = latitude;
@@ -70,5 +70,5 @@ public class Property {
 
 	public void setSpecialInstruction(String specialInstruction) {
 		this.specialInstruction = specialInstruction;
-	} 
+	}
 }

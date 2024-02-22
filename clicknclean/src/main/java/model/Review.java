@@ -6,7 +6,7 @@ public class Review {
 	String grade;
 	int id_user;
 	int id_mission;
-	
+
 	public Review(int id_review, String content, String grade, int id_user, int id_mission) {
 		super();
 		this.id_review = id_review;
