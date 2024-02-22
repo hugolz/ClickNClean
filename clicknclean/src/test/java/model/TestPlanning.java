@@ -25,7 +25,6 @@ public class TestPlanning {
                                 LocalDate.now(),
                                 false,
                                 null,
-                                new Address("28", "av yves thepot", "29000", "quimper"),
                                 0, 0,
                                 null,
                                 null,

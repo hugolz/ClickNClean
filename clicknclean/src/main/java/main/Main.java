@@ -91,13 +91,13 @@ public class Main {
     public static void main(String[] args) throws SQLException, InterruptedException, ExecutionException {
 
       
-        try {
+/*         try {
             testMission();
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         } catch (Exception e) {
             System.err.println(e.getMessage());
-        }
+        } */
 
         try {
             Address.main(args);
@@ -106,7 +106,7 @@ public class Main {
             System.out.println("Error" + e);
         }
 
-        // new Window().run();
+        new Window().run();
 
     }
 }

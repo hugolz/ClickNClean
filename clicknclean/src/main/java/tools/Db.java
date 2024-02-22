@@ -11,14 +11,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import model.Property;
-import javafx.util.Pair;
-
 import javafx.util.Pair;
 import model.planning.Planning;
 import model.planning.TimeSlot;
@@ -30,7 +24,6 @@ import model.UserStatus;
 import model.Owner;
 import model.OwnerMotivation;
 import model.Admin;
-import model.Review;
 import model.Activity;
 import model.User;
 
@@ -290,6 +283,7 @@ public class Db {
 		}
 	}
 
+	/*--------------------------------------ADD A CLEANER (and User)---------------------------------------------------------- */
 
 	public int DAOAddCleaner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, Address departureAddress, int kmRange, int hourlyRate, String bio, String photo, String motivation, String experience, boolean isConfirmed, String photoProfile, String photoLive) {
 		int cleanerID = DAOaddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.CLEANER);
@@ -307,8 +301,6 @@ public class Db {
 
 	/*--------------------------------------ADD AN OWNER (and User)---------------------------------------------------------- */
 
-
-
 	public int DAOAddOwner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, OwnerMotivation serviceType) {
 		int ownerId = DAOaddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.OWNER);
 
@@ -322,34 +314,6 @@ public class Db {
 		}
 		return ownerId;
   }
-
-	/*--------------------------------------ADD AN ADMIN (and User)---------------------------------------------------------- */
-
-
-	public void DAOAddAdmin(Admin a) {
-		int id = 0;
-		// DAOaddUser(a);
-
-		try {
-			String strQuery = "SELECT * FROM user;";
-			ResultSet rsReader = stRead.executeQuery(strQuery);
-			while (rsReader.next()) {
-				id = rsReader.getInt("id_user");
-			}
-			rsReader.close();
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}
-
-		try {
-			String strQuery = "INSERT INTO `admin`"
-			                  + "(`id_admin`) "
-			                  + "VALUES ('" + id + "');";
-			stRead.executeUpdate(strQuery);
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}
-	}
 
 	/*--------------------------------------MANAGE RIGHTS ON USER / CLEANER--------------------------------------------------- */
 
@@ -421,7 +385,6 @@ public class Db {
 
 		try {
 			String strQuery = "INSERT INTO `user`"
-
 			                  + "(`name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `account_date`, `suspended`, `status`) "
 			                  + "VALUES ('" + name + "','" + pwd + "','" + surname + "','" + email + "','" + phoneN + "','"
 			                  + sqlBirthDate + "','" + sqlAccountdate + "','" + (isSuspended ? 1 : 0) + "','" + status.asInt() + "');";
@@ -494,7 +457,5 @@ public class Db {
 		}
 	}
 
-
 	
-
 }
