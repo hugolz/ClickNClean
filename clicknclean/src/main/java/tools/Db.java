@@ -11,15 +11,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import model.Property;
 import javafx.util.Pair;
 
-import javafx.util.Pair;
 import model.planning.Planning;
 import model.planning.TimeSlot;
 import model.Address;
@@ -248,9 +243,7 @@ public class Db {
 		}
 	}
 
-
-
-	public Planning readPlanning(int id_user) throws Exception {
+	public Planning DAOReadPlanning(int id_user) throws Exception {
 		String query = "SELECT * FROM planning JOIN user ON (planning.id_cleaner = user.id_user) WHERE id_cleaner = "
 		               + id_user;
 
@@ -276,7 +269,7 @@ public class Db {
 		return new Planning(slots);
 	}
 
-	public void writePlanning(Planning planning, int id_user) {
+	public void DAOWritePlanning(Planning planning, int id_user) {
 		try {
 			for (TimeSlot ts : planning.getTimeSlots()) {
 				String strQuery = "INSERT INTO `planning`"
@@ -290,14 +283,29 @@ public class Db {
 		}
 	}
 
-
-	public int DAOAddCleaner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, Address departureAddress, int kmRange, int hourlyRate, String bio, String photo, String motivation, String experience, boolean isConfirmed, String photoProfile, String photoLive) {
+	public int DAOAddCleaner(String name,
+	                         String pwd,
+	                         String surname,
+	                         String email,
+	                         String phoneN,
+	                         LocalDate birthDate,
+	                         boolean isSuspended,
+	                         Address departureAddress,
+	                         int kmRange,
+	                         int hourlyRate,
+	                         String bio,
+	                         String photo,
+	                         String motivation,
+	                         String experience,
+	                         boolean isConfirmed,
+	                         String photoProfile,
+	                         String photoLive) {
 		int cleanerID = DAOaddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.CLEANER);
 		try {
 			String strQuery = "INSERT INTO `cleaner`"
 			                  + "(`id_cleaner`, `address_display`, `latitude`, `longitude`, `km_range`, `hourly_rate`, `biography`, `photo`, `motivation`, `experience`, `confirmed`, `photo_profile`, `photo_live`) "
 			                  + "VALUES ('" + cleanerID + "','" + departureAddress.asString() + "','" + departureAddress.getLatitude() +  "','" + departureAddress.getLongitude() + "','" + kmRange + "','" + hourlyRate + "','" + bio + "','"
-			                  + photo + "','" + motivation + "','" + experience + "','" + (isConfirmed ? 1 : 0)  + "','" + photoProfile + "','" + photoLive + "');";			stRead.executeUpdate(strQuery);
+			                  + photo + "','" + motivation + "','" + experience + "','" + (isConfirmed ? 1 : 0)  + "','" + photoProfile + "','" + photoLive + "');";            stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
@@ -305,7 +313,8 @@ public class Db {
 		return cleanerID;
 	}
 
-	/*--------------------------------------ADD AN OWNER (and User)---------------------------------------------------------- */
+	public Cleaner DAOReadCleaner() {
+
 
 
 
@@ -320,8 +329,9 @@ public class Db {
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
+
 		return ownerId;
-  }
+	}
 
 	/*--------------------------------------ADD AN ADMIN (and User)---------------------------------------------------------- */
 
@@ -468,6 +478,7 @@ public class Db {
 		String keyBoxCode, 
 		String specialInstruction, 
 		int ownerId) {
+
 		try {
 			String strQuery = "INSERT INTO `property`"
 			                  + "(`address_display`, `latitude`, `longitude`, `surface`, `id_owner`, `acces_code`, `key_box_code`, `special_instruction`) "
