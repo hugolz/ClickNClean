@@ -156,11 +156,11 @@ CREATE TABLE `property` (
   `address_display` varchar(100) NOT NULL,
   `latitude` double NOT NULL,
   `longitude` double NOT NULL,
-  `surface` int NOT NULL,
+  `surface` int UNSIGNED NOT NULL,
   `id_owner` int UNSIGNED NOT NULL,
-  `acces_code` int DEFAULT NULL,
-  `key_box_code` int DEFAULT NULL,
-  `special_instructon` varchar(50) DEFAULT NULL
+  `acces_code` varchar(15) NOT NULL,
+  `key_box_code` varchar(10) NOT NULL,
+  `special_instruction` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------

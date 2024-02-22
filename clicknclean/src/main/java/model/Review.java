@@ -3,12 +3,12 @@ package model;
 public class Review {
 	int id_review;
 	String content;
-	String grade;
+	int grade;
 	int id_user;
 	int id_mission;
 
-	public Review(int id_review, String content, String grade, int id_user, int id_mission) {
-		super();
+	public Review(int id_review, String content, int grade, int id_user, int id_mission) {
+		// super();
 		this.id_review = id_review;
 		this.content = content;
 		this.grade = grade;
@@ -28,7 +28,7 @@ public class Review {
 		return content;
 	}
 
-	public String getGrade() {
+	public int getGrade() {
 		return grade;
 	}
 
