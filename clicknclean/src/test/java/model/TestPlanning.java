@@ -20,11 +20,11 @@ public class TestPlanning {
                                 "Doe",
                                 "null",
                                 "John",
-                                null,
-                                null,
+                                "null",
+                                "null",
                                 LocalDate.now(),
                                 false,
-                                null,
+                                new Address("28", "av yves thepot", "29000", "quimper"),
                                 0, 0,
                                 null,
                                 null,
@@ -43,11 +43,12 @@ public class TestPlanning {
             ts.add(new TimeSlot(LocalDateTime.now(), 5.5));
 
             Planning p = new Planning(ts);
-            connection.writePlanning(p, cleanerId);
+            connection.DAOWritePlanning(p, cleanerId);
 
-            Planning planning = connection.readPlanning(cleanerId);
+            Planning planning = connection.DAOReadPlanning(cleanerId);
 
             assert p.equals(planning): "r/w plannings are not the same";
+            System.out.println("Planning ended successfully");
         } catch (Exception e) {
             System.err.println(e);
         }

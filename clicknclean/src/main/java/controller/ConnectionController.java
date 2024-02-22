@@ -13,7 +13,7 @@ public class ConnectionController {
 
 	public ConnectionController(String login, String psw, Window window) {
 
-		Db db1 = new Db(); 
+		Db db1 = new Db();
 
 		try {
 			String strQuery = "SELECT * FROM user WHERE email = '" + login + "' AND password = '" + psw + "';";
@@ -49,14 +49,14 @@ public class ConnectionController {
 
 
 
-				
+
 
 				JOptionPane.showMessageDialog(null, "Email ou mot de passe incorrect !");
 				//ConnectionView c1 = new ConnectionView();
 				//c1.setVisible(true);
 
 			}
-		//rsReader.close();
+			//rsReader.close();
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}

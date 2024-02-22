@@ -9,8 +9,10 @@ public class Property {
 	private int ownerId;
 	private int propertyId;
 
+
 	public Property(Address propertyAddress, int propertySurface, String accesCode,
 			String keyBoxCode, String specialInstruction, int ownerId, int propertyId) {
+
 		this.propertyAddress = propertyAddress;
 		this.propertySurface = propertySurface;
 		this.accesCode = accesCode;
@@ -58,5 +60,5 @@ public class Property {
 
 	public void setSpecialInstruction(String specialInstruction) {
 		this.specialInstruction = specialInstruction;
-	} 
+	}
 }

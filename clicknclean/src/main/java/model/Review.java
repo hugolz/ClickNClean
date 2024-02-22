@@ -3,11 +3,13 @@ package model;
 public class Review {
 	int reviewId;
 	String content;
+
 	int grade;
 	int userReceivingId;
 	int missionId;
 	
 	public Review(int reviewId, String content, int grade, int userReceivingId, int missionId) {
+
 		super();
 		this.reviewId = reviewId;
 		this.content = content;
