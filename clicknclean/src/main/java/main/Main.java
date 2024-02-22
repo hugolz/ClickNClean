@@ -6,11 +6,6 @@ import model.UserStatus;
 import model.Cleaner;
 import tools.*;
 import view.Window;
-<<<<<<< HEAD
-
-=======
-import view.Connection;
->>>>>>> fed0f4bfa4ec26993e2619a04320aa51304a3dea
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -56,21 +51,13 @@ public class Main {
 
     }
     public static void main(String[] args) throws SQLException, InterruptedException, ExecutionException {
-        Planning plan = new Planning(1);
-        plan.getAvailableSlots();
-<<<<<<< HEAD
-        
-     
+        //Planning plan = new Planning(1);
+       // plan.getAvailableSlots();
 
-        Db db = new Db();
-<<<<<<< HEAD
+        //Db db = new Db();
         Window w = new Window();
         w.run();
        
-        
-=======
-
->>>>>>> fed0f4bfa4ec26993e2619a04320aa51304a3dea
         // db.DAOAdd(
         //     new Cleaner(
         //         5,
@@ -93,9 +80,8 @@ public class Main {
         //         false
         //     )
         // );
-=======
 
-        try {
+        /*try {
             testCleaner();
         } catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -104,8 +90,6 @@ public class Main {
         }
 
 
->>>>>>> 81423c019c0eeee0f40ecde25f31a5ff9d1acc86
-
 
         try {
             Address.main(args);
@@ -113,18 +97,9 @@ public class Main {
 
         } catch (Exception e) {
             System.out.println("Error" + e);
-        }
+        }*/
 
 
-        // new Window().run();
-
-<<<<<<< HEAD
-       // new Owner_registration().main(args);
-        // new Connection().main(args);
-=======
-       
-        new Connection().main(args);
->>>>>>> fed0f4bfa4ec26993e2619a04320aa51304a3dea
 
 
     }

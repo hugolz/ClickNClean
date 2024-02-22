@@ -110,7 +110,7 @@ public class Db {
 
 	public Pair<Integer, UserStatus> loginUser(String login, String password)
 	throws InterruptedException, ExecutionException, Exception {
-		String query = "SELECT * FROM user where email  = " + login + " AND password = " + password + ";";
+		String query = "SELECT * FROM user where email  = '" + login + "' AND password = '" + password + "';";
 
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
@@ -259,7 +259,7 @@ public class Db {
 	/*--------------------------------------ADD AN OWNER (and User)---------------------------------------------------------- */
 
 
-	public void DAOAddOwner(Owner a) {
+	/*public void DAOAddOwner(Owner a) {
 		int id = 0;
 		DAOaddUser(a);
 
@@ -282,12 +282,12 @@ public class Db {
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
-	}
+	}*/
 
 	/*--------------------------------------ADD AN ADMIN (and User)---------------------------------------------------------- */
 
 
-	public void DAOAddAdmin(Admin a) {
+	/*public void DAOAddAdmin(Admin a) {
 		int id = 0;
 		DAOaddUser(a);
 
@@ -311,7 +311,7 @@ public class Db {
 			System.err.println(e.getMessage());
 		}
 
-	}
+	}*/
 
 	/*--------------------------------------MANAGE RIGHTS ON USER / CLEANER--------------------------------------------------- */
 

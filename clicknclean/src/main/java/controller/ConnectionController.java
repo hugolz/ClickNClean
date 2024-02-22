@@ -1,67 +1,51 @@
 package controller;
 
-import java.sql.ResultSet;
+
 import java.sql.SQLException;
-
+import java.util.concurrent.ExecutionException;
 import javax.swing.JOptionPane;
-
+import javafx.util.Pair;
+import model.UserStatus;
 import tools.Db;
 import view.Window;
 
 public class ConnectionController {
 
 
-	public ConnectionController(String login, String psw, Window window) {
+	public ConnectionController(String login, String psw, Window window) throws SQLException, InterruptedException, ExecutionException, Exception {
 
-		Db db1 = new Db(); 
-
-		try {
-			String strQuery = "SELECT * FROM user WHERE email = '" + login + "' AND password = '" + psw + "';";
+		Db db = new Db(); 
+		
+			
 
 			if (login.isEmpty() || psw.isEmpty()) {
 				JOptionPane.showMessageDialog(null, "Champs non remplis !");
 			}
 
 			else {
-				ResultSet rsReader = db1.getStRead().executeQuery(strQuery);
-
-				while (rsReader.next()) {
-					JOptionPane.showMessageDialog(null, "Connexion réussie");
-					switch (rsReader.getString("status")) {
-					case "Admin" :
+				Pair<Integer, UserStatus> pair = db.loginUser(login,psw);
+				JOptionPane.showMessageDialog(null, "Connexion réussie");
+					
+					switch (pair.getValue()) {
+					case ADMIN :
 						window.displayWelcomeAdmin();
-						String strQueryAdmin = "SELECT * FROM admin WHERE id_;";
-						rsReader = db1.getStRead().executeQuery(strQueryAdmin);
+						db.loginAdmin(pair.getKey());
 						break;
-					case "Cleaner" :
+					case CLEANER :
 						window.displayWelcomeCleaner();
-						String strQueryCleaner = "SELECT * FROM ;";
-						rsReader = db1.getStRead().executeQuery(strQueryCleaner);
+						db.loginCleaner(pair.getKey());
 						break;
-					case "Owner" :
+					case OWNER :
 						window.displayWelcomeOwner();
-						String strQueryOwner = "SELECT * FROM ;";
-						rsReader = db1.getStRead().executeQuery(strQueryOwner);
+						db.loginOwner(pair.getKey());
 						break;
 					}
-				}
-
-
-
-
+			JOptionPane.showMessageDialog(null, "Email ou mot de passe incorrect !");
 				
-
-				JOptionPane.showMessageDialog(null, "Email ou mot de passe incorrect !");
-				//ConnectionView c1 = new ConnectionView();
-				//c1.setVisible(true);
-
+				
 			}
-		//rsReader.close();
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}
-
-
-	}
-
+	}	
 }
+					
+			
+				
