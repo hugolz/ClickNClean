@@ -13,7 +13,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import javafx.util.Pair;
-
 import model.planning.Planning;
 import model.planning.TimeSlot;
 import model.Address;
@@ -24,7 +23,6 @@ import model.UserStatus;
 import model.Owner;
 import model.OwnerMotivation;
 import model.Admin;
-import model.Review;
 import model.Activity;
 import model.User;
 import model.Property;
@@ -363,6 +361,9 @@ public class Db {
 		}
 	}
 
+
+	/*--------------------------------------ADD A CLEANER (and User)---------------------------------------------------------- */
+
 	public int DAOAddCleaner(String name,
 	                         String pwd,
 	                         String surname,
@@ -380,6 +381,7 @@ public class Db {
 	                         boolean isConfirmed,
 	                         String photoProfile,
 	                         String photoLive) {
+
 		int cleanerID = DAOaddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.CLEANER);
 		try {
 			String strQuery = "INSERT INTO `cleaner`"
@@ -406,34 +408,6 @@ public class Db {
 		}
 
 		return ownerId;
-	}
-
-	/*--------------------------------------ADD AN ADMIN (and User)---------------------------------------------------------- */
-
-
-	public void DAOAddAdmin(Admin a) {
-		int id = 0;
-		// DAOaddUser(a);
-
-		try {
-			String strQuery = "SELECT * FROM user;";
-			ResultSet rsReader = stRead.executeQuery(strQuery);
-			while (rsReader.next()) {
-				id = rsReader.getInt("id_user");
-			}
-			rsReader.close();
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}
-
-		try {
-			String strQuery = "INSERT INTO `admin`"
-			                  + "(`id_admin`) "
-			                  + "VALUES ('" + id + "');";
-			stRead.executeUpdate(strQuery);
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}
 	}
 
 	/*--------------------------------------MANAGE RIGHTS ON USER / CLEANER--------------------------------------------------- */
@@ -464,12 +438,27 @@ public class Db {
 		}
 	}
 
-	public void main(String[] args) {
+	/*--------------------------------------CREATE / MANAGE MISSIONS--------------------------------------------------- */
 
+	public void DAOCreateNewMission( 
+		Property property,
+		LocalDateTime localDateTime,
+		double duration) {
+		
+		duration = Mission.setDuration(property.getPropertySurface());
+		
+		try {
+			String strQuery = "INSERT INTO `mission`"
+							+ "(`date_start`, `cost`, `duration`, `commision`, `state`,`id_owner`,`id_property`) "
+							+ "VALUES ('" + localDateTime + "','" + 0.0 + "','" + duration + "','" + 0.0 + "','" + MissionStatus.PUBLISHED.asInt() + "','"
+							+ property.getOwnerId()  + "','" + property.getPropertyId() + "');";
+			stRead.executeUpdate(strQuery);
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
 	}
-
-	/*--------------------------------------MANAGE MISSIONS--------------------------------------------------- */
-
+	
+	
 	public void DAOResolveDispute(int missionID, int state) {
 		try {
 			String strQuery = "UPDATE mission SET state = " + state + "WHERE id_mission = " + missionID + ";";
@@ -491,7 +480,6 @@ public class Db {
 
 		try {
 			String strQuery = "INSERT INTO `user`"
-
 			                  + "(`name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `account_date`, `suspended`, `status`) "
 			                  + "VALUES ('" + name + "','" + pwd + "','" + surname + "','" + email + "','" + phoneN + "','"
 			                  + sqlBirthDate + "','" + sqlAccountdate + "','" + (isSuspended ? 1 : 0) + "','" + status.asInt() + "');";
@@ -564,30 +552,4 @@ public class Db {
 			System.err.println(e.getMessage());
 		}
 	}
-
-	/*--------------------------------------MANAGE PROPERTIES-------------------------------------------------------------- */
-	public void DAOCreateNewMission(
-	    Property property,
-	    LocalDate missionDate,
-	    double duration,
-	    double commission,
-	    int ownerId,
-	    String cleanerId,
-	    ArrayList<Cleaner> cleanerList,
-	    String startTime,
-	    MissionStatus state) {
-
-		duration = Mission.setDuration(property.getPropertySurface());
-
-		try {
-			String strQuery = "INSERT INTO `mission`"
-			                  + "`date_start`, `cost`, `duration`, `commision`, `state`, `before_photo`, `after_photo`, `id_owner`, `id_cleaner`, `id_property`) "
-			                  + "VALUES ('" + missionDate + "','" + null + "','" + duration + "','" + null + "','" + MissionStatus.PUBLISHED + "','"
-			                  + null + "','" + null  + "','" + ownerId  +  "','" +  null + "','" + property.getPropertyId() + "');";
-			stRead.executeUpdate(strQuery);
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}
-	}
-
 }

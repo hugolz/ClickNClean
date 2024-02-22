@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : lun. 19 fév. 2024 à 15:29
+-- Généré le : jeu. 22 fév. 2024 à 15:57
 -- Version du serveur : 8.0.32
 -- Version de PHP : 8.1.10
 
@@ -35,7 +35,8 @@ CREATE TABLE `activity` (
   `id_cleaner` int UNSIGNED DEFAULT NULL,
   `id_mission` int UNSIGNED DEFAULT NULL,
   `id_dispute` int UNSIGNED DEFAULT NULL,
-  `id_admin` int UNSIGNED DEFAULT NULL
+  `id_admin` int UNSIGNED DEFAULT NULL,
+  `id_user_receiving` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
@@ -65,11 +66,18 @@ CREATE TABLE `cleaner` (
   `photo` varchar(36) NOT NULL,
   `photo_profile` varchar(36) NOT NULL,
   `photo_live` varchar(36) NOT NULL,
-
   `motivation` varchar(250) NOT NULL,
   `experience` varchar(250) NOT NULL,
   `confirmed` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Déchargement des données de la table `cleaner`
+--
+
+INSERT INTO `cleaner` (`id_cleaner`, `address_display`, `latitude`, `longitude`, `km_range`, `hourly_rate`, `biography`, `photo`, `photo_profile`, `photo_live`, `motivation`, `experience`, `confirmed`) VALUES
+(4, '28 av yves thepot 29000 quimper', 47.988373, -4.088107, 0, 0, 'null', 'null', 'null', 'null', 'null', 'null', 0),
+(5, '28 av yves thepot 29000 quimper', 47.988373, -4.088107, 0, 0, 'null', 'null', 'null', 'null', 'null', 'null', 0);
 
 -- --------------------------------------------------------
 
@@ -96,17 +104,26 @@ CREATE TABLE `dispute` (
 
 CREATE TABLE `mission` (
   `id_mission` int UNSIGNED NOT NULL,
-  `date_start` date NOT NULL,
-  `cost` double DEFAULT NULL,
+  `date_start` datetime NOT NULL,
+  `cost` double NOT NULL DEFAULT '0',
   `duration` double NOT NULL,
-  `commision` double DEFAULT NULL,
+  `commision` double NOT NULL DEFAULT '0',
   `state` int NOT NULL,
   `before_photo` varchar(50) DEFAULT NULL,
-  `after_photo` int DEFAULT NULL,
+  `after_photo` varchar(50) DEFAULT NULL,
   `id_owner` int UNSIGNED NOT NULL,
   `id_cleaner` int UNSIGNED DEFAULT NULL,
   `id_property` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Déchargement des données de la table `mission`
+--
+
+INSERT INTO `mission` (`id_mission`, `date_start`, `cost`, `duration`, `commision`, `state`, `before_photo`, `after_photo`, `id_owner`, `id_cleaner`, `id_property`) VALUES
+(1, '2024-02-22 15:31:48', 0, 2, 0, 1, 'null', 'null', 6, NULL, 2),
+(2, '2024-02-22 15:33:35', 0, 2, 0, 1, NULL, NULL, 6, NULL, 2),
+(3, '2024-02-22 16:06:51', 0, 2, 0, 1, NULL, NULL, 6, NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -128,9 +145,16 @@ CREATE TABLE `mission_proposal` (
 
 CREATE TABLE `owner` (
   `id_owner` int UNSIGNED NOT NULL,
-  `account_date` date NOT NULL,
   `type_service` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Déchargement des données de la table `owner`
+--
+
+INSERT INTO `owner` (`id_owner`, `type_service`) VALUES
+(5, 1),
+(6, 1);
 
 -- --------------------------------------------------------
 
@@ -140,9 +164,9 @@ CREATE TABLE `owner` (
 
 CREATE TABLE `planning` (
   `id_cleaner` int UNSIGNED NOT NULL,
-  `datetime` datetime NOT NULL,
-  `durationH` double not NULL,
-  `id_mission` int
+  `date` date NOT NULL,
+  `time` time NOT NULL,
+  `availability` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -158,10 +182,17 @@ CREATE TABLE `property` (
   `longitude` double NOT NULL,
   `surface` int UNSIGNED NOT NULL,
   `id_owner` int UNSIGNED NOT NULL,
-  `acces_code` varchar(15) NOT NULL,
-  `key_box_code` varchar(10) NOT NULL,
-  `special_instruction` varchar(50) NOT NULL
+  `acces_code` varchar(15) DEFAULT NULL,
+  `key_box_code` varchar(10) DEFAULT NULL,
+  `special_instruction` varchar(80) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Déchargement des données de la table `property`
+--
+
+INSERT INTO `property` (`id_property`, `address_display`, `latitude`, `longitude`, `surface`, `id_owner`, `acces_code`, `key_box_code`, `special_instruction`) VALUES
+(2, '1 Pl. Louis Armand 29000 quimper', 47.994435, -4.092603, 35, 6, 'null', 'null', 'null');
 
 -- --------------------------------------------------------
 
@@ -217,6 +248,15 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
+-- Déchargement des données de la table `user`
+--
+
+INSERT INTO `user` (`id_user`, `name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `account_date`, `suspended`, `status`) VALUES
+(4, 'Doe', 'null', 'John', 'null', 'null', '2024-02-20', '2024-02-20', 0, 2),
+(5, 'Doe', 'null', 'John', 'null', 'null', '2024-02-20', '2024-02-20', 0, 2),
+(6, 'Lezoualch', 'noobie', 'gogo', 'email', 'null', '2024-02-22', '2024-02-22', 0, 3);
+
+--
 -- Index pour les tables déchargées
 --
 
@@ -229,7 +269,8 @@ ALTER TABLE `activity`
   ADD KEY `cleaner_of_the_activity` (`id_cleaner`),
   ADD KEY `mission_of_the_activity` (`id_mission`),
   ADD KEY `dispute_of_the_mission` (`id_dispute`),
-  ADD KEY `admin_of_the_mission` (`id_admin`);
+  ADD KEY `admin_of_the_mission` (`id_admin`),
+  ADD KEY `user_receiving_activity` (`id_user_receiving`);
 
 --
 -- Index pour la table `admin`
@@ -326,13 +367,13 @@ ALTER TABLE `dispute`
 -- AUTO_INCREMENT pour la table `mission`
 --
 ALTER TABLE `mission`
-  MODIFY `id_mission` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_mission` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `property`
 --
 ALTER TABLE `property`
-  MODIFY `id_property` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_property` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `review`
@@ -350,7 +391,7 @@ ALTER TABLE `status`
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_user` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Contraintes pour les tables déchargées
@@ -364,7 +405,8 @@ ALTER TABLE `activity`
   ADD CONSTRAINT `cleaner_of_the_activity` FOREIGN KEY (`id_cleaner`) REFERENCES `cleaner` (`id_cleaner`),
   ADD CONSTRAINT `dispute_of_the_mission` FOREIGN KEY (`id_dispute`) REFERENCES `dispute` (`id_dispute`),
   ADD CONSTRAINT `mission_of_the_activity` FOREIGN KEY (`id_mission`) REFERENCES `mission` (`id_mission`),
-  ADD CONSTRAINT `owner_of_the_activity` FOREIGN KEY (`id_owner`) REFERENCES `owner` (`id_owner`);
+  ADD CONSTRAINT `owner_of_the_activity` FOREIGN KEY (`id_owner`) REFERENCES `owner` (`id_owner`),
+  ADD CONSTRAINT `user_receiving_activity` FOREIGN KEY (`id_user_receiving`) REFERENCES `user` (`id_user`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Contraintes pour la table `admin`

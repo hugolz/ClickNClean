@@ -12,13 +12,24 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import model.Address;
+import model.Mission;
 import model.OwnerMotivation;
+import model.Property;
 import model.UserStatus;
 
 public class Main {
 
-
-    int ownerId = 0;
+    public static void testMission() throws SQLException, InterruptedException, ExecutionException {
+        Db connection = new Db();
+        Property testProp = new Property(new Address("1", "Pl. Louis Armand", "29000", "quimper"), 
+        40, 
+        null, 
+        null, 
+        null, 
+        6, 
+        2);
+        connection.DAOCreateNewMission(testProp, LocalDateTime.now(), Mission.setDuration(testProp.getPropertySurface()));
+    }
 
     public static void testProperty() throws SQLException, InterruptedException, ExecutionException {
         Db connection = new Db();
@@ -80,13 +91,13 @@ public class Main {
     public static void main(String[] args) throws SQLException, InterruptedException, ExecutionException {
 
       
-        try {
-            testProperty();
+/*         try {
+            testMission();
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         } catch (Exception e) {
             System.err.println(e.getMessage());
-        }
+        } */
 
         try {
             Address.main(args);
@@ -95,7 +106,7 @@ public class Main {
             System.out.println("Error" + e);
         }
 
-        // new Window().run();
+        new Window().run();
 
     }
 }
