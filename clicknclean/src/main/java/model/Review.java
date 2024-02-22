@@ -1,42 +1,44 @@
 package model;
 
 public class Review {
-	int id_review;
+	int reviewId;
 	String content;
-	String grade;
-	int id_user;
-	int id_mission;
 
-	public Review(int id_review, String content, String grade, int id_user, int id_mission) {
+	int grade;
+	int userReceivingId;
+	int missionId;
+	
+	public Review(int reviewId, String content, int grade, int userReceivingId, int missionId) {
+
 		super();
-		this.id_review = id_review;
+		this.reviewId = reviewId;
 		this.content = content;
 		this.grade = grade;
-		this.id_user = id_user;
-		this.id_mission = id_mission;
+		this.userReceivingId = userReceivingId;
+		this.missionId = missionId;
 	}
 
 	public int getId_review() {
-		return id_review;
+		return this.reviewId;
 	}
 
-	public void setId_review(int id_review) {
-		this.id_review = id_review;
+	public void setId_review(int reviewId) {
+		this.reviewId = reviewId;
 	}
 
 	public String getContent() {
-		return content;
+		return this.content;
 	}
 
-	public String getGrade() {
-		return grade;
+	public int getGrade() {
+		return this.grade;
 	}
 
 	public int getId_user() {
-		return id_user;
+		return this.userReceivingId;
 	}
 
 	public int getId_mission() {
-		return id_mission;
+		return this.missionId;
 	}
 }
