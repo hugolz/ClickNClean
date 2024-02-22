@@ -28,6 +28,7 @@ import model.Mission;
 import model.MissionStatus;
 import model.UserStatus;
 import model.Owner;
+import model.OwnerMotivation;
 import model.Admin;
 import model.Review;
 import model.Activity;
@@ -184,7 +185,7 @@ public class Db {
 			}
 
 			Owner owner = new Owner(
-			    new ArrayList<Review>(), // ownerReviews
+			    new ArrayList<Integer>(), // ownerReviews
 			    rSet.getString("serviceType"), //
 			    rSet.getInt("id_owner"),
 			    rSet.getString("name"),
@@ -193,7 +194,6 @@ public class Db {
 			    rSet.getString("email"),
 			    rSet.getString("phone_number"),
 			    rSet.getDate("birth_date").toLocalDate(),
-			    rSet.getDate("account_date").toLocalDate(),
 			    rSet.getBoolean("suspended"));
 			return owner;
 		}
@@ -309,7 +309,7 @@ public class Db {
 
 
 
-	public int DAOAddOwner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, String serviceType) {
+	public int DAOAddOwner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, OwnerMotivation serviceType) {
 		int ownerId = DAOaddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.OWNER);
 
 		try {
@@ -320,6 +320,7 @@ public class Db {
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
+		return ownerId;
   }
 
 	/*--------------------------------------ADD AN ADMIN (and User)---------------------------------------------------------- */

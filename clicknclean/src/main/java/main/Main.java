@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import model.Address;
+import model.OwnerMotivation;
 import model.UserStatus;
 
 public class Main {
@@ -27,15 +28,15 @@ public class Main {
             null, 
             null, 
             null, 
-            0);
+            6);
         connection.disconnect();
         connection = null;
     }
 
 
-    public static void testOwner() {
+    public static void testOwner() throws SQLException, ExecutionException, InterruptedException {
         Db connection = new Db();
-        connection.DAOAddOwner("Lezoual'ch", "noobie", "gogo", "email", "null", LocalDate.now(), false, "null");
+        connection.DAOAddOwner("Lezoualch", "noobie", "gogo", "email", "null", LocalDate.now(), false, OwnerMotivation.GUEST_ROOM);
         connection.disconnect();
         connection =null;
     }
