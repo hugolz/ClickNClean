@@ -1,18 +1,23 @@
 package model;
 
 public class Property {
+	private int propertyId;
 	private Address propertyAddress;
 	private int propertySurface;
+	private int ownerId;
 	private String accesCode;
 	private String keyBoxCode;
 	private String specialInstruction;
-	private int ownerId;
-	private int propertyId;
 
-
-	public Property(Address propertyAddress, int propertySurface, String accesCode,
-			String keyBoxCode, String specialInstruction, int ownerId, int propertyId) {
-
+	public Property(
+	    int propertyId,
+	    Address propertyAddress,
+	    int propertySurface,
+	    int ownerId,
+	    String accesCode,
+	    String keyBoxCode,
+	    String specialInstruction
+	) {
 		this.propertyAddress = propertyAddress;
 		this.propertySurface = propertySurface;
 		this.accesCode = accesCode;
