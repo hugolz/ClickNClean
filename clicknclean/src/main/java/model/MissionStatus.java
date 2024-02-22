@@ -46,7 +46,7 @@ public enum MissionStatus {
            
         
         default:
-            throw new Exception("Given UserStatus status could not be converted into MissionStatus: " + status);
+            throw new Exception("Given status could not be converted into MissionStatus: " + status);
         }
     }
 
