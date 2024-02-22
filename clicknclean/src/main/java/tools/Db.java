@@ -379,12 +379,27 @@ public class Db {
 		}
 	}
 
-	public void main(String[] args) {
+	/*--------------------------------------CREATE / MANAGE MISSIONS--------------------------------------------------- */
 
+	public void DAOCreateNewMission( 
+		Property property,
+		LocalDateTime localDateTime,
+		double duration) {
+		
+		duration = Mission.setDuration(property.getPropertySurface());
+		
+		try {
+			String strQuery = "INSERT INTO `mission`"
+							+ "(`date_start`, `cost`, `duration`, `commision`, `state`,`id_owner`,`id_property`) "
+							+ "VALUES ('" + localDateTime + "','" + 0.0 + "','" + duration + "','" + 0.0 + "','" + MissionStatus.PUBLISHED.asInt() + "','"
+							+ property.getOwnerId()  + "','" + property.getPropertyId() + "');";
+			stRead.executeUpdate(strQuery);
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
 	}
-
-	/*--------------------------------------MANAGE MISSIONS--------------------------------------------------- */
-
+	
+	
 	public void DAOResolveDispute(int missionID, int state) {
 		try {
 			String strQuery = "UPDATE mission SET state = " + state + "WHERE id_mission = " + missionID + ";";
@@ -479,29 +494,7 @@ public class Db {
 		}
 	}
 
-/*--------------------------------------MANAGE PROPERTIES-------------------------------------------------------------- */
-	public void DAOCreateNewMission( 
-		Property property,
-		LocalDate missionDate,
-		double duration,
-		double commission,
-		int ownerId,
-		String cleanerId,
-		ArrayList<Cleaner> cleanerList,
-		String startTime,
-		MissionStatus state) {
-		
-		duration = Mission.setDuration(property.getPropertySurface());
-		
-		try {
-			String strQuery = "INSERT INTO `mission`"
-							+ "`date_start`, `cost`, `duration`, `commision`, `state`, `before_photo`, `after_photo`, `id_owner`, `id_cleaner`, `id_property`) "
-							+ "VALUES ('" + missionDate + "','" + null + "','" + duration + "','" + null + "','" + MissionStatus.PUBLISHED + "','"
-							+ null + "','" + null  + "','" + ownerId  +  "','" +  null + "','" + property.getPropertyId() + "');";
-			stRead.executeUpdate(strQuery);
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}
-	}
+
+	
 
 }
