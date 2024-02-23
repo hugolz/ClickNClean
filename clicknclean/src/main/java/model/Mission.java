@@ -1,13 +1,13 @@
 package model;
 
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Mission {
     Property property;
-    LocalDate missionDate;
+    LocalDateTime missionDate;
     double duration;
     double cost;
     double commission;
@@ -20,7 +20,7 @@ public class Mission {
 
     public Mission(
         Property property,
-        LocalDate missionDate,
+        LocalDateTime missionDate,
         double duration,
         double cost,
         double commission,
@@ -32,7 +32,7 @@ public class Mission {
     ) {
         this.property = property;
         this.missionDate = missionDate;
-        this.duration = duration;
+        this.duration = setDuration(property.getPropertySurface());
         this.cost = cost;
         this.commission = commission;
         this.ownerId = ownerId;
@@ -43,11 +43,11 @@ public class Mission {
 
     }
 
-    public LocalDate getMissionDate() {
+    public LocalDateTime getMissionDate() {
         return missionDate;
     }
 
-    public void setMissionDate(LocalDate missionDate) {
+    public void setMissionDate(LocalDateTime missionDate) {
         this.missionDate = missionDate;
     }
 

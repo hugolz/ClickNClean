@@ -47,16 +47,9 @@ public class Address {
         this.latitude = coordinates.get(1);
     }
 
-    public Address(String display, String coords) throws Exception {
-
-        String[] coords_split = coords.split(",");
-
-        if (coords_split.length != 2) {
-            throw new Exception("Invalid coords");
-        }
-
-        this.latitude = Integer.parseInt(coords_split[0]);
-        this.longitude = Integer.parseInt(coords_split[1]);
+    public Address(String display, double latitude, double longitude) throws Exception {
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.display = display;
     }
 

@@ -169,6 +169,7 @@ CREATE TABLE `planning` (
   `id_mission` int DEFAULT -1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
 -- --------------------------------------------------------
 
 --
