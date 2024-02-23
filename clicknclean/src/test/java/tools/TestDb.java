@@ -2,15 +2,11 @@ package tools;
 
 import org.junit.jupiter.api.Test;
 
-import model.planning.TimeSlot;
 import model.Address;
 import model.Cleaner;
-import model.planning.Planning;
-import tools.Db;
-import java.util.ArrayList;
+import model.Owner;
+import model.OwnerMotivation;
 import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
 
@@ -44,7 +40,6 @@ public class TestDb {
 
         try {
             Db connection = new Db();
-
             int cleanerId = connection.DAOAddCleaner(
                                 name,
                                 pwd,
@@ -63,7 +58,6 @@ public class TestDb {
                                 isConfirmed,
                                 photoProfile,
                                 photoLive);
-
             try {
                 Cleaner cleaner = connection.DAOReadCleaner(cleanerId);
                 assert cleaner.getName().equals(name);
@@ -79,14 +73,52 @@ public class TestDb {
                 assert cleaner.getBiography().equals(bio);
             } catch (Exception e) {
                 System.out.println("cleanerRegistration test failled on cleaner read: " + e);
-
                 return;
-
             }
-
         } catch (Exception e) {
             System.err.println(e);
         }
+    }
 
+    @Test
+    void ownerRegistration() {
+        // Init vars
+        String name = "";
+        String pwd = "";
+        String surname = "";
+        String email = "";
+        String phoneN = "";
+        LocalDate birthDate = LocalDate.now();
+        boolean isSuspended = false;
+        OwnerMotivation serviceType = OwnerMotivation.MAIN_HOME;
+
+        try {
+            Db connection = new Db();
+            int ownerId = connection.DAOAddOwner(name,
+                                                 pwd,
+                                                 surname,
+                                                 email,
+                                                 phoneN,
+                                                 birthDate,
+                                                 isSuspended,
+                                                 serviceType);
+
+            try {
+                Owner owner = connection.DAOReadOwner(ownerId);
+                assert owner.getName().equals(name);
+                assert owner.getPwd().equals(pwd);
+                assert owner.getSurname().equals(surname);
+                assert owner.getEmail().equals(email);
+                assert owner.getPhoneNumber().equals(phoneN);
+                assert owner.getBirthDate().equals(birthDate);
+                assert owner.isSuspended() == isSuspended ;
+                assert owner.getServiceType().equals(serviceType);
+            } catch (Exception e) {
+                System.out.println("ownerRegistration test failled on owner read: " + e);
+                return;
+            }
+        } catch (Exception e) {
+            System.err.println(e);
+        }
     }
 }

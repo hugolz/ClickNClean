@@ -1,14 +1,11 @@
 package main;
 
-import model.planning.Planning;
-import model.planning.TimeSlot;
 import tools.*;
 import view.Window;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import model.Address;

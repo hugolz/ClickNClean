@@ -11,19 +11,19 @@ public enum OwnerMotivation {
         this.motivation = motivation;
     }
 
-    public int fromInt(int motivation) throws Exception {
-        switch (motivation){
-
-            case 1: 
-                return MAIN_HOME.motivation;
-            case 2: 
-                return GUEST_ROOM.motivation;
-            case 3: 
-                return INVENTORY.motivation;
-
-
-            default: throw new Exception("Given motivation doesn't match with owner motivation" + motivation);
+    public static OwnerMotivation fromInt(int motivation) throws Exception {
+        switch (motivation) {
+        case 1:
+            return OwnerMotivation.MAIN_HOME;
+        case 2:
+            return OwnerMotivation.GUEST_ROOM;
+        case 3:
+            return OwnerMotivation.INVENTORY;
+        default: throw new Exception("Given motivation doesn't match with owner motivation" + motivation);
         }
     }
-    
+
+    public int asInt() {
+        return this.motivation;
+    }
 }
