@@ -10,46 +10,44 @@ import tools.Db;
 import view.Window;
 
 public class ConnectionController {
-
-
-
-	public ConnectionController(String login, String psw, Window window) throws SQLException, InterruptedException, ExecutionException, Exception {
+	public ConnectionController(String login, String psw, Window window) {
 		Db db = new Db();
 		if (login.isEmpty() || psw.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Champs non remplis !");
-		}else {
-				Pair<Integer, UserStatus> pair = db.loginUser(login,psw);
-				JOptionPane.showMessageDialog(null, "Connexion réussie");
-					
-					switch (pair.getValue()) {
-					case ADMIN :
-						try {
-							db.loginAdmin(pair.getKey());
-						}
-						catch (Exception e){
-							JOptionPane.showMessageDialog(null, "Email ou mot de passe incorrect !");
-						}
-						window.displayWelcomeAdmin();
-						break;
-					case CLEANER :
-						try {
-							db.loginCleaner(pair.getKey());
-						}
-						catch (Exception e){
-							JOptionPane.showMessageDialog(null, "Email ou mot de passe incorrect !"+ e);
-						}
-						window.displayWelcomeCleaner();
-						break;
-					case OWNER :
-						try {
-							db.loginOwner(pair.getKey());
-						}
-						catch (Exception e) {
-							JOptionPane.showMessageDialog(null, "Email ou mot de passe incorrect !");
-						}
-						window.displayWelcomeOwner();
-						break;
-				}
+			return;
+		}
+
+		Pair<Integer, UserStatus> user;
+
+		try {
+			user = db.DAOReadUser(login, psw);
+		} catch (Exception e) {
+
+			return;
+		}
+
+		JOptionPane.showMessageDialog(null, "Connexion réussie");
+
+		try {
+			switch (user.getValue()) {
+
+			case ADMIN :
+				db.DAOReadAdmin(user.getKey());
+				window.displayWelcomeAdmin();
+				break;
+			case CLEANER :
+				db.DAOReadCleaner(user.getKey());
+				window.displayWelcomeCleaner();
+				break;
+			case OWNER :
+				db.DAOReadOwner(user.getKey());
+				window.displayWelcomeOwner();
+				break;
 			}
-	 }	
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Email ou mot de passe incorrect !");
+		}
+
+
+	}
 }
