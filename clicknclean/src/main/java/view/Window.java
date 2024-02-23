@@ -195,15 +195,15 @@ public class Window extends Application {
 		};
 
 		registerButton.setOnAction(event);
-		
+
 		EventHandler<ActionEvent> eventReturn = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				window.displayConnectionView();
-						}
-			
+			}
+
 		};
 		returnview.setOnAction(eventReturn);
-		
+
 
 		VBox vbox = new VBox();
 		vbox.getChildren().add(title);
@@ -257,8 +257,8 @@ public class Window extends Application {
 	int km;
 	int hourlyRate;
 
-	
-	
+
+
 	public void displayCleanerRegistration() {
 		this.stage.setTitle("Inscription");
 
@@ -287,7 +287,7 @@ public class Window extends Application {
 		Label idPhotoLabel = new Label("Photo de votre carte d'identité :");
 
 		Label photoLiveLabel = new Label ("Photo de vérification d'Id");
-		
+
 		TextField nameInputField = new TextField();
 		TextField surnameInputField = new TextField();
 		TextField emailInputField = new TextField();
@@ -308,17 +308,15 @@ public class Window extends Application {
 		FileChooser idPhotoInputField = new FileChooser();
 		FileChooser photoLiveInputField = new FileChooser();
 		Button returnview = new Button("Retour");
-		
-		
+
+
 		Button registerButton = new Button("Inscription");
 		Button registerPhoto = new Button("Parcourir");
 		Button registerIdPhoto = new Button("Parcourir");
 		Button registerPhotoLive = new Button("Parcourir");
-       
-		
+
+
 		Window window = this;
-		
-		
 		EventHandler<ActionEvent> eventphoto = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				photo = photoInputField.showOpenDialog(window.stage).toString();
@@ -335,60 +333,50 @@ public class Window extends Application {
 		};
 		registerIdPhoto.setOnAction(eventIdPhoto);
 
-		
+
 		EventHandler<ActionEvent> eventPhotoLive = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				photoLive= photoLiveInputField.showOpenDialog(window.stage).toString();
+				photoLive = photoLiveInputField.showOpenDialog(window.stage).toString();
 			}
 		};
 		registerPhotoLive.setOnAction(eventPhotoLive);
-		
+
 
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-
-				
-					try {
-						new CleanerRegistrationController(
-
-								nameInputField.getText(), 
-								surnameInputField.getText(),
-								emailInputField.getText(), 
-								passwordInputField.getText(),
-								confirmpasswordInputField.getText(),
-								phoneInputField.getText(),
-								birthDateInputField.getValue(), 
-								houseNumberInputField.getText(),
-								labelInputField.getText(),
-								postCodeInputField.getText(),
-								cityInputField.getText(),
-								Integer.parseInt(kmInputField.getText()),
-								Integer.parseInt(hourlyRateInputField.getText()),
-								biographyInputField.getText(),
-								motivationInputField.getText(),
-								experienceInputField.getText(),
-								photo,
-								idPhoto,
-								photoLive,
-								window
-								);
-					} catch (NumberFormatException | InterruptedException | ExecutionException e1) {
-						// TODO Auto-generated catch block
-						System.out.println("Ici!");
-						e1.printStackTrace();
-					}
-				
+				new CleanerRegistrationController(
+				    nameInputField.getText(),
+				    surnameInputField.getText(),
+				    emailInputField.getText(),
+				    passwordInputField.getText(),
+				    confirmpasswordInputField.getText(),
+				    phoneInputField.getText(),
+				    birthDateInputField.getValue(),
+				    houseNumberInputField.getText(),
+				    labelInputField.getText(),
+				    postCodeInputField.getText(),
+				    cityInputField.getText(),
+				    km,
+				    hourlyRate,
+				    biographyInputField.getText(),
+				    motivationInputField.getText(),
+				    experienceInputField.getText(),
+				    photo,
+				    idPhoto,
+				    photoLive,
+				    window
+				);
 			}
 		};
 
 		registerButton.setOnAction(event);
 
-		
+
 		EventHandler<ActionEvent> eventReturn = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				window.displayConnectionView();
-						}
-			
+			}
+
 		};
 		returnview.setOnAction(eventReturn);
 
@@ -435,7 +423,7 @@ public class Window extends Application {
 		vbox.getChildren().add(registerIdPhoto);
 		vbox.getChildren().add(photoLiveLabel);
 		vbox.getChildren().add(registerPhotoLive);
-		
+
 		vbox.getChildren().add(registerButton);
 		vbox.getChildren().add(returnview);
 

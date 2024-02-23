@@ -14,17 +14,10 @@ public class ConnectionController {
 
 
 	public ConnectionController(String login, String psw, Window window) throws SQLException, InterruptedException, ExecutionException, Exception {
-
-
-		Db db = new Db(); 
-		
-			
-
-			if (login.isEmpty() || psw.isEmpty()) {
-				JOptionPane.showMessageDialog(null, "Champs non remplis !");
-			}
-
-			else {
+		Db db = new Db();
+		if (login.isEmpty() || psw.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Champs non remplis !");
+		}else {
 				Pair<Integer, UserStatus> pair = db.loginUser(login,psw);
 				JOptionPane.showMessageDialog(null, "Connexion réussie");
 					
@@ -56,20 +49,7 @@ public class ConnectionController {
 						}
 						window.displayWelcomeOwner();
 						break;
-					}
-			
-				
-				
+				}
 			}
-	}	
+	 }	
 }
-					
-			
-		
-
-
-
-
-
-
-			

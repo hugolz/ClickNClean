@@ -11,7 +11,6 @@ import view.Window;
 import tools.Db;
 
 public class CleanerRegistrationController {
-
 	public CleanerRegistrationController(String name, String surname, String email, String password, String confirmpassword, String phone, LocalDate birthDate, String houseNumber, String label, String postCode, String city, int km, int hourlyRate, String biography, String motivation, String experience, String photo, String idPhoto, String photoLive, Window window) throws InterruptedException, ExecutionException {
 		
 		Db db = new Db(); 
@@ -39,7 +38,5 @@ public class CleanerRegistrationController {
 			}
 		}
 	//db.close();
-
 	}
 }
-

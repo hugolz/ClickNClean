@@ -1,15 +1,12 @@
 package model;
 import org.junit.jupiter.api.Test;
 
-import com.mysql.cj.protocol.SocksProxySocketFactory;
-
 import model.planning.TimeSlot;
 import model.planning.Planning;
 import tools.Db;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
-
 
 public class TestPlanning {
     @Test
@@ -26,13 +23,14 @@ public class TestPlanning {
                                 false,
                                 new Address("28", "av yves thepot", "29000", "quimper"),
                                 0, 0,
-                                null,
-                                null,
-                                null,
-                                null,
+                                "null",
+                                "null",
+                                "null",
+                                "null",
                                 false,
-                                null,
-                                null);
+                                "null",
+                                "null");
+            System.out.println("Wrote cleaner");
 
             ArrayList<TimeSlot> ts = new ArrayList<TimeSlot>();
 
@@ -44,8 +42,10 @@ public class TestPlanning {
 
             Planning p = new Planning(ts);
             connection.DAOWritePlanning(p, cleanerId);
+            System.out.println("Wrote planning");
 
             Planning planning = connection.DAOReadPlanning(cleanerId);
+            System.out.println("Read cleaner");
 
             assert p.equals(planning): "r/w plannings are not the same";
             System.out.println("Planning ended successfully");
