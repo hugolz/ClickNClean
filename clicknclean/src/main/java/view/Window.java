@@ -1,7 +1,5 @@
 package view;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.concurrent.ExecutionException;
@@ -25,13 +23,11 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.shape.Rectangle;
 
 
 public class Window extends Application {
