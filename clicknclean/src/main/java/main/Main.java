@@ -21,24 +21,26 @@ public class Main {
 
     public static void testMission() throws SQLException, InterruptedException, ExecutionException {
         Db connection = new Db();
-        Property testProp = new Property(new Address("1", "Pl. Louis Armand", "29000", "quimper"), 
-        40, 
-        null, 
-        null, 
-        null, 
-        6, 
-        2);
+        Property testProp = new Property(
+            2,
+            new Address("1", "Pl. Louis Armand", "29000", "quimper"),
+            40,
+            6,
+            "null",
+            "null",
+            "null"
+        );
         connection.DAOCreateNewMission(testProp, LocalDateTime.now(), Mission.setDuration(testProp.getPropertySurface()));
     }
 
     public static void testProperty() throws SQLException, InterruptedException, ExecutionException {
         Db connection = new Db();
         connection.DAOCreateNewProperty(
-            new Address("1", "Pl. Louis Armand", "29000", "quimper"), 
-            35, 
-            null, 
-            null, 
-            null, 
+            new Address("1", "Pl. Louis Armand", "29000", "quimper"),
+            35,
+            null,
+            null,
+            null,
             6);
         connection.disconnect();
         connection = null;
@@ -49,13 +51,13 @@ public class Main {
         Db connection = new Db();
         connection.DAOAddOwner("Lezoualch", "noobie", "gogo", "email", "null", LocalDate.now(), false, OwnerMotivation.GUEST_ROOM);
         connection.disconnect();
-        connection =null;
+        connection = null;
     }
 
     public static void testUser()  throws SQLException, ExecutionException, InterruptedException {
 
         Db connection = new Db();
-        connection.DAOaddUser("John", "null", "null", "null", "null", LocalDate.now(), false, UserStatus.ADMIN);
+        connection.DAOAddUser("John", "null", "null", "null", "null", LocalDate.now(), false, UserStatus.ADMIN);
         connection.disconnect();
         connection = null;
     }
@@ -63,21 +65,21 @@ public class Main {
     public static void testCleaner() throws SQLException, InterruptedException, ExecutionException {
         Db connection = new Db();
         int cleanerID = connection.DAOAddCleaner(
-            "Doe", 
-            "null", 
-            "John", 
-            null, 
-            null, 
-            LocalDate.now(), 
-            false,           
-            new Address("28","av yves thepot" , "29000", "quimper"),
-            0, 0,
-            null, 
-            null, 
-            null, 
-            null, false, 
-            null, 
-            null);
+                            "Doe",
+                            "null",
+                            "John",
+                            null,
+                            null,
+                            LocalDate.now(),
+                            false,
+                            new Address("28", "av yves thepot" , "29000", "quimper"),
+                            0, 0,
+                            null,
+                            null,
+                            null,
+                            null, false,
+                            null,
+                            null);
         connection.disconnect();
         connection = null;
     }

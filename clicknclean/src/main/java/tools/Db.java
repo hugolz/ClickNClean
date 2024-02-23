@@ -26,6 +26,7 @@ import model.Admin;
 import model.Activity;
 import model.User;
 import model.Property;
+import model.Review;
 
 
 public class Db {
@@ -97,7 +98,7 @@ public class Db {
 				    cleaner_range,
 				    rSet.getInt("hourly_rate"),
 				    rSet.getString("biography"),
-				    rSet.getString("photo"),
+				    rSet.getString("photo_profile"),
 				    rSet.getString("motivation"),
 				    rSet.getString("experience"),
 				    rSet.getBoolean("confirmed"),
@@ -152,7 +153,7 @@ public class Db {
 			    rSet.getInt("hourly_rate"),
 			    rSet.getString("biography"),
 			    rSet.getString("photo_profile"),
-			    rSet.getString("photo_id"),
+			    rSet.getString("photo_identity"),
 			    rSet.getString("motivation"),
 			    rSet.getString("experience"),
 			    rSet.getBoolean("confirmed"),
@@ -352,7 +353,7 @@ public class Db {
 			for (TimeSlot ts : planning.getTimeSlots()) {
 				String strQuery = "INSERT INTO `planning`"
 				                  + "(`id_cleaner`, `datetime`, `durationH`, `id_mission`)"
-				                  + "VALUES ('" + id_user + "','" + ts.getLocalDateTime() + "','" + ts.getDurationH() + "','" + ( ts.getIsAvailable() ? ts.getIdMission() : null) + "');";
+				                  + "VALUES ('" + id_user + "','" + ts.getLocalDateTime() + "','" + ts.getDurationH() + "','" + ts.getIdMission() + "');";
 				stRead.executeUpdate(strQuery);
 			}
 
@@ -375,19 +376,20 @@ public class Db {
 	                         int kmRange,
 	                         int hourlyRate,
 	                         String bio,
-	                         String photo,
+	                         String photoIdentity,
 	                         String motivation,
 	                         String experience,
 	                         boolean isConfirmed,
 	                         String photoProfile,
 	                         String photoLive) {
 
-		int cleanerID = DAOaddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.CLEANER);
+		int cleanerID = DAOAddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.CLEANER);
 		try {
 			String strQuery = "INSERT INTO `cleaner`"
-			                  + "(`id_cleaner`, `address_display`, `latitude`, `longitude`, `km_range`, `hourly_rate`, `biography`, `photo`, `motivation`, `experience`, `confirmed`, `photo_profile`, `photo_live`) "
+			                  + "(`id_cleaner`, `address_display`, `latitude`, `longitude`, `km_range`, `hourly_rate`, `biography`, `photo_identity`, `motivation`, `experience`, `confirmed`, `photo_profile`, `photo_live`) "
 			                  + "VALUES ('" + cleanerID + "','" + departureAddress.asString() + "','" + departureAddress.getLatitude() +  "','" + departureAddress.getLongitude() + "','" + kmRange + "','" + hourlyRate + "','" + bio + "','"
-			                  + photo + "','" + motivation + "','" + experience + "','" + (isConfirmed ? 1 : 0)  + "','" + photoProfile + "','" + photoLive + "');";            stRead.executeUpdate(strQuery);
+			                  + photoIdentity + "','" + motivation + "','" + experience + "','" + (isConfirmed ? 1 : 0)  + "','" + photoProfile + "','" + photoLive + "');";
+			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
@@ -396,7 +398,7 @@ public class Db {
 	}
 
 	public int DAOAddOwner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, OwnerMotivation serviceType) {
-		int ownerId = DAOaddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.OWNER);
+		int ownerId = DAOAddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.OWNER);
 
 		try {
 			String strQuery = "INSERT INTO `owner`"
@@ -409,7 +411,7 @@ public class Db {
 
 		return ownerId;
 	}
-  
+
 	/*--------------------------------------MANAGE RIGHTS ON USER / CLEANER--------------------------------------------------- */
 
 	public void DAOSuspendUser(int userID, boolean suspend) {
@@ -440,25 +442,25 @@ public class Db {
 
 	/*--------------------------------------CREATE / MANAGE MISSIONS--------------------------------------------------- */
 
-	public void DAOCreateNewMission( 
-		Property property,
-		LocalDateTime localDateTime,
-		double duration) {
-		
+	public void DAOCreateNewMission(
+	    Property property,
+	    LocalDateTime localDateTime,
+	    double duration) {
+
 		duration = Mission.setDuration(property.getPropertySurface());
-		
+
 		try {
 			String strQuery = "INSERT INTO `mission`"
-							+ "(`date_start`, `cost`, `duration`, `commision`, `state`,`id_owner`,`id_property`) "
-							+ "VALUES ('" + localDateTime + "','" + 0.0 + "','" + duration + "','" + 0.0 + "','" + MissionStatus.PUBLISHED.asInt() + "','"
-							+ property.getOwnerId()  + "','" + property.getPropertyId() + "');";
+			                  + "(`date_start`, `cost`, `duration`, `commision`, `state`,`id_owner`,`id_property`) "
+			                  + "VALUES ('" + localDateTime + "','" + 0.0 + "','" + duration + "','" + 0.0 + "','" + MissionStatus.PUBLISHED.asInt() + "','"
+			                  + property.getOwnerId()  + "','" + property.getPropertyId() + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
 	}
-	
-	
+
+
 	public void DAOResolveDispute(int missionID, int state) {
 		try {
 			String strQuery = "UPDATE mission SET state = " + state + "WHERE id_mission = " + missionID + ";";
@@ -471,7 +473,7 @@ public class Db {
 
 	/*--------------------------------------TOOLS METHODS--------------------------------------------------------------------- */
 
-	public <T extends User> int DAOaddUser(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, UserStatus status) {
+	public <T extends User> int DAOAddUser(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, UserStatus status) {
 
 		int id = 0;
 		LocalDate accountDate = LocalDate.now();
@@ -486,7 +488,7 @@ public class Db {
 
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
-			System.err.println(e.getMessage());
+			System.err.println("Error in DAOAddUser: " + e.getMessage());
 		}
 
 		try {
