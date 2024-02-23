@@ -373,8 +373,34 @@ public class Window extends Application {
 		
 	}
 	
-	public void displayWelcomeCleaner() {
+	public void displayWelcomeCleaner(Cleaner cleaner) {
+		Button registerProfil = new Button("Profil");
+		Button registerNotifications = new Button("Notification");
+		Button registerMessages = new Button("Messages");
+		Button retour = new Button("Retour");
 		
+		Mission
+		
+		Planning
+		
+		Window window = this;
+		
+		VBox vbox = new VBox();
+		vbox.getChildren().add(registerProfil);
+		vbox.getChildren().add(registerNotifications);
+		vbox.getChildren().add(registerMessages);
+		
+		ScrollPane scrollPane = new ScrollPane();
+		scrollPane.setContent(vbox);
+		
+		scrollPane.setPannable(true);
+		scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		
+		Scene scene = new Scene(scrollPane, 800, 600);
+		scene.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
+		this.stage.setScene(scene);
+		this.stage.show();
 	}
 
 	public void displayWelcomeOwner() {
