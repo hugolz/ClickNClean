@@ -22,7 +22,6 @@ public enum OwnerMotivation {
         default: throw new Exception("Given motivation doesn't match with owner motivation" + motivation);
         }
     }
-
     public int asInt() {
         return this.motivation;
     }

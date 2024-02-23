@@ -17,37 +17,39 @@ public class ConnectionController {
 		Db db = new Db();
 		if (login.isEmpty() || psw.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Champs non remplis !");
-		} else {
-			Pair<Integer, UserStatus> pair = db.DAOReadUser(login, psw);
-			JOptionPane.showMessageDialog(null, "Connexion réussie");
-
-			switch (pair.getValue()) {
-			case ADMIN :
-				window.displayWelcomeAdmin();
-				db.DAOReadAdmin(pair.getKey());
-				break;
-			case CLEANER :
-				window.displayWelcomeCleaner();
-				db.DAOReadCleaner(pair.getKey());
-				break;
-			case OWNER :
-				window.displayWelcomeOwner();
-				db.DAOReadOwner(pair.getKey());
-				break;
+		}else {
+				Pair<Integer, UserStatus> pair = db.loginUser(login,psw);
+				JOptionPane.showMessageDialog(null, "Connexion réussie");
+					
+					switch (pair.getValue()) {
+					case ADMIN :
+						try {
+							db.loginAdmin(pair.getKey());
+						}
+						catch (Exception e){
+							JOptionPane.showMessageDialog(null, "Email ou mot de passe incorrect !");
+						}
+						window.displayWelcomeAdmin();
+						break;
+					case CLEANER :
+						try {
+							db.loginCleaner(pair.getKey());
+						}
+						catch (Exception e){
+							JOptionPane.showMessageDialog(null, "Email ou mot de passe incorrect !"+ e);
+						}
+						window.displayWelcomeCleaner();
+						break;
+					case OWNER :
+						try {
+							db.loginOwner(pair.getKey());
+						}
+						catch (Exception e) {
+							JOptionPane.showMessageDialog(null, "Email ou mot de passe incorrect !");
+						}
+						window.displayWelcomeOwner();
+						break;
+				}
 			}
-			JOptionPane.showMessageDialog(null, "Email ou mot de passe incorrect !");
-
-
-		}
-	}
+	 }	
 }
-
-
-
-
-
-
-
-
-
-
