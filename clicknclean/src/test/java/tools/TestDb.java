@@ -66,17 +66,17 @@ public class TestDb {
 
             try {
                 Cleaner cleaner = connection.DAOReadCleaner(cleanerId);
-                assert name.equals(name): "Assert failled for name";
-                assert pwd.equals(pwd): "Assert failled for pwd";
-                assert surname.equals(surname): "Assert failled for surname";
-                assert email.equals(email): "Assert failled for email";
-                assert phoneN.equals(phoneN): "Assert failled for phoneN";
-                assert birthDate.equals(birthDate): "Assert failled for birthDate";
-                assert isSuspended == isSuspended: "Assert failled for isSuspended";
-                assert departureAddress.equals(departureAddress): "Assert failled for departureAddress";
-                assert kmRange == kmRange: "Assert failled for kmRange";
-                assert hourlyRate == hourlyRate: "Assert failled for hourlyRate";
-                assert bio.equals(bio): "Assert failled for bio";
+                assert cleaner.getName().equals(name);
+                assert cleaner.getPwd().equals(pwd);
+                assert cleaner.getSurname().equals(surname);
+                assert cleaner.getEmail().equals(email);
+                assert cleaner.getPhoneNumber().equals(phoneN);
+                assert cleaner.getBirthDate().equals(birthDate);
+                assert cleaner.isSuspended() == isSuspended ;
+                assert cleaner.getDepartureAddress().equals(departureAddress);
+                assert cleaner.getKmRange() == kmRange;
+                assert cleaner.getHourlyRate() == hourlyRate;
+                assert cleaner.getBiography().equals(bio);
             } catch (Exception e) {
                 System.out.println("cleanerRegistration test failled on cleaner read: " + e);
 
