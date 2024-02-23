@@ -30,19 +30,34 @@ public class ConnectionController {
 					
 					switch (pair.getValue()) {
 					case ADMIN :
+						try {
+							db.loginAdmin(pair.getKey());
+						}
+						catch (Exception e){
+							JOptionPane.showMessageDialog(null, "Email ou mot de passe incorrect !");
+						}
 						window.displayWelcomeAdmin();
-						db.loginAdmin(pair.getKey());
 						break;
 					case CLEANER :
+						try {
+							db.loginCleaner(pair.getKey());
+						}
+						catch (Exception e){
+							JOptionPane.showMessageDialog(null, "Email ou mot de passe incorrect !"+ e);
+						}
 						window.displayWelcomeCleaner();
-						db.loginCleaner(pair.getKey());
 						break;
 					case OWNER :
+						try {
+							db.loginOwner(pair.getKey());
+						}
+						catch (Exception e) {
+							JOptionPane.showMessageDialog(null, "Email ou mot de passe incorrect !");
+						}
 						window.displayWelcomeOwner();
-						db.loginOwner(pair.getKey());
 						break;
 					}
-			JOptionPane.showMessageDialog(null, "Email ou mot de passe incorrect !");
+			
 				
 				
 			}

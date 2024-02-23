@@ -43,8 +43,8 @@ public class Db {
 		this.strClassName = "com.mysql.cj.jdbc.Driver";
 		this.dbName = "click_n_clean";
 
-		this.login = "rootx";
-		this.password = "rootx";
+		this.login = "root";
+		this.password = "root";
 
 		this.strUrl = "jdbc:mysql://localhost:3306/" + dbName
 		              + "?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Europe/Paris";
@@ -314,6 +314,9 @@ public class Db {
 	}
 
 	public Cleaner DAOReadCleaner() {
+		return null;
+		
+	}
 
 
 	public int DAOAddOwner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, OwnerMotivation serviceType) {
@@ -322,7 +325,7 @@ public class Db {
 		try {
 			String strQuery = "INSERT INTO `owner`"
 			                  + "(`id_owner`, `type_service`) "
-			                  + "VALUES ('" + ownerId + "','" + serviceType + "');";
+			                  + "VALUES ('" + ownerId + "','" + serviceType.asInt() + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());

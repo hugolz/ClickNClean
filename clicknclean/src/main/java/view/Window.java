@@ -29,6 +29,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import model.OwnerMotivation;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.shape.Rectangle;
@@ -170,6 +171,18 @@ public class Window extends Application {
 
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
+				OwnerMotivation om = null;
+				switch (ownerMotivationChoiceBox.getValue()){
+				case "Résidence principale":
+					om = OwnerMotivation.MAIN_HOME;
+					break;
+				case "Courte durée":
+					om = OwnerMotivation.GUEST_ROOM;
+					break;
+				case "Etat des lieux":	
+					om = OwnerMotivation.INVENTORY;
+					break;
+				}
 
 				new OwnerRegistrationController(
 				    nameInputField.getText(),
@@ -179,7 +192,7 @@ public class Window extends Application {
 				    confirmpasswordInputField.getText(),
 				    phoneInputField.getText(),
 				    birthDateInputField.getValue(),
-				    ownerMotivationChoiceBox.getValue(),
+				    om,
 				    window
 				);
 			}
@@ -265,15 +278,15 @@ public class Window extends Application {
 		Label phoneLabel = new Label("Téléphone :");
 		Label birthDateLabel = new Label("Date de naissance :");
 		Label addressLabel = new Label("Adresse :");
-		Label houseNumberLabel = new Label("Numéro de maison :");
+		Label houseNumberLabel = new Label("Numéro :");
 		Label labelLabel = new Label("Nom de rue :");
 		Label postCodeLabel = new Label("Code postal :");
 		Label cityLabel = new Label("Ville :");
 		Label kmLabel = new Label("Rayon de recherche en km souhaité :");
 		Label hourlyRateLabel = new Label("Rémunération par heure :");
-		Label biographyLabel = new Label("Biographie :");
-		Label motivationLabel = new Label("Votre motivation :");
-		Label experienceLabel = new Label("Votre expérience :");
+		Label biographyLabel = new Label("Biographie (100 caractères max) :");
+		Label motivationLabel = new Label("Votre motivation (250 caractères max) :");
+		Label experienceLabel = new Label("Votre expérience (250 caractères max) :");
 		Label photoLabel = new Label("Votre photo de profil:");
 		Label idPhotoLabel = new Label("Photo de votre carte d'identité :");
 
@@ -309,17 +322,7 @@ public class Window extends Application {
 		
 		Window window = this;
 		
-		//String kmstring = kmInputField.getText();
-		//int km = Integer.parseInt(kmstring);
 		
-		//String hourlyrateString = hourlyRateInputField.getText();
-		//int hourlyRate = Integer.parseInt(hourlyrateString);
-
-
-
-
-
-
 		EventHandler<ActionEvent> eventphoto = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				photo = photoInputField.showOpenDialog(window.stage).toString();
@@ -348,29 +351,37 @@ public class Window extends Application {
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 
-				new CleanerRegistrationController(
+				
+					try {
+						new CleanerRegistrationController(
 
-						nameInputField.getText(), 
-						surnameInputField.getText(),
-						emailInputField.getText(), 
-						passwordInputField.getText(),
-						confirmpasswordInputField.getText(),
-						phoneInputField.getText(),
-						birthDateInputField.getValue(), 
-						houseNumberInputField.getText(),
-						labelInputField.getText(),
-						postCodeInputField.getText(),
-						cityInputField.getText(),
-						km,
-						hourlyRate,
-						biographyInputField.getText(),
-						motivationInputField.getText(),
-						experienceInputField.getText(),
-						photo,
-						idPhoto,
-						photoLive,
-						window
-						);
+								nameInputField.getText(), 
+								surnameInputField.getText(),
+								emailInputField.getText(), 
+								passwordInputField.getText(),
+								confirmpasswordInputField.getText(),
+								phoneInputField.getText(),
+								birthDateInputField.getValue(), 
+								houseNumberInputField.getText(),
+								labelInputField.getText(),
+								postCodeInputField.getText(),
+								cityInputField.getText(),
+								Integer.parseInt(kmInputField.getText()),
+								Integer.parseInt(hourlyRateInputField.getText()),
+								biographyInputField.getText(),
+								motivationInputField.getText(),
+								experienceInputField.getText(),
+								photo,
+								idPhoto,
+								photoLive,
+								window
+								);
+					} catch (NumberFormatException | InterruptedException | ExecutionException e1) {
+						// TODO Auto-generated catch block
+						System.out.println("Ici!");
+						e1.printStackTrace();
+					}
+				
 			}
 		};
 
