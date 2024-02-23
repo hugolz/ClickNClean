@@ -128,6 +128,7 @@ public class Db {
 			           rSet.getInt("id_user"),
 			           UserStatus.fromInt(rSet.getInt("status")));
 		}
+		rSet.close();
 
 		throw new Exception("Could not find a user with the given address / pasword");
 	}
@@ -169,13 +170,17 @@ public class Db {
 			// TODO: Load planning and reviews
 			return cleaner;
 		}
+		rSet.close();
 
 		throw new Exception("Could not find any cleaner with the given id");
 	}
 
 	public Owner DAOReadOwner(int id_user) throws InterruptedException, ExecutionException, Exception {
-		String query = "SELECT * FROM owner JOIN user ON (owner.id_owner = user.id_user) WHERE id_owner = " + id_user;
+		String query = "SELECT * FROM owner JOIN user ON (owner.id_owner = user.id_user) WHERE owner.id_owner = " + id_user;
 		// String query = "SELECT * FROM owner JOIN user ON(owner.id_owner = user.id_user) JOIN property ON(owner.id_owner = property.id_owner) WHERE owner.id_owner = " + id_user;
+
+		ArrayList<Integer> ownerReviews = this.DAOReadOwnerReviewsIds(id_user);
+		ArrayList<Integer> listproperty = this.DAOReadOwnerPropertiesIds(id_user);
 
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
@@ -183,13 +188,13 @@ public class Db {
 				throw new Exception("Found a user with given id, but it's not an owner;");
 			}
 
-			int id = rSet.getInt("id_owner");
+			int id_owner = rSet.getInt("id_owner");
 
 			Owner owner = new Owner(
-			    id,
-			    rSet.getString("serviceType"), //
-			    this.DAOReadOwnerReviewsIds(id), // ownerReviews
-			    this.DAOReadOwnerPropertiesIds(id), // listproperty
+			    id_owner,
+			    OwnerMotivation.fromInt(rSet.getInt("type_service")),
+			    ownerReviews,
+			    listproperty,
 			    rSet.getString("name"),
 			    rSet.getString("password"),
 			    rSet.getString("surname"),
@@ -197,15 +202,17 @@ public class Db {
 			    rSet.getString("phone_number"),
 			    rSet.getDate("birth_date").toLocalDate(),
 			    rSet.getBoolean("suspended"));
+			rSet.close();
 			return owner;
 		}
+		rSet.close();
 
 		throw new Exception("Could not find any owner with the given id");
 	}
 
 	public ArrayList<Review> DAOReadOwnerReviews(int id_owner) throws InterruptedException, ExecutionException, Exception {
 		ArrayList<Review> reviews = new ArrayList<Review>();
-		String query = "SELECT * FROM review JOIN owner ON (review.id_user = owner.id_owner) WHERE id_owner = " + id_owner;
+		String query = "SELECT * FROM review JOIN owner ON (review.id_user = owner.id_owner) WHERE owner.id_owner = " + id_owner;
 
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
@@ -224,19 +231,20 @@ public class Db {
 
 	public ArrayList<Integer> DAOReadOwnerReviewsIds(int id_owner) throws InterruptedException, ExecutionException, Exception {
 		ArrayList<Integer> reviews = new ArrayList<Integer>();
-		String query = "SELECT * FROM review JOIN owner ON (review.id_user = owner.id_owner) WHERE id_owner = " + id_owner;
+		String query = "SELECT * FROM review JOIN owner ON (review.id_user = owner.id_owner) WHERE owner.id_owner = " + id_owner;
 
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
 			reviews.add(rSet.getInt("id_review"));
 		}
+		rSet.close();
 
 		return reviews;
 	}
 
 	public ArrayList<Property> DAOReadOwnerProperties(int id_owner) throws InterruptedException, ExecutionException, Exception {
 		ArrayList<Property> properties = new ArrayList<Property>();
-		String query = "SELECT * FROM property JOIN owner ON (property.id_owner = owner.id_owner) WHERE id_owner = " + id_owner;
+		String query = "SELECT * FROM property JOIN owner ON (property.id_owner = owner.id_owner) WHERE owner.id_owner = " + id_owner;
 
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
@@ -257,19 +265,20 @@ public class Db {
 
 			properties.add(property);
 		}
-
+		rSet.close();
 		return properties;
 	}
 
 	public ArrayList<Integer> DAOReadOwnerPropertiesIds(int id_owner) throws InterruptedException, ExecutionException, Exception {
 		ArrayList<Integer> properties = new ArrayList<Integer>();
-		String query = "SELECT * FROM property JOIN owner ON (property.id_owner = owner.id_owner) WHERE id_owner = " + id_owner;
+		String query = "SELECT * FROM property JOIN owner ON (property.id_owner = owner.id_owner) WHERE owner.id_owner = " + id_owner;
 
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
 
 			properties.add(rSet.getInt("id_property"));
 		}
+		rSet.close();
 
 		return properties;
 	}
@@ -403,7 +412,7 @@ public class Db {
 		try {
 			String strQuery = "INSERT INTO `owner`"
 			                  + "(`id_owner`, `type_service`) "
-			                  + "VALUES ('" + ownerId + "','" + serviceType + "');";
+			                  + "VALUES ('" + ownerId + "','" + serviceType.asInt() + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());

@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.util.concurrent.ExecutionException;
+
 import tools.JsonBodyHandler;
 import tools.APOD;
 import java.lang.Throwable;
@@ -79,6 +80,34 @@ public class Address {
         double distance = Math.sqrt(x * x + y * y) * EARTH_RADIUS;
 
         return distance * 1000;
+    }
+
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Address)) {
+            return false;
+        }
+        Address a = (Address) o;
+
+        if (!this.display.equals(a.display)) {
+            return false;
+        }
+
+        if (this.longitude != a.longitude) {
+            return false;
+        }
+
+        if (this.latitude != a.latitude) {
+            return false;
+        }
+
+
+        return true;
     }
 
     public static void main(String[] args) {

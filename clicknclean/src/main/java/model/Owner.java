@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Owner extends User {
 
 	private int ownerID;
-	private String serviceType;
+	private OwnerMotivation serviceType;
 	private ArrayList<Integer> ownerReviews;
 	private ArrayList<Integer> listProperty;
 	private UserStatus status;
@@ -14,7 +14,7 @@ public class Owner extends User {
 //Creates a basic owner
 	public Owner(
 	    int ownerID,
-	    String serviceType,
+	    OwnerMotivation serviceType,
 	    String name,
 	    String pwd,
 	    String surname,
@@ -35,7 +35,7 @@ public class Owner extends User {
 // Creates an owner from loaded data
 	public Owner(
 	    int ownerID,
-	    String serviceType,
+	    OwnerMotivation serviceType,
 	    ArrayList<Integer> ownerReviews,
 	    ArrayList<Integer> listProperty,
 	    String name,
@@ -59,7 +59,7 @@ public class Owner extends User {
 		return ownerID;
 	}
 
-	public String getServiceType() {
+	public OwnerMotivation getServiceType() {
 		return serviceType;
 	}
 
