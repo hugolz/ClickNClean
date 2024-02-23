@@ -28,7 +28,6 @@ import model.User;
 import model.Property;
 import model.Review;
 
-
 public class Db {
 	String strClassName;
 	String dbName;
@@ -44,7 +43,6 @@ public class Db {
 
 		this.login = "root";
 		this.password = "";
-
 
 		this.strUrl = "jdbc:mysql://localhost:3306/" + dbName
 		              + "?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Europe/Paris";
@@ -83,8 +81,7 @@ public class Db {
 				Address cleaner_addr = new Address(
 				    rSet.getString("address_display"),
 				    rSet.getInt("latitude"),
-				    rSet.getInt("longitude")
-				);
+				    rSet.getInt("longitude"));
 
 				double distance = addr.calculateDistance(cleaner_addr);
 
@@ -138,6 +135,15 @@ public class Db {
 		String query = "SELECT * FROM cleaner JOIN user ON (cleaner.id_cleaner = user.id_user) WHERE id_cleaner = "
 		               + id_user;
 
+		// Ik that this can throw, but there is no point to catch it as
+		// we can't continue this execution anyway.
+		// "We could use an empty planning if nothing is read"
+		// - There is no point, DAOReadPlanning already does that.
+		Planning planning = this.DAOReadPlanning(id_user);
+
+		// TODO: this
+		// ArrayList<Integer> reviews_ids = // we can't read cleaner review yet !
+
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
 			if (UserStatus.fromInt(rSet.getInt("status")) != UserStatus.CLEANER) {
@@ -167,8 +173,7 @@ public class Db {
 			    rSet.getDate("birth_date").toLocalDate(),
 			    rSet.getBoolean("suspended"),
 			    new ArrayList<Integer>(), // reviews,
-			    new Planning(new ArrayList<TimeSlot>()));
-			// TODO: Load planning and reviews
+			    planning);
 			return cleaner;
 		}
 		rSet.close();
@@ -177,14 +182,18 @@ public class Db {
 	}
 
 	public Owner DAOReadOwner(int id_user) throws InterruptedException, ExecutionException, Exception {
-		String query = "SELECT * FROM owner JOIN user ON (owner.id_owner = user.id_user) WHERE owner.id_owner = " + id_user;
-		// String query = "SELECT * FROM owner JOIN user ON(owner.id_owner = user.id_user) JOIN property ON(owner.id_owner = property.id_owner) WHERE owner.id_owner = " + id_user;
+		String query = "SELECT * FROM owner JOIN user ON (owner.id_owner = user.id_user) WHERE owner.id_owner = "
+		               + id_user;
+
+		// String query = "SELECT * FROM owner JOIN user ON(owner.id_owner =
+		// user.id_user) JOIN property ON(owner.id_owner = property.id_owner) WHERE
+		// owner.id_owner = " + id_user;
 
 		ArrayList<Integer> ownerReviews = this.DAOReadOwnerReviewsIds(id_user);
 		ArrayList<Integer> listproperty = this.DAOReadOwnerPropertiesIds(id_user);
 
 		ResultSet rSet = this.stRead.executeQuery(query);
-		while (rSet.next()) {
+		if (rSet.next()) {
 			if (UserStatus.fromInt(rSet.getInt("status")) != UserStatus.OWNER) {
 				throw new Exception("Found a user with given id, but it's not an owner;");
 			}
@@ -211,9 +220,11 @@ public class Db {
 		throw new Exception("Could not find any owner with the given id");
 	}
 
-	public ArrayList<Review> DAOReadOwnerReviews(int id_owner) throws InterruptedException, ExecutionException, Exception {
+	public ArrayList<Review> DAOReadOwnerReviews(int id_owner)
+	throws InterruptedException, ExecutionException, Exception {
 		ArrayList<Review> reviews = new ArrayList<Review>();
-		String query = "SELECT * FROM review JOIN owner ON (review.id_user = owner.id_owner) WHERE owner.id_owner = " + id_owner;
+		String query = "SELECT * FROM review JOIN owner ON (review.id_user = owner.id_owner) WHERE owner.id_owner = "
+		               + id_owner;
 
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
@@ -222,17 +233,18 @@ public class Db {
 			    rSet.getString("content"),
 			    rSet.getInt("grade"),
 			    rSet.getInt("id_user"),
-			    rSet.getInt("id_mission")
-			);
+			    rSet.getInt("id_mission"));
 			reviews.add(review);
 		}
 
 		return reviews;
 	}
 
-	public ArrayList<Integer> DAOReadOwnerReviewsIds(int id_owner) throws InterruptedException, ExecutionException, Exception {
+	public ArrayList<Integer> DAOReadOwnerReviewsIds(int id_owner)
+	throws InterruptedException, ExecutionException, Exception {
 		ArrayList<Integer> reviews = new ArrayList<Integer>();
-		String query = "SELECT * FROM review JOIN owner ON (review.id_user = owner.id_owner) WHERE owner.id_owner = " + id_owner;
+		String query = "SELECT * FROM review JOIN owner ON (review.id_user = owner.id_owner) WHERE owner.id_owner = "
+		               + id_owner;
 
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
@@ -243,26 +255,25 @@ public class Db {
 		return reviews;
 	}
 
-	public ArrayList<Property> DAOReadOwnerProperties(int id_owner) throws InterruptedException, ExecutionException, Exception {
+	public ArrayList<Property> DAOReadOwnerProperties(int id_owner)
+	throws InterruptedException, ExecutionException, Exception {
 		ArrayList<Property> properties = new ArrayList<Property>();
-		String query = "SELECT * FROM property JOIN owner ON (property.id_owner = owner.id_owner) WHERE owner.id_owner = " + id_owner;
+		String query = "SELECT * FROM property JOIN owner ON (property.id_owner = owner.id_owner) WHERE owner.id_owner = "
+		               + id_owner;
 
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
-
 			Property property = new Property(
 			    rSet.getInt("id_property"),
 			    new Address(
 			        rSet.getString("address_display"),
 			        rSet.getDouble("latitude"),
-			        rSet.getDouble("longitude")
-			    ),
+			        rSet.getDouble("longitude")),
 			    rSet.getInt("surface"),
 			    rSet.getInt("id_owner"),
 			    rSet.getString("acces_code"),
 			    rSet.getString("keybox_code"),
-			    rSet.getString("special_instruction")
-			);
+			    rSet.getString("special_instruction"));
 
 			properties.add(property);
 		}
@@ -270,9 +281,11 @@ public class Db {
 		return properties;
 	}
 
-	public ArrayList<Integer> DAOReadOwnerPropertiesIds(int id_owner) throws InterruptedException, ExecutionException, Exception {
+	public ArrayList<Integer> DAOReadOwnerPropertiesIds(int id_owner)
+	throws InterruptedException, ExecutionException, Exception {
 		ArrayList<Integer> properties = new ArrayList<Integer>();
-		String query = "SELECT * FROM property JOIN owner ON (property.id_owner = owner.id_owner) WHERE owner.id_owner = " + id_owner;
+		String query = "SELECT * FROM property JOIN owner ON (property.id_owner = owner.id_owner) WHERE owner.id_owner = "
+		               + id_owner;
 
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
@@ -283,7 +296,6 @@ public class Db {
 
 		return properties;
 	}
-
 
 	public Admin DAOReadAdmin(int id_user) throws InterruptedException, ExecutionException, Exception {
 		String query = "SELECT * FROM admin JOIN user ON (admin.id_admin = user.id_user) WHERE id_admin = " + id_user;
@@ -345,8 +357,7 @@ public class Db {
 				TimeSlot ts = new TimeSlot(
 				    rSet.getTimestamp("datetime").toLocalDateTime(),
 				    rSet.getDouble("durationH"),
-				    rSet.getInt("id_mission")
-				);
+				    rSet.getInt("id_mission"));
 
 				slots.add(ts);
 			}
@@ -363,7 +374,8 @@ public class Db {
 			for (TimeSlot ts : planning.getTimeSlots()) {
 				String strQuery = "INSERT INTO `planning`"
 				                  + "(`id_cleaner`, `datetime`, `durationH`, `id_mission`)"
-				                  + "VALUES ('" + id_user + "','" + ts.getLocalDateTime() + "','" + ts.getDurationH() + "','" + ts.getIdMission() + "');";
+				                  + "VALUES ('" + id_user + "','" + ts.getLocalDateTime() + "','" + ts.getDurationH() + "','"
+				                  + ts.getIdMission() + "');";
 				stRead.executeUpdate(strQuery);
 			}
 
@@ -371,7 +383,6 @@ public class Db {
 			System.err.println(e.getMessage());
 		}
 	}
-
 
 	/*--------------------------------------ADD A CLEANER (and User)---------------------------------------------------------- */
 
@@ -397,8 +408,11 @@ public class Db {
 		try {
 			String strQuery = "INSERT INTO `cleaner`"
 			                  + "(`id_cleaner`, `address_display`, `latitude`, `longitude`, `km_range`, `hourly_rate`, `biography`, `photo_identity`, `motivation`, `experience`, `confirmed`, `photo_profile`, `photo_live`) "
-			                  + "VALUES ('" + cleanerID + "','" + departureAddress.asString() + "','" + departureAddress.getLatitude() +  "','" + departureAddress.getLongitude() + "','" + kmRange + "','" + hourlyRate + "','" + bio + "','"
-			                  + photoIdentity + "','" + motivation + "','" + experience + "','" + (isConfirmed ? 1 : 0)  + "','" + photoProfile + "','" + photoLive + "');";
+			                  + "VALUES ('" + cleanerID + "','" + departureAddress.asString() + "','"
+			                  + departureAddress.getLatitude() + "','" + departureAddress.getLongitude() + "','" + kmRange + "','"
+			                  + hourlyRate + "','" + bio + "','"
+			                  + photoIdentity + "','" + motivation + "','" + experience + "','" + (isConfirmed ? 1 : 0) + "','"
+			                  + photoProfile + "','" + photoLive + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -407,7 +421,8 @@ public class Db {
 		return cleanerID;
 	}
 
-	public int DAOAddOwner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, OwnerMotivation serviceType) {
+	public int DAOAddOwner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate,
+	                       boolean isSuspended, OwnerMotivation serviceType) {
 		int ownerId = DAOAddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.OWNER);
 
 		try {
@@ -462,14 +477,14 @@ public class Db {
 		try {
 			String strQuery = "INSERT INTO `mission`"
 			                  + "(`date_start`, `cost`, `duration`, `commision`, `state`,`id_owner`,`id_property`) "
-			                  + "VALUES ('" + localDateTime + "','" + 0.0 + "','" + duration + "','" + 0.0 + "','" + MissionStatus.PUBLISHED.asInt() + "','"
-			                  + property.getOwnerId()  + "','" + property.getPropertyId() + "');";
+			                  + "VALUES ('" + localDateTime + "','" + 0.0 + "','" + duration + "','" + 0.0 + "','"
+			                  + MissionStatus.PUBLISHED.asInt() + "','"
+			                  + property.getOwnerId() + "','" + property.getPropertyId() + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
 	}
-
 
 	public void DAOResolveDispute(int missionID, int state) {
 		try {
@@ -480,10 +495,10 @@ public class Db {
 		}
 	}
 
-
 	/*--------------------------------------TOOLS METHODS--------------------------------------------------------------------- */
 
-	public <T extends User> int DAOAddUser(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, UserStatus status) {
+	public <T extends User> int DAOAddUser(String name, String pwd, String surname, String email, String phoneN,
+	                                       LocalDate birthDate, boolean isSuspended, UserStatus status) {
 
 		int id = 0;
 		LocalDate accountDate = LocalDate.now();
@@ -494,7 +509,8 @@ public class Db {
 			String strQuery = "INSERT INTO `user`"
 			                  + "(`name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `account_date`, `suspended`, `status`) "
 			                  + "VALUES ('" + name + "','" + pwd + "','" + surname + "','" + email + "','" + phoneN + "','"
-			                  + sqlBirthDate + "','" + sqlAccountdate + "','" + (isSuspended ? 1 : 0) + "','" + status.asInt() + "');";
+			                  + sqlBirthDate + "','" + sqlAccountdate + "','" + (isSuspended ? 1 : 0) + "','" + status.asInt()
+			                  + "');";
 
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
@@ -557,8 +573,9 @@ public class Db {
 		try {
 			String strQuery = "INSERT INTO `property`"
 			                  + "(`address_display`, `latitude`, `longitude`, `surface`, `id_owner`, `acces_code`, `key_box_code`, `special_instruction`) "
-			                  + "VALUES ('" + propertyAddress.asString() + "','" + propertyAddress.getLatitude() + "','" + propertyAddress.getLongitude() + "','" + propertySurface + "','" + ownerId + "','"
-			                  + accesCode + "','" + keyBoxCode  + "','" + specialInstruction  + "');";
+			                  + "VALUES ('" + propertyAddress.asString() + "','" + propertyAddress.getLatitude() + "','"
+			                  + propertyAddress.getLongitude() + "','" + propertySurface + "','" + ownerId + "','"
+			                  + accesCode + "','" + keyBoxCode + "','" + specialInstruction + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
