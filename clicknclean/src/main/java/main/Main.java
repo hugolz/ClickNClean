@@ -89,24 +89,6 @@ public class Main {
 
 
     public static void main(String[] args) throws SQLException, InterruptedException, ExecutionException {
-
-      
-/*         try {
-            testMission();
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        } */
-
-        try {
-            Address.main(args);
-            // a.main(args);
-        } catch (Exception e) {
-            System.out.println("Error" + e);
-        }
-
         new Window().run();
-
     }
 }
