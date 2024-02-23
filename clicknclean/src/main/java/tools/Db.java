@@ -43,7 +43,7 @@ public class Db {
 		this.dbName = "click_n_clean";
 
 		this.login = "root";
-		this.password = "root";
+		this.password = "";
 
 
 		this.strUrl = "jdbc:mysql://localhost:3306/" + dbName

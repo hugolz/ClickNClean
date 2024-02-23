@@ -58,21 +58,7 @@ public class Window extends Application {
 
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				try {
-					new ConnectionController(loginInputField.getText(), passwordInputField.getText(), window);
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (ExecutionException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				new ConnectionController(loginInputField.getText(), passwordInputField.getText(), window);
 			}
 		};
 
@@ -168,14 +154,14 @@ public class Window extends Application {
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				OwnerMotivation om = null;
-				switch (ownerMotivationChoiceBox.getValue()){
+				switch (ownerMotivationChoiceBox.getValue()) {
 				case "Résidence principale":
 					om = OwnerMotivation.MAIN_HOME;
 					break;
 				case "Courte durée":
 					om = OwnerMotivation.GUEST_ROOM;
 					break;
-				case "Etat des lieux":	
+				case "Etat des lieux":
 					om = OwnerMotivation.INVENTORY;
 					break;
 				}
