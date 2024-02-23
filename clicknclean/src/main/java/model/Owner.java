@@ -7,8 +7,8 @@ public class Owner extends User {
 
 	private int ownerID;
 	private String serviceType;
-	private ArrayList<Review>ownerReviews;
-	private ArrayList<Property> listProperty;
+	private ArrayList<Integer>ownerReviews;
+	private ArrayList<Integer> listProperty;
 	private UserStatus status;
 
 //Creates a basic owner
@@ -21,14 +21,11 @@ public class Owner extends User {
 	    String email,
 	    String phoneNumber,
 	    LocalDate birthLocalDate,
-	    LocalDate accountLocalDate,
 	    boolean suspended
 
 	) {
 
 		super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, UserStatus.OWNER);
-
-
 
 		this.serviceType = serviceType;
 		this.ownerID = ownerID;
@@ -37,7 +34,7 @@ public class Owner extends User {
 
 // Creates an owner from loaded data
 	public Owner(
-	    ArrayList<Review> ownerReviews,
+	    ArrayList<Integer> ownerReviews,
 	    String serviceType,
 	    int ownerID,
 	    String name,
@@ -46,15 +43,10 @@ public class Owner extends User {
 	    String email,
 	    String phoneNumber,
 	    LocalDate birthLocalDate,
-	    LocalDate accountLocalDate,
-	    boolean suspended,
-	    UserStatus status
+	    boolean suspended
 	) {
 
-
 		super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, UserStatus.OWNER);
-
-
 
 		this.serviceType = serviceType;
 		this.ownerReviews = ownerReviews;
@@ -70,11 +62,11 @@ public class Owner extends User {
 		return serviceType;
 	}
 
-	public ArrayList<Review> getOwnerReviews() {
+	public ArrayList<Integer> getOwnerReviews() {
 		return ownerReviews;
 	}
 
-	public ArrayList<Property> getListProperty() {
+	public ArrayList<Integer> getListProperty() {
 		return listProperty;
 	}
 
@@ -104,9 +96,5 @@ public class Owner extends User {
 
 	public void deleteProperty() {
 
-	}
-
-	public void addProperty(Property property) {
-		this.listProperty.add(property);
 	}
 }

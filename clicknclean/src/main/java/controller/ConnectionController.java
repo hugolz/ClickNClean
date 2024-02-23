@@ -12,7 +12,9 @@ import view.Window;
 public class ConnectionController {
 
 
+
 	public ConnectionController(String login, String psw, Window window) throws SQLException, InterruptedException, ExecutionException, Exception {
+
 
 		Db db = new Db(); 
 		
@@ -48,4 +50,11 @@ public class ConnectionController {
 }
 					
 			
-				
+		
+
+
+
+
+
+
+			

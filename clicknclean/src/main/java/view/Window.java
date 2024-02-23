@@ -37,15 +37,15 @@ import javafx.scene.shape.Rectangle;
 public class Window extends Application {
 	private static double xOffset = 0;
 	private static double yOffset = 0;
- 
+
 	Stage stage;
-	
+
 	public Window() {
 
 	}
-	
+
 	public void displayConnectionView() {
-		
+
 		this.stage.setTitle("Connexion");
 
 		Button newOwner = new Button("S'inscrire en tant que Demandeur");
@@ -56,7 +56,7 @@ public class Window extends Application {
 
 		TextField loginInputField = new TextField();
 		PasswordField passwordInputField = new PasswordField();
-		
+
 		Window window = this;
 
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
@@ -80,25 +80,25 @@ public class Window extends Application {
 		};
 
 		ConnectButton.setOnAction(event);
-		
+
 		EventHandler<ActionEvent> event2 = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				new AskRegistrationController("Owner", window);
 			}
 		};
-		
+
 		newOwner.setOnAction(event2);
-		
+
 		EventHandler<ActionEvent> event3 = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				new AskRegistrationController("Cleaner", window);
 			}
 		};
-		
+
 		newCleaner.setOnAction(event3);
-		
-		
-		
+
+
+
 		VBox vbox = new VBox();
 		vbox.getChildren().add(loginLabel);
 		vbox.getChildren().add(loginInputField);
@@ -110,14 +110,14 @@ public class Window extends Application {
 
 		vbox.setSpacing(10);
 		vbox.setPadding(new Insets(220, 300, 20, 300));
-		
+
 		ScrollPane scrollPane = new ScrollPane();
 		scrollPane.setContent(vbox);
-		
+
 		scrollPane.setPannable(true);
 		scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
-		
+
 		loginLabel.setMaxWidth(Double.MAX_VALUE);
 		passwordLabel.setMaxWidth(Double.MAX_VALUE);
 		ConnectButton.setMaxWidth(Double.MAX_VALUE);
@@ -134,10 +134,10 @@ public class Window extends Application {
 		this.stage.setScene(scene);
 		this.stage.show();
 	}
-	
+
 	public void displayOwnerRegistration() {
 		this.stage.setTitle("Inscription");
-		
+
 		Label title = new Label("S'inscire en tant que Demandeur :");
 		Label nameLabel = new Label("Nom :");
 		Label surnameLabel = new Label("Prénom :");
@@ -161,27 +161,27 @@ public class Window extends Application {
 		ChoiceBox<String> ownerMotivationChoiceBox = new ChoiceBox<>();
 
 		ObservableList<String> options = FXCollections.observableArrayList(
-                "Résidence principale", "Courte durée", "Etat des lieux"
-		);
+		                                     "Résidence principale", "Courte durée", "Etat des lieux"
+		                                 );
 		ownerMotivationChoiceBox.setItems(options);
 
-		
+
 		Window window = this;
-		
+
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				
+
 				new OwnerRegistrationController(
-						nameInputField.getText(), 
-						surnameInputField.getText(),
-						emailInputField.getText(), 
-						passwordInputField.getText(),
-						confirmpasswordInputField.getText(),
-						phoneInputField.getText(),
-						birthDateInputField.getValue(), 
-						ownerMotivationChoiceBox.getValue(),
-						window
-						);
+				    nameInputField.getText(),
+				    surnameInputField.getText(),
+				    emailInputField.getText(),
+				    passwordInputField.getText(),
+				    confirmpasswordInputField.getText(),
+				    phoneInputField.getText(),
+				    birthDateInputField.getValue(),
+				    ownerMotivationChoiceBox.getValue(),
+				    window
+				);
 			}
 		};
 
@@ -219,10 +219,10 @@ public class Window extends Application {
 
 		vbox.setSpacing(10);
 		vbox.setPadding(new Insets(100, 300, 20, 300));
-		
+
 		ScrollPane scrollPane = new ScrollPane();
 		scrollPane.setContent(vbox);
-		
+
 		scrollPane.setPannable(true);
 		scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
@@ -239,7 +239,7 @@ public class Window extends Application {
 		this.stage.setScene(scene);
 		this.stage.show();
 	}
-	
+
 	String photo;
 	String idPhoto;
 	String photoLive;
@@ -252,10 +252,10 @@ public class Window extends Application {
 	
 	public void displayCleanerRegistration() {
 		this.stage.setTitle("Inscription");
-		
-		
-	
-		
+
+
+
+
 		Label title = new Label("S'inscire en tant que Cleaner :");
 		Label nameLabel = new Label("Nom :");
 		Label surnameLabel = new Label("Prénom :");
@@ -276,6 +276,7 @@ public class Window extends Application {
 		Label experienceLabel = new Label("Votre expérience :");
 		Label photoLabel = new Label("Votre photo de profil:");
 		Label idPhotoLabel = new Label("Photo de votre carte d'identité :");
+
 		Label photoLiveLabel = new Label ("Photo de vérification d'Id");
 		
 		TextField nameInputField = new TextField();
@@ -313,24 +314,28 @@ public class Window extends Application {
 		
 		//String hourlyrateString = hourlyRateInputField.getText();
 		//int hourlyRate = Integer.parseInt(hourlyrateString);
-		
-		
-		
+
+
+
+
+
+
 		EventHandler<ActionEvent> eventphoto = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				photo = photoInputField.showOpenDialog(window.stage).toString();
-				
+
 			}
 		};
 		registerPhoto.setOnAction(eventphoto);
-		
-		
+
+
 		EventHandler<ActionEvent> eventIdPhoto = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				idPhoto= idPhotoInputField.showOpenDialog(window.stage).toString();
+				idPhoto = idPhotoInputField.showOpenDialog(window.stage).toString();
 			}
 		};
 		registerIdPhoto.setOnAction(eventIdPhoto);
+
 		
 		EventHandler<ActionEvent> eventPhotoLive = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
@@ -339,11 +344,12 @@ public class Window extends Application {
 		};
 		registerPhotoLive.setOnAction(eventPhotoLive);
 		
-		
+
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				
+
 				new CleanerRegistrationController(
+
 						nameInputField.getText(), 
 						surnameInputField.getText(),
 						emailInputField.getText(), 
@@ -369,6 +375,7 @@ public class Window extends Application {
 		};
 
 		registerButton.setOnAction(event);
+
 		
 		EventHandler<ActionEvent> eventReturn = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
@@ -377,7 +384,9 @@ public class Window extends Application {
 			
 		};
 		returnview.setOnAction(eventReturn);
-		
+
+
+
 		VBox vbox = new VBox();
 		vbox.getChildren().add(title);
 		vbox.getChildren().add(nameLabel);
@@ -422,18 +431,19 @@ public class Window extends Application {
 		
 		vbox.getChildren().add(registerButton);
 		vbox.getChildren().add(returnview);
-		
-		
+
+
+
 		vbox.setSpacing(10);
 		vbox.setPadding(new Insets(100, 300, 20, 300));
-		
+
 		ScrollPane scrollPane = new ScrollPane();
 		scrollPane.setContent(vbox);
-		
+
 		scrollPane.setPannable(true);
 		scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
-		
+
 		nameLabel.setMaxWidth(Double.MAX_VALUE);
 		surnameLabel.setMaxWidth(Double.MAX_VALUE);
 		registerButton.setMaxWidth(Double.MAX_VALUE);
@@ -445,19 +455,19 @@ public class Window extends Application {
 		scene.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
 		this.stage.setScene(scene);
 		this.stage.show();
-		
+
 	}
-	
+
 	public void displayWelcomeAdmin() {
-		
+
 	}
-	
+
 	public void displayWelcomeCleaner() {
-		
+
 	}
 
 	public void displayWelcomeOwner() {
-	
+
 	}
 
 	public void run() {
@@ -468,7 +478,7 @@ public class Window extends Application {
 		// stage.initStyle(StageStyle.UNDECORATED);
 
 		ScrollPane root = new ScrollPane();
-		
+
 		// Setting vertical scroll bar is never displayed.
 		root.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 
@@ -504,10 +514,10 @@ public class Window extends Application {
 
 		this.displayConnectionView();
 
-		
+
 
 		this.stage.show();
-		
+
 	}
 
 }

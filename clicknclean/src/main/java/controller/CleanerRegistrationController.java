@@ -1,6 +1,7 @@
 package controller;
 
 import java.time.LocalDate;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
 
@@ -11,13 +12,13 @@ import tools.Db;
 
 public class CleanerRegistrationController {
 
-	public CleanerRegistrationController(String name, String surname, String email, String password, String confirmpassword, String phone, LocalDate birthDate, String houseNumber, String label, String postCode, String city, int km, int hourlyRate, String biography, String motivation, String experience, String photo, String idPhoto, String photoLive, Window window) {
+	public CleanerRegistrationController(String name, String surname, String email, String password, String confirmpassword, String phone, LocalDate birthDate, String houseNumber, String label, String postCode, String city, int km, int hourlyRate, String biography, String motivation, String experience, String photo, String idPhoto, String photoLive, Window window) throws InterruptedException, ExecutionException {
 		
 		Db db = new Db(); 
 		Address address = new Address(houseNumber,label,postCode,city);
 		
 		
-		if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || password.isEmpty() || confirmpassword.isEmpty() || phone.isEmpty() || birthDate==null || address==null || km==0 || hourlyRate.isEmpty() || biography.isEmpty() || motivation.isEmpty() || experience.isEmpty() || photo.isEmpty() || idPhoto.isEmpty()) {
+		if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || password.isEmpty() || confirmpassword.isEmpty() || phone.isEmpty() || birthDate==null || address==null || km==0 || hourlyRate==0 || biography.isEmpty() || motivation.isEmpty() || experience.isEmpty() || photo.isEmpty() || idPhoto.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Champs non remplis !");
 		}
 		else {
@@ -32,8 +33,7 @@ public class CleanerRegistrationController {
 			}
 		}
 		
+
 	}
 }
 
-
- 
