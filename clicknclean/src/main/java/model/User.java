@@ -9,8 +9,8 @@ public class User {
 	private String surname;
 	private String email;
 	private String phoneNumber;
-	private LocalDate birthLocalDate;
-	private LocalDate accountLocalDate;
+	private LocalDate birthDate;
+	private LocalDate accountDate;
 	private boolean suspended;
 	private UserStatus status;
 	/*
@@ -27,7 +27,7 @@ public class User {
 	    String surname,
 	    String email,
 	    String phoneNumber,
-	    LocalDate birthLocalDate,
+	    LocalDate birthDate,
 	    boolean suspended,
 	    UserStatus status
 	) {
@@ -36,8 +36,8 @@ public class User {
 		this.surname = surname;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
-		this.birthLocalDate = birthLocalDate;
-		this.accountLocalDate = LocalDate.now();
+		this.birthDate = birthDate;
+		this.accountDate = LocalDate.now();
 		this.suspended = suspended;
 		this.status = status;
 	}
@@ -111,20 +111,20 @@ public class User {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public LocalDate getBirthLocalDate() {
-		return this.birthLocalDate;
+	public LocalDate getBirthDate() {
+		return this.birthDate;
 	}
 
-	public void setBirthLocalDate(LocalDate birthLocalDate) {
-		this.birthLocalDate = birthLocalDate;
+	public void setBirthDate(LocalDate birthDate) {
+		this.birthDate = birthDate;
 	}
 
-	public LocalDate getAccountLocalDate() {
-		return accountLocalDate;
+	public LocalDate getAccountDate() {
+		return this.accountDate;
 	}
 
-	public void  setAccountLocalDate(LocalDate accountLocalDate) {
-		this.accountLocalDate = accountLocalDate;
+	public void  setAccountLocalDate(LocalDate accountDate) {
+		this.accountDate = accountDate;
 	}
 
 	public UserStatus getStatus() {

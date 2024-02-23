@@ -1,8 +1,8 @@
 package view;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.io.File;
+import java.sql.SQLException;
+import java.util.concurrent.ExecutionException;
 
 import controller.AskRegistrationController;
 import controller.CleanerRegistrationController;
@@ -23,27 +23,26 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import model.OwnerMotivation;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.shape.Rectangle;
 
 
 public class Window extends Application {
 	private static double xOffset = 0;
 	private static double yOffset = 0;
- 
+
 	Stage stage;
-	
+
 	public Window() {
 
 	}
-	
+
 	public void displayConnectionView() {
-		
+
 		this.stage.setTitle("Connexion");
 
 		Button newOwner = new Button("S'inscrire en tant que Demandeur");
@@ -54,7 +53,7 @@ public class Window extends Application {
 
 		TextField loginInputField = new TextField();
 		PasswordField passwordInputField = new PasswordField();
-		
+
 		Window window = this;
 
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
@@ -64,25 +63,25 @@ public class Window extends Application {
 		};
 
 		ConnectButton.setOnAction(event);
-		
+
 		EventHandler<ActionEvent> event2 = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				new AskRegistrationController("Owner", window);
 			}
 		};
-		
+
 		newOwner.setOnAction(event2);
-		
+
 		EventHandler<ActionEvent> event3 = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				new AskRegistrationController("Cleaner", window);
 			}
 		};
-		
+
 		newCleaner.setOnAction(event3);
-		
-		
-		
+
+
+
 		VBox vbox = new VBox();
 		vbox.getChildren().add(loginLabel);
 		vbox.getChildren().add(loginInputField);
@@ -94,14 +93,14 @@ public class Window extends Application {
 
 		vbox.setSpacing(10);
 		vbox.setPadding(new Insets(220, 300, 20, 300));
-		
+
 		ScrollPane scrollPane = new ScrollPane();
 		scrollPane.setContent(vbox);
-		
+
 		scrollPane.setPannable(true);
 		scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
-		
+
 		loginLabel.setMaxWidth(Double.MAX_VALUE);
 		passwordLabel.setMaxWidth(Double.MAX_VALUE);
 		ConnectButton.setMaxWidth(Double.MAX_VALUE);
@@ -118,10 +117,10 @@ public class Window extends Application {
 		this.stage.setScene(scene);
 		this.stage.show();
 	}
-	
+
 	public void displayOwnerRegistration() {
 		this.stage.setTitle("Inscription");
-		
+
 		Label title = new Label("S'inscire en tant que Demandeur :");
 		Label nameLabel = new Label("Nom :");
 		Label surnameLabel = new Label("Prénom :");
@@ -132,6 +131,7 @@ public class Window extends Application {
 		Label birthDateLabel = new Label("Date de naissance :");
 		Label ownerMotivationLabel = new Label("Type de prestation recherché :");
 		Button registerButton = new Button("Inscription");
+		Button returnview = new Button("Retour");
 
 
 		TextField nameInputField = new TextField();
@@ -144,31 +144,52 @@ public class Window extends Application {
 		ChoiceBox<String> ownerMotivationChoiceBox = new ChoiceBox<>();
 
 		ObservableList<String> options = FXCollections.observableArrayList(
-                "Résidence principale", "Courte durée", "Etat des lieux"
-		);
+		                                     "Résidence principale", "Courte durée", "Etat des lieux"
+		                                 );
 		ownerMotivationChoiceBox.setItems(options);
 
-		
+
 		Window window = this;
-		
+
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				
+				OwnerMotivation om = null;
+				switch (ownerMotivationChoiceBox.getValue()) {
+				case "Résidence principale":
+					om = OwnerMotivation.MAIN_HOME;
+					break;
+				case "Courte durée":
+					om = OwnerMotivation.GUEST_ROOM;
+					break;
+				case "Etat des lieux":
+					om = OwnerMotivation.INVENTORY;
+					break;
+				}
+
 				new OwnerRegistrationController(
-						nameInputField.getText(), 
-						surnameInputField.getText(),
-						emailInputField.getText(), 
-						passwordInputField.getText(),
-						confirmpasswordInputField.getText(),
-						phoneInputField.getText(),
-						birthDateInputField.getValue(), 
-						ownerMotivationChoiceBox.getValue(),
-						window
-						);
+				    nameInputField.getText(),
+				    surnameInputField.getText(),
+				    emailInputField.getText(),
+				    passwordInputField.getText(),
+				    confirmpasswordInputField.getText(),
+				    phoneInputField.getText(),
+				    birthDateInputField.getValue(),
+				    om,
+				    window
+				);
 			}
 		};
 
 		registerButton.setOnAction(event);
+
+		EventHandler<ActionEvent> eventReturn = new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				window.displayConnectionView();
+			}
+
+		};
+		returnview.setOnAction(eventReturn);
+
 
 		VBox vbox = new VBox();
 		vbox.getChildren().add(title);
@@ -189,13 +210,14 @@ public class Window extends Application {
 		vbox.getChildren().add(ownerMotivationLabel);
 		vbox.getChildren().add(ownerMotivationChoiceBox);
 		vbox.getChildren().add(registerButton);
+		vbox.getChildren().add(returnview);
 
 		vbox.setSpacing(10);
 		vbox.setPadding(new Insets(100, 300, 20, 300));
-		
+
 		ScrollPane scrollPane = new ScrollPane();
 		scrollPane.setContent(vbox);
-		
+
 		scrollPane.setPannable(true);
 		scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
@@ -212,15 +234,23 @@ public class Window extends Application {
 		this.stage.setScene(scene);
 		this.stage.show();
 	}
-	
+
 	String photo;
 	String idPhoto;
+	String photoLive;
+	String kmstring;
+	String hourlyrateString;
+	int km;
+	int hourlyRate;
+
+
+
 	public void displayCleanerRegistration() {
 		this.stage.setTitle("Inscription");
-		
-		
-	
-		
+
+
+
+
 		Label title = new Label("S'inscire en tant que Cleaner :");
 		Label nameLabel = new Label("Nom :");
 		Label surnameLabel = new Label("Prénom :");
@@ -230,14 +260,20 @@ public class Window extends Application {
 		Label phoneLabel = new Label("Téléphone :");
 		Label birthDateLabel = new Label("Date de naissance :");
 		Label addressLabel = new Label("Adresse :");
+		Label houseNumberLabel = new Label("Numéro :");
+		Label labelLabel = new Label("Nom de rue :");
+		Label postCodeLabel = new Label("Code postal :");
+		Label cityLabel = new Label("Ville :");
 		Label kmLabel = new Label("Rayon de recherche en km souhaité :");
 		Label hourlyRateLabel = new Label("Rémunération par heure :");
-		Label biographyLabel = new Label("Biographie :");
-		Label motivationLabel = new Label("Votre motivation :");
-		Label experienceLabel = new Label("Votre expérience :");
-		Label photoLabel = new Label("Votre photo :");
+		Label biographyLabel = new Label("Biographie (100 caractères max) :");
+		Label motivationLabel = new Label("Votre motivation (250 caractères max) :");
+		Label experienceLabel = new Label("Votre expérience (250 caractères max) :");
+		Label photoLabel = new Label("Votre photo de profil:");
 		Label idPhotoLabel = new Label("Photo de votre carte d'identité :");
-		
+
+		Label photoLiveLabel = new Label ("Photo de vérification d'Id");
+
 		TextField nameInputField = new TextField();
 		TextField surnameInputField = new TextField();
 		TextField emailInputField = new TextField();
@@ -245,7 +281,10 @@ public class Window extends Application {
 		PasswordField confirmpasswordInputField = new PasswordField();
 		TextField phoneInputField = new TextField();
 		DatePicker birthDateInputField = new DatePicker();
-		TextField addressInputField = new TextField();
+		TextField houseNumberInputField = new TextField();
+		TextField labelInputField = new TextField();
+		TextField postCodeInputField = new TextField();
+		TextField cityInputField = new TextField();
 		TextField kmInputField = new TextField();
 		TextField hourlyRateInputField = new TextField();
 		TextField biographyInputField = new TextField();
@@ -253,61 +292,82 @@ public class Window extends Application {
 		TextField experienceInputField = new TextField();
 		FileChooser photoInputField = new FileChooser();
 		FileChooser idPhotoInputField = new FileChooser();
-		
-		
+		FileChooser photoLiveInputField = new FileChooser();
+		Button returnview = new Button("Retour");
+
+
 		Button registerButton = new Button("Inscription");
 		Button registerPhoto = new Button("Parcourir");
 		Button registerIdPhoto = new Button("Parcourir");
-       
-		
+		Button registerPhotoLive = new Button("Parcourir");
+
+
 		Window window = this;
-		
-		
-		
-		
 		EventHandler<ActionEvent> eventphoto = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				photo = photoInputField.showOpenDialog(window.stage).toString();
-				
+
 			}
 		};
 		registerPhoto.setOnAction(eventphoto);
-		
-		
+
+
 		EventHandler<ActionEvent> eventIdPhoto = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				idPhoto= idPhotoInputField.showOpenDialog(window.stage).toString();
+				idPhoto = idPhotoInputField.showOpenDialog(window.stage).toString();
 			}
 		};
 		registerIdPhoto.setOnAction(eventIdPhoto);
-		
-		
+
+
+		EventHandler<ActionEvent> eventPhotoLive = new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				photoLive = photoLiveInputField.showOpenDialog(window.stage).toString();
+			}
+		};
+		registerPhotoLive.setOnAction(eventPhotoLive);
+
+
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				
 				new CleanerRegistrationController(
-						nameInputField.getText(), 
-						surnameInputField.getText(),
-						emailInputField.getText(), 
-						passwordInputField.getText(),
-						confirmpasswordInputField.getText(),
-						phoneInputField.getText(),
-						birthDateInputField.getValue(), 
-						addressInputField.getText(),
-						kmInputField.getText(),
-						hourlyRateInputField.getText(),
-						biographyInputField.getText(),
-						motivationInputField.getText(),
-						experienceInputField.getText(),
-						photo,
-						idPhoto,
-						window
-						);
+				    nameInputField.getText(),
+				    surnameInputField.getText(),
+				    emailInputField.getText(),
+				    passwordInputField.getText(),
+				    confirmpasswordInputField.getText(),
+				    phoneInputField.getText(),
+				    birthDateInputField.getValue(),
+				    houseNumberInputField.getText(),
+				    labelInputField.getText(),
+				    postCodeInputField.getText(),
+				    cityInputField.getText(),
+				    km,
+				    hourlyRate,
+				    biographyInputField.getText(),
+				    motivationInputField.getText(),
+				    experienceInputField.getText(),
+				    photo,
+				    idPhoto,
+				    photoLive,
+				    window
+				);
 			}
 		};
 
 		registerButton.setOnAction(event);
-		
+
+
+		EventHandler<ActionEvent> eventReturn = new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				window.displayConnectionView();
+			}
+
+		};
+		returnview.setOnAction(eventReturn);
+
+
+
 		VBox vbox = new VBox();
 		vbox.getChildren().add(title);
 		vbox.getChildren().add(nameLabel);
@@ -325,8 +385,14 @@ public class Window extends Application {
 		vbox.getChildren().add(birthDateLabel);
 		vbox.getChildren().add(birthDateInputField);
 		vbox.getChildren().add(addressLabel);
-		vbox.getChildren().add(addressInputField);
-		
+		vbox.getChildren().add(houseNumberLabel);
+		vbox.getChildren().add(houseNumberInputField);
+		vbox.getChildren().add(labelLabel);
+		vbox.getChildren().add(labelInputField);
+		vbox.getChildren().add(postCodeLabel);
+		vbox.getChildren().add(postCodeInputField);
+		vbox.getChildren().add(cityLabel);
+		vbox.getChildren().add(cityInputField);
 		vbox.getChildren().add(kmLabel);
 		vbox.getChildren().add(kmInputField);
 		vbox.getChildren().add(hourlyRateLabel);
@@ -341,20 +407,24 @@ public class Window extends Application {
 		vbox.getChildren().add(registerPhoto);
 		vbox.getChildren().add(idPhotoLabel);
 		vbox.getChildren().add(registerIdPhoto);
-		
+		vbox.getChildren().add(photoLiveLabel);
+		vbox.getChildren().add(registerPhotoLive);
+
 		vbox.getChildren().add(registerButton);
-		
-		
+		vbox.getChildren().add(returnview);
+
+
+
 		vbox.setSpacing(10);
 		vbox.setPadding(new Insets(100, 300, 20, 300));
-		
+
 		ScrollPane scrollPane = new ScrollPane();
 		scrollPane.setContent(vbox);
-		
+
 		scrollPane.setPannable(true);
 		scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
-		
+
 		nameLabel.setMaxWidth(Double.MAX_VALUE);
 		surnameLabel.setMaxWidth(Double.MAX_VALUE);
 		registerButton.setMaxWidth(Double.MAX_VALUE);
@@ -366,11 +436,11 @@ public class Window extends Application {
 		scene.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
 		this.stage.setScene(scene);
 		this.stage.show();
-		
+
 	}
-	
+
 	public void displayWelcomeAdmin() {
-		
+
 	}
 	
 	public void displayWelcomeCleaner(Cleaner cleaner) {
@@ -401,10 +471,11 @@ public class Window extends Application {
 		scene.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
 		this.stage.setScene(scene);
 		this.stage.show();
+
 	}
 
 	public void displayWelcomeOwner() {
-	
+
 	}
 
 	public void run() {
@@ -415,7 +486,7 @@ public class Window extends Application {
 		// stage.initStyle(StageStyle.UNDECORATED);
 
 		ScrollPane root = new ScrollPane();
-		
+
 		// Setting vertical scroll bar is never displayed.
 		root.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 
@@ -451,10 +522,10 @@ public class Window extends Application {
 
 		this.displayConnectionView();
 
-		
+
 
 		this.stage.show();
-		
+
 	}
 
 }

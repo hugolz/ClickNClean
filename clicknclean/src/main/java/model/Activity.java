@@ -3,21 +3,21 @@ package model;
 public class Activity {
     private int activityID;
     private String type;
-    private boolean opened;	
-    private int ownerID;	
-    private int cleanerID;	
-    private int missionID;	
-    private int disputeID;	
+    private boolean opened;
+    private int ownerID;
+    private int cleanerID;
+    private int missionID;
+    private int disputeID;
     private int adminID;
-    
+
     public Activity(
-        int activityID, 
-        String type, 
-        boolean opened, 
-        int ownerID, 
-        int cleanerID, 
+        int activityID,
+        String type,
+        boolean opened,
+        int ownerID,
+        int cleanerID,
         int missionID,
-        int disputeID, 
+        int disputeID,
         int adminID) {
 
         this.activityID = activityID;
@@ -94,6 +94,6 @@ public class Activity {
         this.adminID = adminID;
     }
 
-    
+
 
 }

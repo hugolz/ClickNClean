@@ -1,6 +1,13 @@
 package model.planning;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalField;
+
+import javafx.scene.control.TextField;
 
 public class TimeSlot {
     private LocalDateTime datetime;
@@ -11,13 +18,13 @@ public class TimeSlot {
     public static final int ENGAGED_IN_MISSION = 2;
 
     public TimeSlot(LocalDateTime datetime, double durationH) {
-        this.datetime = datetime;
+        this.datetime = datetime.truncatedTo(ChronoUnit.SECONDS); // Round to seconds for better compare to
         this.durationH = durationH;
         this.idMission = -1;
     }
 
     public TimeSlot(LocalDateTime datetime, double durationH, int idMission) {
-        this.datetime = datetime;
+        this.datetime = datetime.truncatedTo(ChronoUnit.SECONDS); // Round to seconds for better compare to
         this.durationH = durationH;
         this.idMission = idMission;
     }
@@ -53,8 +60,24 @@ public class TimeSlot {
     public String toString() {
         return "TimeSlot{" +
                "date: " + this.datetime +
-               "duration_h: " + this.durationH +
+               ", duration_h: " + this.durationH +
                ", id_mission: " + this.idMission +
                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof TimeSlot)) {
+            return false;
+        }
+
+        TimeSlot t = (TimeSlot) o;
+
+        return this.datetime.equals(t.datetime) && this.durationH == t.durationH
+               && this.idMission == t.idMission;
     }
 }

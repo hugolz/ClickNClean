@@ -1,7 +1,5 @@
 package main;
 
-import model.planning.Planning;
-import model.planning.TimeSlot;
 import tools.*;
 import view.Window;
 
@@ -10,91 +8,86 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.concurrent.ExecutionException;
 
-import model.Address; 
+import model.Address;
+import model.Mission;
+import model.OwnerMotivation;
+import model.Property;
+import model.UserStatus;
 
 public class Main {
 
-    public static void testUser()  throws SQLException, ExecutionException, InterruptedException {
+    public static void testMission() throws SQLException, InterruptedException, ExecutionException {
         Db connection = new Db();
-        connection.DAOaddUser("John", "null", "null", "null", "null", LocalDate.now(), false, UserStatus.ADMIN);
+        Property testProp = new Property(
+            2,
+            new Address("1", "Pl. Louis Armand", "29000", "quimper"),
+            40,
+            6,
+            "null",
+            "null",
+            "null"
+        );
+        connection.DAOCreateNewMission(testProp, LocalDateTime.now(), Mission.setDuration(testProp.getPropertySurface()));
+    }
+
+    public static void testProperty() throws SQLException, InterruptedException, ExecutionException {
+        Db connection = new Db();
+        connection.DAOCreateNewProperty(
+            new Address("1", "Pl. Louis Armand", "29000", "quimper"),
+            35,
+            null,
+            null,
+            null,
+            6);
+        connection.disconnect();
+        connection = null;
+    }
+
+
+    public static void testOwner() throws SQLException, ExecutionException, InterruptedException {
+        Db connection = new Db();
+        connection.DAOAddOwner("Lezoualch", "noobie", "gogo", "email", "null", LocalDate.now(), false, OwnerMotivation.GUEST_ROOM);
+        connection.disconnect();
+        connection = null;
+    }
+
+    public static void testUser()  throws SQLException, ExecutionException, InterruptedException {
+
+        Db connection = new Db();
+        connection.DAOAddUser("John", "null", "null", "null", "null", LocalDate.now(), false, UserStatus.ADMIN);
+        connection.disconnect();
+        connection = null;
     }
 
     public static void testCleaner() throws SQLException, InterruptedException, ExecutionException {
         Db connection = new Db();
         int cleanerID = connection.DAOAddCleaner(
-            "Doe", 
-            "null", 
-            "John", 
-            null, 
-            null, 
-            LocalDate.now(), 
-            false, 
-            null, 
-            new Address("28","av yves thepot" , "29000", "quimper"),
-            0, 0,
-            null, 
-            null, 
-            null, 
-            null, 
-            false, 
-            null, 
-            null);
+                            "Doe",
+                            "null",
+                            "John",
+                            null,
+                            null,
+                            LocalDate.now(),
+                            false,
+                            new Address("28", "av yves thepot" , "29000", "quimper"),
+                            0, 0,
+                            null,
+                            null,
+                            null,
+                            null, false,
+                            null,
+                            null);
         connection.disconnect();
         connection = null;
-
-
-        
-
     }
+
+    public static void testPlanning() throws Exception, SQLException, InterruptedException, ExecutionException {
+
+
+    };
+
+
     public static void main(String[] args) throws SQLException, InterruptedException, ExecutionException {
-        Planning plan = new Planning(1);
-        plan.getAvailableSlots();
-
-        // Db db = new Db();
-        Window w = new Window();
-        w.run();
-      
-        // db.DAOAdd(
-        //     new Cleaner(
-        //         5,
-        //         new Address("3", "av Yves thepot",
-        //                     "29000", "quimper"),
-        //         13,
-        //         0,
-        //         "null",
-        //         "null",
-        //         "null",
-        //         "null",
-        //         false,
-        //         "Martin",
-        //         "null",
-        //         "Durand",
-        //         "test@test.com",
-        //         "88967886",
-        //         LocalDate.now(),
-        //         LocalDate.now(),
-        //         false
-        //     )
-        // );
-      
-        try {
-            testCleaner();
-        } catch (SQLException e) {
-			      System.err.println(e.getMessage());
-		    }catch (Exception e){
-			      System.err.println(e.getMessage());
-        }
-
-        try {
-            Address.main(args);
-            // a.main(args);
-        } catch (Exception e) {
-            System.out.println("Error" + e);
-        }
-
-
-        // new Window().run();
-
-
+        new Window().run();
     }
 }
