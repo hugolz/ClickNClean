@@ -25,6 +25,7 @@ import model.Owner;
 import model.OwnerMotivation;
 import model.Admin;
 import model.Activity;
+import model.ActivityType;
 import model.User;
 
 
@@ -315,8 +316,6 @@ public class Db {
 		return cleanerID;
 	}
 
-	public Cleaner DAOReadCleaner() {
-
 
 	public int DAOAddOwner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, OwnerMotivation serviceType) {
 		int ownerId = DAOaddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.OWNER);
@@ -427,13 +426,14 @@ public class Db {
 
 	/*--------------------------------------MANAGE ACTIVITY--------------------------------------------------------------------- */
 
-	public void DAOaddActivity(Activity a) {
+	public void DAOaddActivity(ActivityType type, int receivingUser, int ownerId, int cleanerId, int missionId, int disputeId, int adminId) {
+			
 		try {
 			String strQuery = "INSERT INTO `activity`"
-			                  + "(`type`, `opened`, `id_owner`, `id_cleaner`, `id_mission`, `id_dispute`, `id_admin`) "
-			                  + "VALUES ('" + a.getType() + "','" + (a.isOpened() ? 1 : 0) + "','" + a.getOwnerID() + "','"
-			                  + a.getCleanerID() + "','" + a.getMissionID() + "','"
-			                  + a.getDisputeID() + "','" + a.getAdminID() + "');";
+			                  + "(`type`, `opened`, `id_owner`, `id_cleaner`, `id_mission`, `id_dispute`, `id_admin`, `id_user_receiving`) "
+			                  + "VALUES ('" + type.asInt() + "','" + 0 + "','" + ownerId + "','"
+			                  + cleanerId + "','" + missionId + "','"
+			                  + disputeId + "','" + adminId + "','" + receivingUser +"');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());

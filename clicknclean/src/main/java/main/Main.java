@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+import model.ActivityType;
 import model.Address;
 import model.Mission;
 import model.OwnerMotivation;
@@ -18,6 +19,16 @@ import model.Property;
 import model.UserStatus;
 
 public class Main {
+
+    public static void testActivity() throws SQLException, InterruptedException, ExecutionException {
+        Db connection = new Db();
+        connection.DAOaddActivity(ActivityType.MISSION_CANCELED, 6, 
+            0,
+            6, 
+            0, 
+            0, 
+            0);
+    }
 
     public static void testMission() throws SQLException, InterruptedException, ExecutionException {
         Db connection = new Db();
@@ -91,13 +102,13 @@ public class Main {
     public static void main(String[] args) throws SQLException, InterruptedException, ExecutionException {
 
       
-/*         try {
-            testMission();
+        try {
+            testActivity();
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         } catch (Exception e) {
             System.err.println(e.getMessage());
-        } */
+        }
 
         try {
             Address.main(args);
