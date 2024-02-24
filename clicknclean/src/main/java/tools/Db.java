@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
-import model.Property;
 import javafx.util.Pair;
 import model.planning.Planning;
 import model.planning.TimeSlot;
@@ -27,6 +26,8 @@ import model.Admin;
 import model.Activity;
 import model.ActivityType;
 import model.User;
+import model.Property;
+import model.Review;
 
 
 public class Db {
@@ -42,8 +43,9 @@ public class Db {
 		this.strClassName = "com.mysql.cj.jdbc.Driver";
 		this.dbName = "click_n_clean";
 
-		this.login = "rootx";
-		this.password = "rootx";
+		this.login = "root";
+		this.password = "";
+
 
 		this.strUrl = "jdbc:mysql://localhost:3306/" + dbName
 		              + "?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Europe/Paris";
@@ -80,8 +82,10 @@ public class Db {
 				int cleaner_range = rSet.getInt("km_range");
 
 				Address cleaner_addr = new Address(
-				    rSet.getString("address_coords"),
-				    rSet.getString("address_display"));
+				    rSet.getString("address_display"),
+				    rSet.getInt("latitude"),
+				    rSet.getInt("longitude")
+				);
 
 				double distance = addr.calculateDistance(cleaner_addr);
 
@@ -96,7 +100,7 @@ public class Db {
 				    cleaner_range,
 				    rSet.getInt("hourly_rate"),
 				    rSet.getString("biography"),
-				    rSet.getString("photo"),
+				    rSet.getString("photo_profile"),
 				    rSet.getString("motivation"),
 				    rSet.getString("experience"),
 				    rSet.getBoolean("confirmed"),
@@ -116,9 +120,9 @@ public class Db {
 		return out;
 	}
 
-	public Pair<Integer, UserStatus> loginUser(String login, String password)
+	public Pair<Integer, UserStatus> DAOReadUser(String login, String password)
 	throws InterruptedException, ExecutionException, Exception {
-		String query = "SELECT * FROM user where email  = " + login + " AND password = " + password + ";";
+		String query = "SELECT * FROM user where email  = '" + login + "' AND password = '" + password + "';";
 
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
@@ -126,11 +130,12 @@ public class Db {
 			           rSet.getInt("id_user"),
 			           UserStatus.fromInt(rSet.getInt("status")));
 		}
+		rSet.close();
 
 		throw new Exception("Could not find a user with the given address / pasword");
 	}
 
-	public Cleaner loginCleaner(int id_user) throws InterruptedException, ExecutionException, Exception {
+	public Cleaner DAOReadCleaner(int id_user) throws InterruptedException, ExecutionException, Exception {
 		String query = "SELECT * FROM cleaner JOIN user ON (cleaner.id_cleaner = user.id_user) WHERE id_cleaner = "
 		               + id_user;
 
@@ -143,13 +148,15 @@ public class Db {
 			Cleaner cleaner = new Cleaner(
 			    rSet.getInt("id_cleaner"),
 			    new Address(
-			        rSet.getString("address_coords"),
-			        rSet.getString("address_display")),
+			        rSet.getString("address_display"),
+			        rSet.getDouble("latitude"),
+			        rSet.getDouble("longitude")
+			    ),
 			    rSet.getInt("km_range"),
 			    rSet.getInt("hourly_rate"),
 			    rSet.getString("biography"),
 			    rSet.getString("photo_profile"),
-			    rSet.getString("photo_id"),
+			    rSet.getString("photo_identity"),
 			    rSet.getString("motivation"),
 			    rSet.getString("experience"),
 			    rSet.getBoolean("confirmed"),
@@ -165,12 +172,17 @@ public class Db {
 			// TODO: Load planning and reviews
 			return cleaner;
 		}
+		rSet.close();
 
 		throw new Exception("Could not find any cleaner with the given id");
 	}
 
-	public Owner loginOwner(int id_user) throws InterruptedException, ExecutionException, Exception {
-		String query = "SELECT * FROM owner JOIN user ON (owner.id_owner = user.id_user) WHERE id_owner = " + id_user;
+	public Owner DAOReadOwner(int id_user) throws InterruptedException, ExecutionException, Exception {
+		String query = "SELECT * FROM owner JOIN user ON (owner.id_owner = user.id_user) WHERE owner.id_owner = " + id_user;
+		// String query = "SELECT * FROM owner JOIN user ON(owner.id_owner = user.id_user) JOIN property ON(owner.id_owner = property.id_owner) WHERE owner.id_owner = " + id_user;
+
+		ArrayList<Integer> ownerReviews = this.DAOReadOwnerReviewsIds(id_user);
+		ArrayList<Integer> listproperty = this.DAOReadOwnerPropertiesIds(id_user);
 
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
@@ -178,10 +190,13 @@ public class Db {
 				throw new Exception("Found a user with given id, but it's not an owner;");
 			}
 
+			int id_owner = rSet.getInt("id_owner");
+
 			Owner owner = new Owner(
-			    new ArrayList<Integer>(), // ownerReviews
-			    rSet.getString("serviceType"), //
-			    rSet.getInt("id_owner"),
+			    id_owner,
+			    OwnerMotivation.fromInt(rSet.getInt("type_service")),
+			    ownerReviews,
+			    listproperty,
 			    rSet.getString("name"),
 			    rSet.getString("password"),
 			    rSet.getString("surname"),
@@ -189,13 +204,89 @@ public class Db {
 			    rSet.getString("phone_number"),
 			    rSet.getDate("birth_date").toLocalDate(),
 			    rSet.getBoolean("suspended"));
+			rSet.close();
 			return owner;
 		}
+		rSet.close();
 
 		throw new Exception("Could not find any owner with the given id");
 	}
 
-	public Admin loginAdmin(int id_user) throws InterruptedException, ExecutionException, Exception {
+	public ArrayList<Review> DAOReadOwnerReviews(int id_owner) throws InterruptedException, ExecutionException, Exception {
+		ArrayList<Review> reviews = new ArrayList<Review>();
+		String query = "SELECT * FROM review JOIN owner ON (review.id_user = owner.id_owner) WHERE owner.id_owner = " + id_owner;
+
+		ResultSet rSet = this.stRead.executeQuery(query);
+		while (rSet.next()) {
+			Review review = new Review(
+			    rSet.getInt("id_review"),
+			    rSet.getString("content"),
+			    rSet.getInt("grade"),
+			    rSet.getInt("id_user"),
+			    rSet.getInt("id_mission")
+			);
+			reviews.add(review);
+		}
+
+		return reviews;
+	}
+
+	public ArrayList<Integer> DAOReadOwnerReviewsIds(int id_owner) throws InterruptedException, ExecutionException, Exception {
+		ArrayList<Integer> reviews = new ArrayList<Integer>();
+		String query = "SELECT * FROM review JOIN owner ON (review.id_user = owner.id_owner) WHERE owner.id_owner = " + id_owner;
+
+		ResultSet rSet = this.stRead.executeQuery(query);
+		while (rSet.next()) {
+			reviews.add(rSet.getInt("id_review"));
+		}
+		rSet.close();
+
+		return reviews;
+	}
+
+	public ArrayList<Property> DAOReadOwnerProperties(int id_owner) throws InterruptedException, ExecutionException, Exception {
+		ArrayList<Property> properties = new ArrayList<Property>();
+		String query = "SELECT * FROM property JOIN owner ON (property.id_owner = owner.id_owner) WHERE owner.id_owner = " + id_owner;
+
+		ResultSet rSet = this.stRead.executeQuery(query);
+		while (rSet.next()) {
+
+			Property property = new Property(
+			    rSet.getInt("id_property"),
+			    new Address(
+			        rSet.getString("address_display"),
+			        rSet.getDouble("latitude"),
+			        rSet.getDouble("longitude")
+			    ),
+			    rSet.getInt("surface"),
+			    rSet.getInt("id_owner"),
+			    rSet.getString("acces_code"),
+			    rSet.getString("keybox_code"),
+			    rSet.getString("special_instruction")
+			);
+
+			properties.add(property);
+		}
+		rSet.close();
+		return properties;
+	}
+
+	public ArrayList<Integer> DAOReadOwnerPropertiesIds(int id_owner) throws InterruptedException, ExecutionException, Exception {
+		ArrayList<Integer> properties = new ArrayList<Integer>();
+		String query = "SELECT * FROM property JOIN owner ON (property.id_owner = owner.id_owner) WHERE owner.id_owner = " + id_owner;
+
+		ResultSet rSet = this.stRead.executeQuery(query);
+		while (rSet.next()) {
+
+			properties.add(rSet.getInt("id_property"));
+		}
+		rSet.close();
+
+		return properties;
+	}
+
+
+	public Admin DAOReadAdmin(int id_user) throws InterruptedException, ExecutionException, Exception {
 		String query = "SELECT * FROM admin JOIN user ON (admin.id_admin = user.id_user) WHERE id_admin = " + id_user;
 
 		ResultSet rSet = this.stRead.executeQuery(query);
@@ -273,7 +364,7 @@ public class Db {
 			for (TimeSlot ts : planning.getTimeSlots()) {
 				String strQuery = "INSERT INTO `planning`"
 				                  + "(`id_cleaner`, `datetime`, `durationH`, `id_mission`)"
-				                  + "VALUES ('" + id_user + "','" + ts.getLocalDateTime() + "','" + ts.getDurationH() + "','" + ( ts.getIsAvailable() ? ts.getIdMission() : null) + "');";
+				                  + "VALUES ('" + id_user + "','" + ts.getLocalDateTime() + "','" + ts.getDurationH() + "','" + ts.getIdMission() + "');";
 				stRead.executeUpdate(strQuery);
 			}
 
@@ -296,19 +387,20 @@ public class Db {
 	                         int kmRange,
 	                         int hourlyRate,
 	                         String bio,
-	                         String photo,
+	                         String photoIdentity,
 	                         String motivation,
 	                         String experience,
 	                         boolean isConfirmed,
 	                         String photoProfile,
 	                         String photoLive) {
 
-		int cleanerID = DAOaddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.CLEANER);
+		int cleanerID = DAOAddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.CLEANER);
 		try {
 			String strQuery = "INSERT INTO `cleaner`"
-			                  + "(`id_cleaner`, `address_display`, `latitude`, `longitude`, `km_range`, `hourly_rate`, `biography`, `photo`, `motivation`, `experience`, `confirmed`, `photo_profile`, `photo_live`) "
+			                  + "(`id_cleaner`, `address_display`, `latitude`, `longitude`, `km_range`, `hourly_rate`, `biography`, `photo_identity`, `motivation`, `experience`, `confirmed`, `photo_profile`, `photo_live`) "
 			                  + "VALUES ('" + cleanerID + "','" + departureAddress.asString() + "','" + departureAddress.getLatitude() +  "','" + departureAddress.getLongitude() + "','" + kmRange + "','" + hourlyRate + "','" + bio + "','"
-			                  + photo + "','" + motivation + "','" + experience + "','" + (isConfirmed ? 1 : 0)  + "','" + photoProfile + "','" + photoLive + "');";            stRead.executeUpdate(strQuery);
+			                  + photoIdentity + "','" + motivation + "','" + experience + "','" + (isConfirmed ? 1 : 0)  + "','" + photoProfile + "','" + photoLive + "');";
+			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
@@ -318,12 +410,12 @@ public class Db {
 
 
 	public int DAOAddOwner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, OwnerMotivation serviceType) {
-		int ownerId = DAOaddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.OWNER);
+		int ownerId = DAOAddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.OWNER);
 
 		try {
 			String strQuery = "INSERT INTO `owner`"
 			                  + "(`id_owner`, `type_service`) "
-			                  + "VALUES ('" + ownerId + "','" + serviceType + "');";
+			                  + "VALUES ('" + ownerId + "','" + serviceType.asInt() + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -362,25 +454,25 @@ public class Db {
 
 	/*--------------------------------------CREATE / MANAGE MISSIONS--------------------------------------------------- */
 
-	public void DAOCreateNewMission( 
-		Property property,
-		LocalDateTime localDateTime,
-		double duration) {
-		
+	public void DAOCreateNewMission(
+	    Property property,
+	    LocalDateTime localDateTime,
+	    double duration) {
+
 		duration = Mission.setDuration(property.getPropertySurface());
-		
+
 		try {
 			String strQuery = "INSERT INTO `mission`"
-							+ "(`date_start`, `cost`, `duration`, `commision`, `state`,`id_owner`,`id_property`) "
-							+ "VALUES ('" + localDateTime + "','" + 0.0 + "','" + duration + "','" + 0.0 + "','" + MissionStatus.PUBLISHED.asInt() + "','"
-							+ property.getOwnerId()  + "','" + property.getPropertyId() + "');";
+			                  + "(`date_start`, `cost`, `duration`, `commision`, `state`,`id_owner`,`id_property`) "
+			                  + "VALUES ('" + localDateTime + "','" + 0.0 + "','" + duration + "','" + 0.0 + "','" + MissionStatus.PUBLISHED.asInt() + "','"
+			                  + property.getOwnerId()  + "','" + property.getPropertyId() + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
 	}
-	
-	
+
+
 	public void DAOResolveDispute(int missionID, int state) {
 		try {
 			String strQuery = "UPDATE mission SET state = " + state + "WHERE id_mission = " + missionID + ";";
@@ -393,7 +485,7 @@ public class Db {
 
 	/*--------------------------------------TOOLS METHODS--------------------------------------------------------------------- */
 
-	public <T extends User> int DAOaddUser(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, UserStatus status) {
+	public <T extends User> int DAOAddUser(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate, boolean isSuspended, UserStatus status) {
 
 		int id = 0;
 		LocalDate accountDate = LocalDate.now();
@@ -408,7 +500,7 @@ public class Db {
 
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
-			System.err.println(e.getMessage());
+			System.err.println("Error in DAOAddUser: " + e.getMessage());
 		}
 
 		try {
@@ -458,12 +550,12 @@ public class Db {
 
 	/*--------------------------------------MANAGE PROPERTIES-------------------------------------------------------------- */
 	public void DAOCreateNewProperty(
-		Address propertyAddress, 
-		int propertySurface,
-		String accesCode,
-		String keyBoxCode, 
-		String specialInstruction, 
-		int ownerId) {
+	    Address propertyAddress,
+	    int propertySurface,
+	    String accesCode,
+	    String keyBoxCode,
+	    String specialInstruction,
+	    int ownerId) {
 
 		try {
 			String strQuery = "INSERT INTO `property`"
@@ -475,6 +567,4 @@ public class Db {
 			System.err.println(e.getMessage());
 		}
 	}
-
-	
 }

@@ -63,7 +63,7 @@ CREATE TABLE `cleaner` (
   `km_range` int NOT NULL,
   `hourly_rate` int NOT NULL,
   `biography` varchar(100) NOT NULL,
-  `photo` varchar(36) NOT NULL,
+  `photo_identity` varchar(36) NOT NULL,
   `photo_profile` varchar(36) NOT NULL,
   `photo_live` varchar(36) NOT NULL,
   `motivation` varchar(250) NOT NULL,
@@ -75,7 +75,7 @@ CREATE TABLE `cleaner` (
 -- Déchargement des données de la table `cleaner`
 --
 
-INSERT INTO `cleaner` (`id_cleaner`, `address_display`, `latitude`, `longitude`, `km_range`, `hourly_rate`, `biography`, `photo`, `photo_profile`, `photo_live`, `motivation`, `experience`, `confirmed`) VALUES
+INSERT INTO `cleaner` (`id_cleaner`, `address_display`, `latitude`, `longitude`, `km_range`, `hourly_rate`, `biography`, `photo_identity`, `photo_profile`, `photo_live`, `motivation`, `experience`, `confirmed`) VALUES
 (4, '28 av yves thepot 29000 quimper', 47.988373, -4.088107, 0, 0, 'null', 'null', 'null', 'null', 'null', 'null', 0),
 (5, '28 av yves thepot 29000 quimper', 47.988373, -4.088107, 0, 0, 'null', 'null', 'null', 'null', 'null', 'null', 0);
 
@@ -135,7 +135,7 @@ CREATE TABLE `mission_proposal` (
   `id_mission` int NOT NULL,
   `id_cleaner` int NOT NULL,
   `starting_hour` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -164,10 +164,10 @@ INSERT INTO `owner` (`id_owner`, `type_service`) VALUES
 
 CREATE TABLE `planning` (
   `id_cleaner` int UNSIGNED NOT NULL,
-  `date` date NOT NULL,
-  `time` time NOT NULL,
-  `availability` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `datetime` datetime NOT NULL,
+  `durationH` double NOT NULL,
+  `id_mission` int DEFAULT -1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -217,7 +217,7 @@ CREATE TABLE `review` (
 CREATE TABLE `status` (
   `id_status` int UNSIGNED NOT NULL,
   `name_status` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `status`
