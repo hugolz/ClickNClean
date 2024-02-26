@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import model.Address;
 import model.UserStatus;
 import view.Window;
+import view.SceneId;
 import tools.Db;
 
 public class CleanerRegistrationController {
@@ -119,8 +120,8 @@ public class CleanerRegistrationController {
 		}
 
 		JOptionPane.showMessageDialog(null, "Inscription réussi ! Vous allez être dirigé vers votre page d'acceuil, vos accès sont limités en attente de confirmation de votre compte");
-		window.displayWelcomeCleaner();
-
+		// window.displayWelcomeCleaner();
+		window.setScene(SceneId.CLEANER_WECLOME);
 		// db.close();
 	}
 	

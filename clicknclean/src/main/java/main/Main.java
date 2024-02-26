@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.concurrent.ExecutionException;
 
+import model.ActivityType;
 import model.Address;
 import model.Mission;
 import model.OwnerMotivation;
@@ -15,7 +16,24 @@ import model.Property;
 import model.UserStatus;
 
 public class Main {
+    public static void testReview() throws SQLException, InterruptedException, ExecutionException {
+        Db connection = new Db();
+        connection.DAOCreateNewReview("Super", 5., 5, 1 );
+        connection.disconnect();
+        connection = null;
+    }
 
+    public static void testActivity() throws SQLException, InterruptedException, ExecutionException {
+        Db connection = new Db();
+        connection.DAOaddActivity(ActivityType.MISSION_CANCELED, 4, 
+            null,
+            4, 
+            null, 
+            null, 
+            null);
+        connection.disconnect();
+        connection = null;
+    }
     public static void testMission() throws SQLException, InterruptedException, ExecutionException {
         Db connection = new Db();
         Property testProp = new Property(
@@ -54,7 +72,7 @@ public class Main {
     public static void testUser()  throws SQLException, ExecutionException, InterruptedException {
 
         Db connection = new Db();
-        connection.DAOAddUser("John", "null", "null", "null", "null", LocalDate.now(), false, UserStatus.ADMIN);
+        connection.DAOAddUser("", "null", "null", "null", "null", LocalDate.now(), false, UserStatus.ADMIN);
         connection.disconnect();
         connection = null;
     }
@@ -88,6 +106,11 @@ public class Main {
 
 
     public static void main(String[] args) throws SQLException, InterruptedException, ExecutionException {
+
+        try {
+            testActivity();
+        } catch (SQLException e) {
+        }
         new Window().run();
     }
 }

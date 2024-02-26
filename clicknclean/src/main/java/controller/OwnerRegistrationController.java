@@ -13,9 +13,7 @@ import tools.Db;
 public class OwnerRegistrationController {
 
 	public OwnerRegistrationController(String name, String surname, String email, String password, String confirmpassword, String phone, LocalDate birthDate, OwnerMotivation motivation, Window window) {
-
 		Db db = new Db();
-	
 			
 		if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || password.isEmpty() || confirmpassword.isEmpty() || phone.isEmpty() || birthDate == null || motivation==null) {
 			JOptionPane.showMessageDialog(null, "Champs non remplis !");
@@ -38,6 +36,7 @@ public class OwnerRegistrationController {
 			//not good email format
 			JOptionPane.showMessageDialog(null, "Mauvais format d'email !");
 			return;
+
 		}
 	
 		
