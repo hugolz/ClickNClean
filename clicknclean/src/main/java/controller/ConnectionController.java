@@ -8,6 +8,7 @@ import javafx.util.Pair;
 import model.UserStatus;
 import tools.Db;
 import view.Window;
+import view.SceneId;
 
 public class ConnectionController {
 	public ConnectionController(String login, String psw, Window window) {
@@ -33,15 +34,21 @@ public class ConnectionController {
 
 			case ADMIN :
 				db.DAOReadAdmin(user.getKey());
-				window.displayWelcomeAdmin();
+				// window.displayWelcomeAdmin();
+				// TODO: scene for ADMIN_WELCOME
+				//  window.setScene(SceneId.ADMIN_WELCOME);
 				break;
 			case CLEANER :
 				db.DAOReadCleaner(user.getKey());
-				//window.displayWelcomeCleaner();
+				// window.displayWelcomeCleaner();
+				window.setScene(SceneId.CLEANER_WECLOME);
+
 				break;
 			case OWNER :
 				db.DAOReadOwner(user.getKey());
-				window.displayWelcomeOwner();
+				// window.displayWelcomeOwner();
+				// TODO: scene for OWNER_WELCOME
+				//  window.setScene(SceneId.OWNER_WELCOME);
 				break;
 			}
 		} catch (Exception e) {
