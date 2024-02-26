@@ -1,7 +1,7 @@
-package view;
+package view.owner;
 
 import java.io.File;
-
+import view.Window;
 import controller.AskRegistrationController;
 import controller.ConnectionController;
 import javafx.collections.FXCollections;
