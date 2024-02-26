@@ -17,14 +17,23 @@ import model.UserStatus;
 
 public class Main {
 
+    public static void testReview() throws SQLException, InterruptedException, ExecutionException {
+        Db connection = new Db();
+        connection.DAOCreateNewReview("Super", 5., 5, 1 );
+        connection.disconnect();
+        connection = null;
+    }
+
     public static void testActivity() throws SQLException, InterruptedException, ExecutionException {
         Db connection = new Db();
-        connection.DAOaddActivity(ActivityType.MISSION_CANCELED, 6, 
-            0,
-            6, 
-            0, 
-            0, 
-            0);
+        connection.DAOaddActivity(ActivityType.MISSION_CANCELED, 4, 
+            null,
+            4, 
+            null, 
+            null, 
+            null);
+        connection.disconnect();
+        connection = null;
     }
 
     public static void testMission() throws SQLException, InterruptedException, ExecutionException {
@@ -100,7 +109,10 @@ public class Main {
 
     public static void main(String[] args) throws SQLException, InterruptedException, ExecutionException {
 
-
+        try {
+            testActivity();
+        } catch (SQLException e) {
+        }
         new Window().run();
     }
 }

@@ -3,6 +3,7 @@ package tools;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -43,8 +44,8 @@ public class Db {
 		this.strClassName = "com.mysql.cj.jdbc.Driver";
 		this.dbName = "click_n_clean";
 
-		this.login = "root";
-		this.password = "";
+		this.login = "rootx";
+		this.password = "rootx";
 
 
 		this.strUrl = "jdbc:mysql://localhost:3306/" + dbName
@@ -518,15 +519,29 @@ public class Db {
 
 	/*--------------------------------------MANAGE ACTIVITY--------------------------------------------------------------------- */
 
-	public void DAOaddActivity(ActivityType type, int receivingUser, int ownerId, int cleanerId, int missionId, int disputeId, int adminId) {
+	public void DAOaddActivity(ActivityType type, int receivingUser, Integer ownerId, Integer cleanerId, Integer missionId, Integer disputeId, Integer adminId) {
 			
 		try {
-			String strQuery = "INSERT INTO `activity`"
-			                  + "(`type`, `opened`, `id_owner`, `id_cleaner`, `id_mission`, `id_dispute`, `id_admin`, `id_user_receiving`) "
-			                  + "VALUES ('" + type.asInt() + "','" + 0 + "','" + ownerId + "','"
-			                  + cleanerId + "','" + missionId + "','"
-			                  + disputeId + "','" + adminId + "','" + receivingUser +"');";
-			stRead.executeUpdate(strQuery);
+			String sql = "INSERT INTO `activity`" 
+							+ "(`type`, `opened`, `id_owner`, `id_cleaner`, `id_mission`, `id_dispute`, `id_admin`, `id_user_receiving`)"
+							+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?) ";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, type.asInt());
+			pstmt.setInt(2, 0);
+
+			if (ownerId == null) pstmt.setNull(3, java.sql.Types.INTEGER);
+			else pstmt.setInt(3, ownerId);
+			if (cleanerId == null) pstmt.setNull(4, java.sql.Types.INTEGER);
+			else  pstmt.setInt(4, cleanerId);
+			if (missionId == null) pstmt.setNull(5, java.sql.Types.INTEGER);
+			else pstmt.setInt(5, missionId);
+			if (disputeId == null) pstmt.setNull(6, java.sql.Types.INTEGER);
+			else  pstmt.setInt(6, disputeId);
+			if (adminId == null) pstmt.setNull(7, java.sql.Types.INTEGER);
+			else pstmt.setInt(7, adminId);
+			pstmt.setInt(8, receivingUser);
+			
+			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
@@ -548,7 +563,7 @@ public class Db {
 		}
 	}
 
-	/*--------------------------------------MANAGE PROPERTIES-------------------------------------------------------------- */
+	/*--------------------------------------CREATE PROPERTY-------------------------------------------------------------- */
 	public void DAOCreateNewProperty(
 	    Address propertyAddress,
 	    int propertySurface,
@@ -567,4 +582,18 @@ public class Db {
 			System.err.println(e.getMessage());
 		}
 	}
+
+	/*--------------------------------------CREATE REVIEW-------------------------------------------------------------- */
+	public void DAOCreateNewReview(String content, double/*menton*/ grade, int userReceivingId, int missionId) {
+
+		try {
+			String strQuery = "INSERT INTO `review`"
+			                  + "(`content`, `grade`, `id_user_receiving`, `id_mission`, `id_owner`) "
+			                  + "VALUES ('" + content + "','" + userReceivingId + "','" + missionId + "');";
+			stRead.executeUpdate(strQuery);
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+	}
+
 }

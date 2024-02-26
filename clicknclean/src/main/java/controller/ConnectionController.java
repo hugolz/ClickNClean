@@ -37,7 +37,7 @@ public class ConnectionController {
 				break;
 			case CLEANER :
 				db.DAOReadCleaner(user.getKey());
-				window.displayWelcomeCleaner();
+				//window.displayWelcomeCleaner();
 				break;
 			case OWNER :
 				db.DAOReadOwner(user.getKey());
