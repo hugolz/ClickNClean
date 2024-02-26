@@ -26,6 +26,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import model.Cleaner;
 import model.OwnerMotivation;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
@@ -449,9 +450,9 @@ public class Window extends Application {
 		Button registerMessages = new Button("Messages");
 		Button retour = new Button("Retour");
 		
-		Mission
+		//Mission
 		
-		Planning
+		//Planning
 		
 		Window window = this;
 		

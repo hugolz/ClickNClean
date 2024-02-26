@@ -106,7 +106,7 @@ public class CleanerRegistrationController {
 		}
 
 		JOptionPane.showMessageDialog(null, "Inscription réussi ! Vous allez être dirigé vers votre page d'acceuil, vos accès sont limités en attente de confirmation de votre compte");
-		window.displayWelcomeCleaner();
+		//window.displayWelcomeCleaner();
 
 		// db.close();
 	}
