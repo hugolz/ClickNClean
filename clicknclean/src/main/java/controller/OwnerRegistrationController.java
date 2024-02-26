@@ -49,7 +49,7 @@ public class OwnerRegistrationController {
 		}
 
 		JOptionPane.showMessageDialog(null, "Inscription réussi ! Vous allez être redirigez vers votre page d'acceuil !");
-		window.displayWelcomeOwner();
+		// window.displayWelcomeOwner();
 
 		//db.close();
 
