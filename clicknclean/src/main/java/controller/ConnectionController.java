@@ -45,7 +45,7 @@ public class ConnectionController {
 				db.DAOReadOwner(user.getKey());
 				// window.displayWelcomeOwner();
 				// TODO: scene for OWNER_WELCOME
-				//  window.setScene(SceneId.OWNER_WELCOME);
+				window.setScene(SceneId.OWNER_WELCOME);
 				break;
 			}
 		} catch (Exception e) {

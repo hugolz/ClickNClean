@@ -76,7 +76,9 @@ public class Window extends Application {
 		case CLEANER_REGISTRATION:
 			new CleanerRegistration(this);
 			break;
-
+		case OWNER_WELCOME:
+			new OwnerWelcome(this);
+			break;
 		case CLEANER_WECLOME:
 			new CleanerWelcome(this);
 			break;
