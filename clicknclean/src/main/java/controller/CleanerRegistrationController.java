@@ -2,6 +2,8 @@ package controller;
 
 import java.time.LocalDate;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 
@@ -58,25 +60,36 @@ public class CleanerRegistrationController {
 		// pour que ce soit plus simple de les adapter à la db
 		if (phone.length() != 10) {
 			// Wrong phone number format
+			JOptionPane.showMessageDialog(null, "Numéro de téléphone invalide !");
 			return;
 		}
 
 		if (postCode.length() != 5) {
 			// Incorrect postcode format
+			JOptionPane.showMessageDialog(null, "Code postale invalide !");
 			return;
 		}
 
 		if (biography.length() > 100) {
 			// Biography too large
+			JOptionPane.showMessageDialog(null, "Biography trop longue !");
 			return;
 		}
 
-		if (motivation.length() < 250) {
+		if (motivation.length() > 250) {
 			// Too much motivation :p
+			JOptionPane.showMessageDialog(null, "Motivation trop longue !");
 			return;
 		}
 
 		if (experience.length() > 250) {
+			JOptionPane.showMessageDialog(null, "Expérience trop longue !");
+			return;
+		}
+		
+		if (isEmailAdress(email)==false) {
+			//not good email format
+			JOptionPane.showMessageDialog(null, "Mauvais format d'email !");
 			return;
 		}
 
@@ -110,4 +123,13 @@ public class CleanerRegistrationController {
 
 		// db.close();
 	}
+	
+	public boolean isEmailAdress(String email) {
+        Pattern p = Pattern
+                .compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$");
+        Matcher m = p.matcher(email.toUpperCase());
+        return m.matches();
+    }
+	
+	
 }

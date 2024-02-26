@@ -1,9 +1,9 @@
 package view;
 
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import java.io.File;
-import java.sql.SQLException;
-import java.util.concurrent.ExecutionException;
-
 import controller.AskRegistrationController;
 import controller.CleanerRegistrationController;
 import controller.ConnectionController;
@@ -448,7 +448,7 @@ public class Window extends Application {
 	}
 
 	public void displayWelcomeOwner() {
-
+		
 	}
 
 	public void run() {

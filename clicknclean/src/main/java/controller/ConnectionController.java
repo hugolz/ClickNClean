@@ -1,8 +1,5 @@
 package controller;
 
-
-import java.sql.SQLException;
-import java.util.concurrent.ExecutionException;
 import javax.swing.JOptionPane;
 import javafx.util.Pair;
 import model.UserStatus;
