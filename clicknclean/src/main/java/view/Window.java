@@ -1,6 +1,10 @@
 package view;
 
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import java.io.File;
+import controller.AskRegistrationController;
 
 import controller.CleanerRegistrationController;
 import controller.OwnerRegistrationController;
