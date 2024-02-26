@@ -11,19 +11,15 @@ import javafx.scene.layout.VBox;
 public class CleanerWelcome {
 	public CleanerWelcome(Window window) {
 		System.out.println("CleanerWelcome constructor");
-		Button registerProfil = new Button("Profil");
-		Button registerNotifications = new Button("Notification");
-		Button registerMessages = new Button("Messages");
-		Button retour = new Button("Retour");
-
-		// Mission
-
-		// Planning
+		Button profile = new Button("Profil");
+		Button notification = new Button("Notification");
+		Button inbox = new Button("Messages");
+		Button disconnectButton = new Button("Se déconnecter");
 
 		VBox vbox = new VBox();
-		vbox.getChildren().add(registerProfil);
-		vbox.getChildren().add(registerNotifications);
-		vbox.getChildren().add(registerMessages);
+		vbox.getChildren().add(profile);
+		vbox.getChildren().add(notification);
+		vbox.getChildren().add(inbox);
 
 		ScrollPane scrollPane = new ScrollPane();
 		scrollPane.setContent(vbox);

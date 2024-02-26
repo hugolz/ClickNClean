@@ -7,7 +7,7 @@ import java.io.File;
 import controller.AskRegistrationController;
 
 import controller.CleanerRegistrationController;
-import controller.OwnerRegistrationController;
+import controller.owner.OwnerRegistrationController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

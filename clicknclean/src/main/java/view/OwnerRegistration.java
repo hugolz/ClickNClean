@@ -4,6 +4,7 @@ import java.io.File;
 
 import controller.AskRegistrationController;
 import controller.ConnectionController;
+import controller.owner.OwnerRegistrationController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,7 +22,6 @@ import model.OwnerMotivation;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.DatePicker;
-import controller.OwnerRegistrationController;
 
 public class OwnerRegistration {
 	public OwnerRegistration(Window window) {

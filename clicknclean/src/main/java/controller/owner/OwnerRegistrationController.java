@@ -1,4 +1,4 @@
-package controller;
+package controller.owner;
 
 import java.time.LocalDate;
 import java.util.regex.Matcher;
@@ -45,11 +45,11 @@ public class OwnerRegistrationController {
 		}
 		
 		catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "L'inscription a échouée");
+			JOptionPane.showMessageDialog(null, "L'inscription a échoué");
 		}
 		
-		JOptionPane.showMessageDialog(null, "Inscription réussi ! Vous allez être redirigez vers votre page d'acceuil !");		
-		window.displayWelcomeOwner();
+		JOptionPane.showMessageDialog(null, "Inscription réussie ! Vous allez être redirigez vers votre page d'accueil !");		
+		//window.displayWelcomeOwner();
 	 
 		//db.close();
 
