@@ -155,8 +155,7 @@ public class Db {
 			    new Address(
 			        rSet.getString("address_display"),
 			        rSet.getDouble("latitude"),
-			        rSet.getDouble("longitude")
-			    ),
+			        rSet.getDouble("longitude")),
 			    rSet.getInt("km_range"),
 			    rSet.getInt("hourly_rate"),
 			    rSet.getString("biography"),

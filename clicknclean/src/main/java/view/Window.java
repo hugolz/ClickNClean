@@ -1,12 +1,8 @@
 package view;
 
 import java.io.File;
-import java.sql.SQLException;
-import java.util.concurrent.ExecutionException;
 
-import controller.AskRegistrationController;
 import controller.CleanerRegistrationController;
-import controller.ConnectionController;
 import controller.OwnerRegistrationController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -26,456 +22,66 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import model.Cleaner;
 import model.OwnerMotivation;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-
 
 public class Window extends Application {
 	private static double xOffset = 0;
 	private static double yOffset = 0;
 
-	Stage stage;
+	private Stage stage;
+	private SceneId currentScene;
 
 	public Window() {
 
 	}
 
-	public void displayConnectionView() {
+	public Stage getStage() {
+		return this.stage;
+	}
 
-		this.stage.setTitle("Connexion");
+	public void setTitle(String newTitle) {
+		this.stage.setTitle(newTitle);
+	}
 
-		Button newOwner = new Button("S'inscrire en tant que Demandeur");
-		Button newCleaner = new Button("S'inscrire en tant que Cleaner");
-		Button ConnectButton = new Button("Se connecter");
-		Label loginLabel = new Label("E-mail :");
-		Label passwordLabel = new Label("Mot de passe :");
+	public void setScene(Scene s) {
+		this.stage.setScene(s);
+		this.currentScene = null;
+		System.out.println("New set scene");
+	}
 
-		TextField loginInputField = new TextField();
-		PasswordField passwordInputField = new PasswordField();
-
-		Window window = this;
-
-		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				new ConnectionController(loginInputField.getText(), passwordInputField.getText(), window);
-			}
-		};
-
-		ConnectButton.setOnAction(event);
-
-		EventHandler<ActionEvent> event2 = new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				new AskRegistrationController("Owner", window);
-			}
-		};
-
-		newOwner.setOnAction(event2);
-
-		EventHandler<ActionEvent> event3 = new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				new AskRegistrationController("Cleaner", window);
-			}
-		};
-
-		newCleaner.setOnAction(event3);
+	public void setScene(SceneId id) {
+		if (this.currentScene == id) {
+			// TODO: Can this cause problem ? does switching to the same scene be usefull ?
+			// like a refresh or something
+			System.err.println("Current scene is already " + id);
+			return;
+		}
 
 
+		System.out.println("Requested new scene: " + id);
+		switch (id) {
+		case CONNECTION:
+			new Connection(this);
+			break;
+		case OWNER_REGISTRATION:
+			new OwnerRegistration(this);
+			break;
+		case CLEANER_REGISTRATION:
+			new CleanerRegistration(this);
+			break;
 
-		VBox vbox = new VBox();
-		vbox.getChildren().add(loginLabel);
-		vbox.getChildren().add(loginInputField);
-		vbox.getChildren().add(passwordLabel);
-		vbox.getChildren().add(passwordInputField);
-		vbox.getChildren().add(ConnectButton);
-		vbox.getChildren().add(newOwner);
-		vbox.getChildren().add(newCleaner);
+		case CLEANER_WECLOME:
+			new CleanerWelcome(this);
+			break;
+		}
+		this.currentScene = id;
 
-		vbox.setSpacing(10);
-		vbox.setPadding(new Insets(220, 300, 20, 300));
+		System.out.println(this.currentScene);
 
-		ScrollPane scrollPane = new ScrollPane();
-		scrollPane.setContent(vbox);
-
-		scrollPane.setPannable(true);
-		scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
-
-		loginLabel.setMaxWidth(Double.MAX_VALUE);
-		passwordLabel.setMaxWidth(Double.MAX_VALUE);
-		ConnectButton.setMaxWidth(Double.MAX_VALUE);
-		newOwner.setMaxWidth(Double.MAX_VALUE);
-		newCleaner.setMaxWidth(Double.MAX_VALUE);
-		VBox.setVgrow(loginLabel, Priority.ALWAYS);
-		VBox.setVgrow(passwordLabel, Priority.ALWAYS);
-		VBox.setVgrow(ConnectButton, Priority.ALWAYS);
-		VBox.setVgrow(newOwner, Priority.ALWAYS);
-		VBox.setVgrow(newCleaner, Priority.ALWAYS);
-
-		Scene scene = new Scene(scrollPane, 800, 600); //scroll
-		scene.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
-		this.stage.setScene(scene);
 		this.stage.show();
-	}
-
-	public void displayOwnerRegistration() {
-		this.stage.setTitle("Inscription");
-
-		Label title = new Label("S'inscire en tant que Demandeur :");
-		Label nameLabel = new Label("Nom :");
-		Label surnameLabel = new Label("Prénom :");
-		Label emailLabel = new Label("Mail :");
-		Label passwordLabel = new Label("Mot de passe :");
-		Label confirmpasswordLabel = new Label("Confirmer le mot de passe :");
-		Label phoneLabel = new Label("Téléphone :");
-		Label birthDateLabel = new Label("Date de naissance :");
-		Label ownerMotivationLabel = new Label("Type de prestation recherché :");
-		Button registerButton = new Button("Inscription");
-		Button returnview = new Button("Retour");
-
-
-		TextField nameInputField = new TextField();
-		TextField surnameInputField = new TextField();
-		TextField emailInputField = new TextField();
-		PasswordField passwordInputField = new PasswordField();
-		PasswordField confirmpasswordInputField = new PasswordField();
-		TextField phoneInputField = new TextField();
-		DatePicker birthDateInputField = new DatePicker();
-		ChoiceBox<String> ownerMotivationChoiceBox = new ChoiceBox<>();
-
-		ObservableList<String> options = FXCollections.observableArrayList(
-		                                     "Résidence principale", "Courte durée", "Etat des lieux"
-		                                 );
-		ownerMotivationChoiceBox.setItems(options);
-
-
-		Window window = this;
-
-		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				OwnerMotivation om = null;
-				switch (ownerMotivationChoiceBox.getValue()) {
-				case "Résidence principale":
-					om = OwnerMotivation.MAIN_HOME;
-					break;
-				case "Courte durée":
-					om = OwnerMotivation.GUEST_ROOM;
-					break;
-				case "Etat des lieux":
-					om = OwnerMotivation.INVENTORY;
-					break;
-				}
-
-				new OwnerRegistrationController(
-				    nameInputField.getText(),
-				    surnameInputField.getText(),
-				    emailInputField.getText(),
-				    passwordInputField.getText(),
-				    confirmpasswordInputField.getText(),
-				    phoneInputField.getText(),
-				    birthDateInputField.getValue(),
-				    om,
-				    window
-				);
-			}
-		};
-
-		registerButton.setOnAction(event);
-
-		EventHandler<ActionEvent> eventReturn = new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				window.displayConnectionView();
-			}
-
-		};
-		returnview.setOnAction(eventReturn);
-
-
-		VBox vbox = new VBox();
-		vbox.getChildren().add(title);
-		vbox.getChildren().add(nameLabel);
-		vbox.getChildren().add(nameInputField);
-		vbox.getChildren().add(surnameLabel);
-		vbox.getChildren().add(surnameInputField);
-		vbox.getChildren().add(emailLabel);
-		vbox.getChildren().add(emailInputField);
-		vbox.getChildren().add(passwordLabel);
-		vbox.getChildren().add(passwordInputField);
-		vbox.getChildren().add(confirmpasswordLabel);
-		vbox.getChildren().add(confirmpasswordInputField);
-		vbox.getChildren().add(phoneLabel);
-		vbox.getChildren().add(phoneInputField);
-		vbox.getChildren().add(birthDateLabel);
-		vbox.getChildren().add(birthDateInputField);
-		vbox.getChildren().add(ownerMotivationLabel);
-		vbox.getChildren().add(ownerMotivationChoiceBox);
-		vbox.getChildren().add(registerButton);
-		vbox.getChildren().add(returnview);
-
-		vbox.setSpacing(10);
-		vbox.setPadding(new Insets(100, 300, 20, 300));
-
-		ScrollPane scrollPane = new ScrollPane();
-		scrollPane.setContent(vbox);
-
-		scrollPane.setPannable(true);
-		scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
-
-		nameLabel.setMaxWidth(Double.MAX_VALUE);
-		surnameLabel.setMaxWidth(Double.MAX_VALUE);
-		registerButton.setMaxWidth(Double.MAX_VALUE);
-		VBox.setVgrow(nameLabel, Priority.ALWAYS);
-		VBox.setVgrow(surnameLabel, Priority.ALWAYS);
-		VBox.setVgrow(registerButton, Priority.ALWAYS);
-
-		Scene scene = new Scene(scrollPane, 800, 600);
-		scene.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
-		this.stage.setScene(scene);
-		this.stage.show();
-	}
-
-	String photo;
-	String idPhoto;
-	String photoLive;
-	String kmstring;
-	String hourlyrateString;
-	int km;
-	int hourlyRate;
-
-
-
-	public void displayCleanerRegistration() {
-		this.stage.setTitle("Inscription");
-
-
-
-
-		Label title = new Label("S'inscire en tant que Cleaner :");
-		Label nameLabel = new Label("Nom :");
-		Label surnameLabel = new Label("Prénom :");
-		Label emailLabel = new Label("Mail :");
-		Label passwordLabel = new Label("Mot de passe :");
-		Label confirmpasswordLabel = new Label("Confirmer le mot de passe :");
-		Label phoneLabel = new Label("Téléphone :");
-		Label birthDateLabel = new Label("Date de naissance :");
-		Label addressLabel = new Label("Adresse :");
-		Label houseNumberLabel = new Label("Numéro :");
-		Label labelLabel = new Label("Nom de rue :");
-		Label postCodeLabel = new Label("Code postal :");
-		Label cityLabel = new Label("Ville :");
-		Label kmLabel = new Label("Rayon de recherche en km souhaité :");
-		Label hourlyRateLabel = new Label("Rémunération par heure :");
-		Label biographyLabel = new Label("Biographie (100 caractères max) :");
-		Label motivationLabel = new Label("Votre motivation (250 caractères max) :");
-		Label experienceLabel = new Label("Votre expérience (250 caractères max) :");
-		Label photoLabel = new Label("Votre photo de profil:");
-		Label idPhotoLabel = new Label("Photo de votre carte d'identité :");
-
-		Label photoLiveLabel = new Label ("Photo de vérification d'Id");
-
-		TextField nameInputField = new TextField();
-		TextField surnameInputField = new TextField();
-		TextField emailInputField = new TextField();
-		PasswordField passwordInputField = new PasswordField();
-		PasswordField confirmpasswordInputField = new PasswordField();
-		TextField phoneInputField = new TextField();
-		DatePicker birthDateInputField = new DatePicker();
-		TextField houseNumberInputField = new TextField();
-		TextField labelInputField = new TextField();
-		TextField postCodeInputField = new TextField();
-		TextField cityInputField = new TextField();
-		TextField kmInputField = new TextField();
-		TextField hourlyRateInputField = new TextField();
-		TextField biographyInputField = new TextField();
-		TextField motivationInputField = new TextField();
-		TextField experienceInputField = new TextField();
-		FileChooser photoInputField = new FileChooser();
-		FileChooser idPhotoInputField = new FileChooser();
-		FileChooser photoLiveInputField = new FileChooser();
-		Button returnview = new Button("Retour");
-
-
-		Button registerButton = new Button("Inscription");
-		Button registerPhoto = new Button("Parcourir");
-		Button registerIdPhoto = new Button("Parcourir");
-		Button registerPhotoLive = new Button("Parcourir");
-
-
-		Window window = this;
-		EventHandler<ActionEvent> eventphoto = new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				photo = photoInputField.showOpenDialog(window.stage).toString();
-
-			}
-		};
-		registerPhoto.setOnAction(eventphoto);
-
-
-		EventHandler<ActionEvent> eventIdPhoto = new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				idPhoto = idPhotoInputField.showOpenDialog(window.stage).toString();
-			}
-		};
-		registerIdPhoto.setOnAction(eventIdPhoto);
-
-
-		EventHandler<ActionEvent> eventPhotoLive = new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				photoLive = photoLiveInputField.showOpenDialog(window.stage).toString();
-			}
-		};
-		registerPhotoLive.setOnAction(eventPhotoLive);
-
-
-		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				new CleanerRegistrationController(
-				    nameInputField.getText(),
-				    surnameInputField.getText(),
-				    emailInputField.getText(),
-				    passwordInputField.getText(),
-				    confirmpasswordInputField.getText(),
-				    phoneInputField.getText(),
-				    birthDateInputField.getValue(),
-				    houseNumberInputField.getText(),
-				    labelInputField.getText(),
-				    postCodeInputField.getText(),
-				    cityInputField.getText(),
-				    km,
-				    hourlyRate,
-				    biographyInputField.getText(),
-				    motivationInputField.getText(),
-				    experienceInputField.getText(),
-				    photo,
-				    idPhoto,
-				    photoLive,
-				    window
-				);
-			}
-		};
-
-		registerButton.setOnAction(event);
-
-
-		EventHandler<ActionEvent> eventReturn = new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				window.displayConnectionView();
-			}
-
-		};
-		returnview.setOnAction(eventReturn);
-
-
-
-		VBox vbox = new VBox();
-		vbox.getChildren().add(title);
-		vbox.getChildren().add(nameLabel);
-		vbox.getChildren().add(nameInputField);
-		vbox.getChildren().add(surnameLabel);
-		vbox.getChildren().add(surnameInputField);
-		vbox.getChildren().add(emailLabel);
-		vbox.getChildren().add(emailInputField);
-		vbox.getChildren().add(passwordLabel);
-		vbox.getChildren().add(passwordInputField);
-		vbox.getChildren().add(confirmpasswordLabel);
-		vbox.getChildren().add(confirmpasswordInputField);
-		vbox.getChildren().add(phoneLabel);
-		vbox.getChildren().add(phoneInputField);
-		vbox.getChildren().add(birthDateLabel);
-		vbox.getChildren().add(birthDateInputField);
-		vbox.getChildren().add(addressLabel);
-		vbox.getChildren().add(houseNumberLabel);
-		vbox.getChildren().add(houseNumberInputField);
-		vbox.getChildren().add(labelLabel);
-		vbox.getChildren().add(labelInputField);
-		vbox.getChildren().add(postCodeLabel);
-		vbox.getChildren().add(postCodeInputField);
-		vbox.getChildren().add(cityLabel);
-		vbox.getChildren().add(cityInputField);
-		vbox.getChildren().add(kmLabel);
-		vbox.getChildren().add(kmInputField);
-		vbox.getChildren().add(hourlyRateLabel);
-		vbox.getChildren().add(hourlyRateInputField);
-		vbox.getChildren().add(biographyLabel);
-		vbox.getChildren().add(biographyInputField);
-		vbox.getChildren().add(motivationLabel);
-		vbox.getChildren().add(motivationInputField);
-		vbox.getChildren().add(experienceLabel);
-		vbox.getChildren().add(experienceInputField);
-		vbox.getChildren().add(photoLabel);
-		vbox.getChildren().add(registerPhoto);
-		vbox.getChildren().add(idPhotoLabel);
-		vbox.getChildren().add(registerIdPhoto);
-		vbox.getChildren().add(photoLiveLabel);
-		vbox.getChildren().add(registerPhotoLive);
-
-		vbox.getChildren().add(registerButton);
-		vbox.getChildren().add(returnview);
-
-
-
-		vbox.setSpacing(10);
-		vbox.setPadding(new Insets(100, 300, 20, 300));
-
-		ScrollPane scrollPane = new ScrollPane();
-		scrollPane.setContent(vbox);
-
-		scrollPane.setPannable(true);
-		scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
-
-		nameLabel.setMaxWidth(Double.MAX_VALUE);
-		surnameLabel.setMaxWidth(Double.MAX_VALUE);
-		registerButton.setMaxWidth(Double.MAX_VALUE);
-		VBox.setVgrow(nameLabel, Priority.ALWAYS);
-		VBox.setVgrow(surnameLabel, Priority.ALWAYS);
-		VBox.setVgrow(registerButton, Priority.ALWAYS);
-
-		Scene scene = new Scene(scrollPane, 800, 600);
-		scene.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
-		this.stage.setScene(scene);
-		this.stage.show();
-
-	}
-
-	public void displayWelcomeAdmin() {
-
-	}
-	
-	public void displayWelcomeCleaner(Cleaner cleaner) {
-		Button registerProfil = new Button("Profil");
-		Button registerNotifications = new Button("Notification");
-		Button registerMessages = new Button("Messages");
-		Button retour = new Button("Retour");
-		
-		Mission
-		
-		Planning
-		
-		Window window = this;
-		
-		VBox vbox = new VBox();
-		vbox.getChildren().add(registerProfil);
-		vbox.getChildren().add(registerNotifications);
-		vbox.getChildren().add(registerMessages);
-		
-		ScrollPane scrollPane = new ScrollPane();
-		scrollPane.setContent(vbox);
-		
-		scrollPane.setPannable(true);
-		scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
-		
-		Scene scene = new Scene(scrollPane, 800, 600);
-		scene.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
-		this.stage.setScene(scene);
-		this.stage.show();
-
-	}
-
-	public void displayWelcomeOwner() {
-
 	}
 
 	public void run() {
@@ -507,7 +113,8 @@ public class Window extends Application {
 
 		Scene scene = new Scene(root, 800, 600);
 
-		scene.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
+		scene.getStylesheets()
+		.add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
 
 		this.stage.setScene(scene);
 
@@ -520,11 +127,9 @@ public class Window extends Application {
 		this.stage.setTitle("Hello World!");
 		ScrollPane root = this.initStage(stage);
 
-		this.displayConnectionView();
+		this.setScene(SceneId.CONNECTION);
 
-
-
-		this.stage.show();
+		// this.stage.show();
 
 	}
 

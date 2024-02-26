@@ -15,7 +15,6 @@ import model.Property;
 import model.UserStatus;
 
 public class Main {
-
     public static void testMission() throws SQLException, InterruptedException, ExecutionException {
         Db connection = new Db();
         Property testProp = new Property(
@@ -54,7 +53,7 @@ public class Main {
     public static void testUser()  throws SQLException, ExecutionException, InterruptedException {
 
         Db connection = new Db();
-        connection.DAOAddUser("John", "null", "null", "null", "null", LocalDate.now(), false, UserStatus.ADMIN);
+        connection.DAOAddUser("", "null", "null", "null", "null", LocalDate.now(), false, UserStatus.ADMIN);
         connection.disconnect();
         connection = null;
     }

@@ -58,12 +58,12 @@ public class Planning {
 
         Planning p = (Planning) o;
 
-
         if (this.getTimeSlots().size() != p.getTimeSlots().size()) {
             return false;
         }
 
         int i = 0;
+
         while (i < this.slots.size()) {
             if (!this.getTimeSlots().get(i).equals(p.getTimeSlots().get(i))) {
                 System.out.println("Time slot check failled at " + i);
