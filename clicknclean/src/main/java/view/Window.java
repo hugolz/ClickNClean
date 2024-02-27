@@ -1,33 +1,14 @@
 package view;
 
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import java.io.File;
-import controller.AskRegistrationController;
-
-import controller.CleanerRegistrationController;
-import controller.owner.OwnerRegistrationController;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import model.Cleaner;
-import model.OwnerMotivation;
+import view.cleaner.CleanerRegistration;
+import view.cleaner.CleanerWelcome;
+import view.owner.OwnerRegistration;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 
@@ -79,7 +60,7 @@ public class Window extends Application {
 		case OWNER_WELCOME:
 			new OwnerWelcome(this);
 			break;
-		case CLEANER_WECLOME:
+		case CLEANER_WELCOME:
 			new CleanerWelcome(this);
 			break;
 		}

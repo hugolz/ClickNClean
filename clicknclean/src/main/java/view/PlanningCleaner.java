@@ -1,6 +1,6 @@
 package view;
 
-import view.Window;
+
 import java.io.File;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
