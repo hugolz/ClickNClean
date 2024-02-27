@@ -8,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import view.cleaner.CleanerRegistration;
 import view.cleaner.CleanerWelcome;
+import view.owner.OwnerWelcome;
 import view.owner.OwnerRegistration;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;

@@ -1,5 +1,6 @@
-package view;
+package view.cleaner;
 
+import view.Window;
 import java.io.File;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
