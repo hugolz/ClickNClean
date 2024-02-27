@@ -1,7 +1,9 @@
-package view;
+package view.owner;
 
 import java.io.File;
 
+import view.SceneId;
+import view.Window;
 import controller.AskRegistrationController;
 import controller.ConnectionController;
 import controller.owner.OwnerRegistrationController;

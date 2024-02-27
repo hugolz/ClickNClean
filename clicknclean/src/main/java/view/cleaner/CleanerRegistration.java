@@ -1,4 +1,4 @@
-package view;
+package view.cleaner;
 
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -7,7 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-
+import view.Window;
 import controller.CleanerRegistrationController;
 import controller.owner.OwnerRegistrationController;
 import javafx.application.Application;

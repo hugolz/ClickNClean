@@ -25,12 +25,12 @@ public class Main {
 
     public static void testActivity() throws SQLException, InterruptedException, ExecutionException {
         Db connection = new Db();
-        connection.DAOaddActivity(ActivityType.MISSION_CANCELED, 4, 
-            null,
-            4, 
-            null, 
-            null, 
-            null);
+        connection.DAOaddActivity(ActivityType.MISSION_CANCELED, 4,
+                                  null,
+                                  4,
+                                  null,
+                                  null,
+                                  null);
         connection.disconnect();
         connection = null;
     }
@@ -107,10 +107,10 @@ public class Main {
 
     public static void main(String[] args) throws SQLException, InterruptedException, ExecutionException {
 
-        try {
-            testActivity();
-        } catch (SQLException e) {
-        }
+        // try {
+        //     testActivity();
+        // } catch (SQLException e) {
+        // }
         new Window().run();
     }
 }

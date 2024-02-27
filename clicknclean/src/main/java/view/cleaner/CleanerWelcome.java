@@ -1,7 +1,7 @@
-package view;
+package view.cleaner;
 
 import java.io.File;
-
+import view.Window;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
