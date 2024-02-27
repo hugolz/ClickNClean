@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import javafx.util.Pair;
-import model.Activity;
 import model.ActivityType;
 import model.Address;
 import model.Admin;

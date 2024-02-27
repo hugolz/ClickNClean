@@ -39,7 +39,7 @@ public class ConnectionController {
 			case CLEANER :
 				db.DAOReadCleaner(user.getKey());
 				// window.displayWelcomeCleaner();
-				window.setScene(SceneId.CLEANER_WECLOME);
+				window.setScene(SceneId.CLEANER_WELCOME);
 
 				break;
 			case OWNER :

@@ -4,8 +4,6 @@ import java.io.File;
 
 import view.SceneId;
 import view.Window;
-import controller.AskRegistrationController;
-import controller.ConnectionController;
 import controller.owner.OwnerRegistrationController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
