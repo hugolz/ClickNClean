@@ -13,22 +13,22 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
+
 import javafx.util.Pair;
-import model.planning.Planning;
-import model.planning.TimeSlot;
+import model.ActivityType;
 import model.Address;
+import model.Admin;
 import model.Cleaner;
 import model.Mission;
 import model.MissionStatus;
-import model.UserStatus;
 import model.Owner;
 import model.OwnerMotivation;
-import model.Admin;
-import model.Activity;
-import model.ActivityType;
-import model.User;
 import model.Property;
 import model.Review;
+import model.User;
+import model.UserStatus;
+import model.planning.Planning;
+import model.planning.TimeSlot;
 
 public class Db {
 	String strClassName;

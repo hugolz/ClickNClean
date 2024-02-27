@@ -7,24 +7,17 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+
+import view.SceneId;
 import view.Window;
 import controller.CleanerRegistrationController;
-import controller.OwnerRegistrationController;
-import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import model.Cleaner;
-import model.OwnerMotivation;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 

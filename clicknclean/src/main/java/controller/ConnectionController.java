@@ -1,6 +1,7 @@
 package controller;
 
 import javax.swing.JOptionPane;
+
 import javafx.util.Pair;
 import model.UserStatus;
 import tools.Db;
@@ -38,14 +39,14 @@ public class ConnectionController {
 			case CLEANER :
 				db.DAOReadCleaner(user.getKey());
 				// window.displayWelcomeCleaner();
-				window.setScene(SceneId.CLEANER_WECLOME);
+				window.setScene(SceneId.CLEANER_WELCOME);
 
 				break;
 			case OWNER :
 				db.DAOReadOwner(user.getKey());
 				// window.displayWelcomeOwner();
 				// TODO: scene for OWNER_WELCOME
-				//  window.setScene(SceneId.OWNER_WELCOME);
+				window.setScene(SceneId.OWNER_WELCOME);
 				break;
 			}
 		} catch (Exception e) {
