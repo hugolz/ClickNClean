@@ -9,7 +9,7 @@ import javafx.stage.FileChooser;
 import java.io.File;
 import view.Window;
 import controller.CleanerRegistrationController;
-import controller.OwnerRegistrationController;
+import controller.owner.OwnerRegistrationController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
