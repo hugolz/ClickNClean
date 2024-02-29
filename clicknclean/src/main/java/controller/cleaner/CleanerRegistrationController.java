@@ -1,11 +1,14 @@
-package controller;
+package controller.cleaner;
 
 import java.time.LocalDate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+
+import javafx.scene.control.ScrollPane;
 import model.Address;
 import view.Window;
+import view.cleaner.CleanerWelcome;
 import view.SceneId;
 import tools.Db;
 
@@ -41,7 +44,6 @@ public class CleanerRegistrationController {
 			// TODO: Show the user that there was an error with the address
 			return;
 		}
-
 
 		if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || password.isEmpty() || confirmpassword.isEmpty() || phone.isEmpty() || birthDate == null || address == null || km == 0 || hourlyRate == 0 || biography.isEmpty() || motivation.isEmpty() || experience.isEmpty() || photo.isEmpty() || idPhoto.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Champs non remplis !");
@@ -83,8 +85,8 @@ public class CleanerRegistrationController {
 			JOptionPane.showMessageDialog(null, "Expérience trop longue !");
 			return;
 		}
-		
-		if (isEmailAdress(email)==false) {
+
+		if (isEmailAdress(email) == false) {
 			//not good email format
 			JOptionPane.showMessageDialog(null, "Mauvais format d'email !");
 			return;
@@ -116,17 +118,16 @@ public class CleanerRegistrationController {
 		}
 
 		JOptionPane.showMessageDialog(null, "Inscription réussi ! Vous allez être dirigé vers votre page d'acceuil, vos accès sont limités en attente de confirmation de votre compte");
-		// window.displayWelcomeCleaner();
-		window.setScene(SceneId.CLEANER_WELCOME);
+		window.setScene(new CleanerWelcome(new ScrollPane() ));
 		// db.close();
 	}
-	
+
 	public boolean isEmailAdress(String email) {
-        Pattern p = Pattern
-                .compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$");
-        Matcher m = p.matcher(email.toUpperCase());
-        return m.matches();
-    }
-	
-	
+		Pattern p = Pattern
+		            .compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$");
+		Matcher m = p.matcher(email.toUpperCase());
+		return m.matches();
+	}
+
+
 }
