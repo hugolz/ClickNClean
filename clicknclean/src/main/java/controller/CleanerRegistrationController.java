@@ -5,6 +5,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import model.Address;
+import model.CleanerExperience;
+import model.UserStatus;
 import view.Window;
 import view.SceneId;
 import tools.Db;
@@ -26,7 +28,7 @@ public class CleanerRegistrationController {
 	    int hourlyRate,
 	    String biography,
 	    String motivation,
-	    String experience,
+	    CleanerExperience experience,
 	    String photo,
 	    String idPhoto,
 	    String photoLive,
@@ -43,7 +45,7 @@ public class CleanerRegistrationController {
 		}
 
 
-		if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || password.isEmpty() || confirmpassword.isEmpty() || phone.isEmpty() || birthDate == null || address == null || km == 0 || hourlyRate == 0 || biography.isEmpty() || motivation.isEmpty() || experience.isEmpty() || photo.isEmpty() || idPhoto.isEmpty()) {
+		if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || password.isEmpty() || confirmpassword.isEmpty() || phone.isEmpty() || birthDate == null || address == null || km == 0 || hourlyRate == 0 || biography.isEmpty() || motivation.isEmpty() || experience==null || photo.isEmpty() || idPhoto.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Champs non remplis !");
 			return;
 		}
@@ -78,15 +80,16 @@ public class CleanerRegistrationController {
 			JOptionPane.showMessageDialog(null, "Motivation trop longue !");
 			return;
 		}
-
-		if (experience.length() > 250) {
-			JOptionPane.showMessageDialog(null, "Expérience trop longue !");
-			return;
-		}
 		
 		if (isEmailAdress(email)==false) {
 			//not good email format
 			JOptionPane.showMessageDialog(null, "Mauvais format d'email !");
+			return;
+		}
+		
+		if (hourlyRate>40 || hourlyRate<15) {
+			//too much or not enough hourlyRate
+			JOptionPane.showMessageDialog(null, "Rémunération trop ou pas assez élevée");
 			return;
 		}
 

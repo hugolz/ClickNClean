@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 import model.OwnerMotivation;
+import view.SceneId;
 import view.Window;
 import tools.Db;
 
@@ -50,6 +51,7 @@ public class OwnerRegistrationController {
 
 		JOptionPane.showMessageDialog(null, "Inscription réussi ! Vous allez être redirigez vers votre page d'acceuil !");
 		// window.displayWelcomeOwner();
+		window.setScene(SceneId.OWNER_MAIN);
 
 		//db.close();
 

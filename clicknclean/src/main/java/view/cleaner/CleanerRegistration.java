@@ -18,6 +18,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import model.Cleaner;
+import model.CleanerExperience;
+import model.OwnerMotivation;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 
@@ -49,7 +53,7 @@ public class CleanerRegistration {
 		Label postCodeLabel = new Label("Code postal :");
 		Label cityLabel = new Label("Ville :");
 		Label kmLabel = new Label("Rayon de recherche en km souhaité :");
-		Label hourlyRateLabel = new Label("Rémunération par heure :");
+		Label hourlyRateLabel = new Label("Rémunération par heure (entre 15€ et 40€) :");
 		Label biographyLabel = new Label("Biographie (100 caractères max) :");
 		Label motivationLabel = new Label("Votre motivation (250 caractères max) :");
 		Label experienceLabel = new Label("Votre expérience (250 caractères max) :");
@@ -73,7 +77,9 @@ public class CleanerRegistration {
 		TextField hourlyRateInputField = new TextField();
 		TextField biographyInputField = new TextField();
 		TextField motivationInputField = new TextField();
-		TextField experienceInputField = new TextField();
+		ChoiceBox<String> experienceChoiceBox = new ChoiceBox<>();
+
+		
 		FileChooser photoInputField = new FileChooser();
 		FileChooser idPhotoInputField = new FileChooser();
 		FileChooser photoLiveInputField = new FileChooser();
@@ -83,7 +89,11 @@ public class CleanerRegistration {
 		Button registerPhoto = new Button("Parcourir");
 		Button registerIdPhoto = new Button("Parcourir");
 		Button registerPhotoLive = new Button("Parcourir");
-
+		
+		ObservableList<String> options = FXCollections.observableArrayList(
+		                                     "Aucune", "Moins d'un an", "De 1 à 3ans", "Plus de 3ans");
+			experienceChoiceBox.setItems(options);
+			
 		EventHandler<ActionEvent> eventphoto = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				photo = photoInputField.showOpenDialog(window.getStage()).toString();
@@ -109,6 +119,22 @@ public class CleanerRegistration {
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				System.out.println("Triggered");
+				CleanerExperience ce = null;
+				switch (experienceChoiceBox.getValue()) {
+				case "Aucune":
+					ce = CleanerExperience.NONE;
+					break;
+				case "Moins d'un an":
+					ce = CleanerExperience.LESS_1_YEARS;
+					break;
+				case "De 1 à 3ans":
+					ce = CleanerExperience.BETWEEN_1_3 ;
+					break;
+				case "Plus de 3ans":
+					ce = CleanerExperience.MORE_3_YEARS;
+					break;
+				}
+				
 				new CleanerRegistrationController(
 				    nameInputField.getText(),
 				    surnameInputField.getText(),
@@ -125,9 +151,9 @@ public class CleanerRegistration {
 				    hourlyRate,
 				    biographyInputField.getText(),
 				    motivationInputField.getText(),
-				    experienceInputField.getText(),
+				    ce,
 				    photo,
-				    idPhoto,
+				    idPhoto, 
 				    photoLive,
 				    window);
 			}
@@ -178,7 +204,7 @@ public class CleanerRegistration {
 		vbox.getChildren().add(motivationLabel);
 		vbox.getChildren().add(motivationInputField);
 		vbox.getChildren().add(experienceLabel);
-		vbox.getChildren().add(experienceInputField);
+		vbox.getChildren().add(experienceChoiceBox);
 		vbox.getChildren().add(photoLabel);
 		vbox.getChildren().add(registerPhoto);
 		vbox.getChildren().add(idPhotoLabel);

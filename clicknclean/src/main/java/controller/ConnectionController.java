@@ -3,6 +3,7 @@ package controller;
 import javax.swing.JOptionPane;
 
 import javafx.util.Pair;
+import model.Owner;
 import model.UserStatus;
 import tools.Db;
 import view.Window;
@@ -43,10 +44,10 @@ public class ConnectionController {
 
 				break;
 			case OWNER :
-				db.DAOReadOwner(user.getKey());
+				Window.currentOwner = db.DAOReadOwner(user.getKey());
 				// window.displayWelcomeOwner();
 				// TODO: scene for OWNER_WELCOME
-				window.setScene(SceneId.OWNER_WELCOME);
+				window.setScene(SceneId.OWNER_MAIN);
 				break;
 			}
 		} catch (Exception e) {
