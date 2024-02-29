@@ -65,7 +65,7 @@ public class Window extends Application {
 		case OWNER_MAIN:
 			new OwnerMain(this);
 			break; 
-		case CLEANER_WECLOME:
+		case CLEANER_WELCOME:
 			new CleanerWelcome(this);
 			break;
 		}

@@ -5,7 +5,7 @@ public enum SceneId {
     OWNER_REGISTRATION(2),
     CLEANER_REGISTRATION(3),
     OWNER_MAIN(5),
-    CLEANER_WECLOME(6);
+    CLEANER_WELCOME(6);
 
     private final int id;
 

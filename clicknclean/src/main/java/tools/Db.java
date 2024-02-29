@@ -121,6 +121,7 @@ public class Db {
 
 	public Pair<Integer, UserStatus> DAOReadUser(String login, String password)
 	throws InterruptedException, ExecutionException, Exception {
+		password = User.sha3256Hashing(password);
 		String query = "SELECT * FROM user where email  = '" + login + "' AND password = '" + password + "';";
 
 		ResultSet rSet = this.stRead.executeQuery(query);
