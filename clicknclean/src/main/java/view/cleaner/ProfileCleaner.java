@@ -1,12 +1,12 @@
-package view;
+package view.cleaner;
 
-import view.Window;
 import java.io.File;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
+import view.Window;
 
-class PlanningCleaner {
-    public PlanningCleaner(Window window) {
+class ProfileCleaner {
+    public ProfileCleaner(Window window) {
         System.out.println("Menu");
 
         Scene scene = new Scene(new VBox(), 800, 600);

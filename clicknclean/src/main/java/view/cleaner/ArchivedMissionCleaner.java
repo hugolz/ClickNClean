@@ -1,12 +1,14 @@
-package view;
+package view.cleaner;
+
 
 import java.io.File;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
+import view.Window;
 
-class OpenDisputeCleaner {
-    public OpenDisputeCleaner(Window window) {
-        System.out.println("Menu");
+class ArchivedMission {
+    public ArchivedMission(Window window) {
+        System.out.println("Archive missions");
 
         Scene scene = new Scene(new VBox(), 800, 600);
         scene.getStylesheets()

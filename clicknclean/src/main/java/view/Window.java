@@ -27,13 +27,19 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Cleaner;
+import model.Owner;
 import model.OwnerMotivation;
+import view.cleaner.CleanerRegistration;
+import view.cleaner.CleanerWelcome;
+import view.owner.OwnerRegistration;
+import view.owner.OwnerMain;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 
 public class Window extends Application {
 	private static double xOffset = 0;
 	private static double yOffset = 0;
+	public static Owner currentOwner;
 
 	private Stage stage;
 	private SceneId currentScene;
@@ -76,9 +82,9 @@ public class Window extends Application {
 		case CLEANER_REGISTRATION:
 			new CleanerRegistration(this);
 			break;
-		case OWNER_WELCOME:
-			new OwnerWelcome(this);
-			break;
+		case OWNER_MAIN:
+			new OwnerMain(this);
+			break; 
 		case CLEANER_WECLOME:
 			new CleanerWelcome(this);
 			break;
