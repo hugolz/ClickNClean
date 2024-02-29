@@ -8,9 +8,9 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 
+import controller.cleaner.CleanerRegistrationController;
 import view.SceneId;
 import view.Window;
-import controller.CleanerRegistrationController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

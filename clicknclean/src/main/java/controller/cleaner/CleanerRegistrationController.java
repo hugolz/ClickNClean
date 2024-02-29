@@ -1,10 +1,11 @@
-package controller;
+package controller.cleaner;
 
 import java.time.LocalDate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import model.Address;
+import model.User;
 import view.Window;
 import view.SceneId;
 import tools.Db;
@@ -14,8 +15,8 @@ public class CleanerRegistrationController {
 	    String name,
 	    String surname,
 	    String email,
-	    String password,
-	    String confirmpassword,
+	    String rawPassword,
+	    String rawConfirmpassword,
 	    String phone,
 	    LocalDate birthDate,
 	    String houseNumber,
@@ -43,11 +44,11 @@ public class CleanerRegistrationController {
 		}
 
 
-		if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || password.isEmpty() || confirmpassword.isEmpty() || phone.isEmpty() || birthDate == null || address == null || km == 0 || hourlyRate == 0 || biography.isEmpty() || motivation.isEmpty() || experience.isEmpty() || photo.isEmpty() || idPhoto.isEmpty()) {
+		if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || rawPassword.isEmpty() || rawConfirmpassword.isEmpty() || phone.isEmpty() || birthDate == null || address == null || km == 0 || hourlyRate == 0 || biography.isEmpty() || motivation.isEmpty() || experience.isEmpty() || photo.isEmpty() || idPhoto.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Champs non remplis !");
 			return;
 		}
-		if (!password.equals(confirmpassword)) {
+		if (!rawPassword.equals(rawConfirmpassword)) {
 			// Password doesn't match confirmpassword
 			JOptionPane.showMessageDialog(null, "Le mot de passe n'est pas le même que la confirmation !");
 			return;
@@ -94,7 +95,7 @@ public class CleanerRegistrationController {
 		try {
 			db.DAOAddCleaner(
 			    name,
-			    password,
+			    User.sha3256Hashing(rawPassword),
 			    surname,
 			    email,
 			    phone,
