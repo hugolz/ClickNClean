@@ -24,7 +24,7 @@ public enum SceneId {
         case 5:
         	return SceneId.OWNER_MAIN;
         case 6:
-            return SceneId.CLEANER_WECLOME;
+            return SceneId.CLEANER_WELCOME;
         default:
             throw new Exception("Given int status could not be converted into UserStatus: " + id);
         }

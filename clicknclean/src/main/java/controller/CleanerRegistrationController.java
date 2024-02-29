@@ -1,12 +1,9 @@
 package controller;
 
 import java.time.LocalDate;
-import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.swing.JOptionPane;
-
 import model.Address;
 import model.CleanerExperience;
 import model.UserStatus;
@@ -123,7 +120,7 @@ public class CleanerRegistrationController {
 
 		JOptionPane.showMessageDialog(null, "Inscription réussi ! Vous allez être dirigé vers votre page d'acceuil, vos accès sont limités en attente de confirmation de votre compte");
 		// window.displayWelcomeCleaner();
-		window.setScene(SceneId.CLEANER_WECLOME);
+		window.setScene(SceneId.CLEANER_WELCOME);
 		// db.close();
 	}
 	
