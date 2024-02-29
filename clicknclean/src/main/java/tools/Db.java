@@ -19,6 +19,7 @@ import model.ActivityType;
 import model.Address;
 import model.Admin;
 import model.Cleaner;
+import model.CleanerExperience;
 import model.Mission;
 import model.MissionStatus;
 import model.Owner;
@@ -401,7 +402,7 @@ public class Db {
 	                         String bio,
 	                         String photoIdentity,
 	                         String motivation,
-	                         String experience,
+	                         CleanerExperience experience,
 	                         boolean isConfirmed,
 	                         String photoProfile,
 	                         String photoLive) {
