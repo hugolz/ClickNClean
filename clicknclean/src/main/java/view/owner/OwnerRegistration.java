@@ -2,6 +2,7 @@ package view.owner;
 
 import java.io.File;
 
+import view.Connection;
 import view.SceneId;
 import view.Window;
 import controller.owner.OwnerRegistrationController;
@@ -88,6 +89,8 @@ public class OwnerRegistration extends Scene {
 			public void handle(ActionEvent e) {
 				// window.displayConnectionView();
 				// window.setScene(SceneId.CONNECTION);
+				window.setScene(new Connection(new ScrollPane(), window));
+
 			}
 
 		};
