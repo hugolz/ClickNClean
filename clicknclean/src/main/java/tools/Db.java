@@ -19,6 +19,7 @@ import model.ActivityType;
 import model.Address;
 import model.Admin;
 import model.Cleaner;
+import model.CleanerExperience;
 import model.Mission;
 import model.MissionStatus;
 import model.Owner;
@@ -120,6 +121,7 @@ public class Db {
 
 	public Pair<Integer, UserStatus> DAOReadUser(String login, String password)
 	throws InterruptedException, ExecutionException, Exception {
+		password = User.sha3256Hashing(password);
 		String query = "SELECT * FROM user where email  = '" + login + "' AND password = '" + password + "';";
 
 		ResultSet rSet = this.stRead.executeQuery(query);
@@ -400,7 +402,7 @@ public class Db {
 	                         String bio,
 	                         String photoIdentity,
 	                         String motivation,
-	                         String experience,
+	                         CleanerExperience experience,
 	                         boolean isConfirmed,
 	                         String photoProfile,
 	                         String photoLive) {

@@ -4,6 +4,7 @@ import javax.swing.JOptionPane;
 
 import javafx.scene.control.ScrollPane;
 import javafx.util.Pair;
+import model.Owner;
 import model.UserStatus;
 import tools.Db;
 import view.Window;
@@ -45,10 +46,12 @@ public class ConnectionController {
 				window.setScene(new CleanerWelcome(new ScrollPane()));
 				break;
 			case OWNER :
-				db.DAOReadOwner(user.getKey());
+				Window.currentOwner = db.DAOReadOwner(user.getKey());
 				// window.displayWelcomeOwner();
 				// TODO: scene for OWNER_WELCOME
+
 				window.setScene(new OwnerWelcome(new ScrollPane(), window));
+
 				break;
 			}
 		} catch (Exception e) {

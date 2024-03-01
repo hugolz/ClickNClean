@@ -13,6 +13,7 @@ import model.Address;
 import model.Mission;
 import model.OwnerMotivation;
 import model.Property;
+import model.User;
 import model.UserStatus;
 
 public class Main {
@@ -105,5 +106,6 @@ public class Main {
 
     public static void main(String[] args) throws SQLException, InterruptedException, ExecutionException {
         new Window().run();
+        System.out.println(User.sha3256Hashing("gogo"));
     }
 }

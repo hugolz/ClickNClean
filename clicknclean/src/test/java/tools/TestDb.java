@@ -60,7 +60,6 @@ public class TestDb {
             try {
                 Cleaner cleaner = connection.DAOReadCleaner(cleanerId);
                 assert cleaner.getName().equals(name);
-                assert cleaner.getPwd().equals(pwd);
                 assert cleaner.getSurname().equals(surname);
                 assert cleaner.getEmail().equals(email);
                 assert cleaner.getPhoneNumber().equals(phoneN);
@@ -105,7 +104,6 @@ public class TestDb {
             try {
                 Owner owner = connection.DAOReadOwner(ownerId);
                 assert owner.getName().equals(name);
-                assert owner.getPwd().equals(pwd);
                 assert owner.getSurname().equals(surname);
                 assert owner.getEmail().equals(email);
                 assert owner.getPhoneNumber().equals(phoneN);

@@ -5,10 +5,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
-import javafx.scene.control.ScrollPane;
 import model.Address;
+import model.CleanerExperience;
+import model.User;
+import model.UserStatus;
 import view.Window;
-import view.cleaner.CleanerWelcome;
+
 import view.SceneId;
 import tools.Db;
 
@@ -17,8 +19,10 @@ public class CleanerRegistrationController {
 	    String name,
 	    String surname,
 	    String email,
-	    String password,
-	    String confirmpassword,
+
+	    String rawPassword,
+	    String rawConfirmpassword,
+
 	    String phone,
 	    LocalDate birthDate,
 	    String houseNumber,
@@ -29,7 +33,9 @@ public class CleanerRegistrationController {
 	    int hourlyRate,
 	    String biography,
 	    String motivation,
-	    String experience,
+
+	    CleanerExperience experience,
+
 	    String photo,
 	    String idPhoto,
 	    String photoLive,
@@ -45,11 +51,14 @@ public class CleanerRegistrationController {
 			return;
 		}
 
-		if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || password.isEmpty() || confirmpassword.isEmpty() || phone.isEmpty() || birthDate == null || address == null || km == 0 || hourlyRate == 0 || biography.isEmpty() || motivation.isEmpty() || experience.isEmpty() || photo.isEmpty() || idPhoto.isEmpty()) {
+
+
+		if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || rawPassword.isEmpty() || rawConfirmpassword.isEmpty() || phone.isEmpty() || birthDate == null || address == null || km == 0 || hourlyRate == 0 || biography.isEmpty() || motivation.isEmpty() || photo.isEmpty() || idPhoto.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Champs non remplis !");
 			return;
 		}
-		if (!password.equals(confirmpassword)) {
+		if (!rawPassword.equals(rawConfirmpassword)) {
+
 			// Password doesn't match confirmpassword
 			JOptionPane.showMessageDialog(null, "Le mot de passe n'est pas le même que la confirmation !");
 			return;
@@ -81,22 +90,23 @@ public class CleanerRegistrationController {
 			return;
 		}
 
-		if (experience.length() > 250) {
-			JOptionPane.showMessageDialog(null, "Expérience trop longue !");
-			return;
-		}
-
-		if (isEmailAdress(email) == false) {
+		
+		if (isEmailAdress(email)==false) {
 			//not good email format
 			JOptionPane.showMessageDialog(null, "Mauvais format d'email !");
 			return;
 		}
-
+		
+		if (hourlyRate>40 || hourlyRate<15) {
+			//too much or not enough hourlyRate
+			JOptionPane.showMessageDialog(null, "Rémunération trop ou pas assez élevée");
+			return;
+		}
 
 		try {
 			db.DAOAddCleaner(
 			    name,
-			    password,
+			    User.sha3256Hashing(rawPassword),
 			    surname,
 			    email,
 			    phone,
@@ -118,6 +128,7 @@ public class CleanerRegistrationController {
 		}
 
 		JOptionPane.showMessageDialog(null, "Inscription réussi ! Vous allez être dirigé vers votre page d'acceuil, vos accès sont limités en attente de confirmation de votre compte");
+
 		window.setScene(new CleanerWelcome(new ScrollPane() ));
 		// db.close();
 	}
@@ -128,6 +139,7 @@ public class CleanerRegistrationController {
 		Matcher m = p.matcher(email.toUpperCase());
 		return m.matches();
 	}
+
 
 
 }
