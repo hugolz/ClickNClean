@@ -1,6 +1,9 @@
 package view.cleaner;
 
 import java.io.File;
+
+import javax.swing.Scrollable;
+
 import view.Window;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -8,8 +11,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.VBox;
 
-public class CleanerWelcome {
-	public CleanerWelcome(Window window) {
+public class CleanerWelcome extends Scene {
+	public CleanerWelcome(ScrollPane container) {
+		super(container, 800, 600);
 		System.out.println("CleanerWelcome constructor");
 		Button profile = new Button("Profil");
 		Button notification = new Button("Notification");
@@ -21,16 +25,13 @@ public class CleanerWelcome {
 		vbox.getChildren().add(notification);
 		vbox.getChildren().add(inbox);
 
-		ScrollPane scrollPane = new ScrollPane();
-		scrollPane.setContent(vbox);
+		container.setContent(vbox);
 
-		scrollPane.setPannable(true);
-		scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		container.setPannable(true);
+		container.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+		container.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 
-		Scene scene = new Scene(scrollPane, 800, 600);
-		scene.getStylesheets()
+		this.getStylesheets()
 		.add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
-		window.setScene(scene);
 	}
 }

@@ -2,11 +2,14 @@ package controller;
 
 import javax.swing.JOptionPane;
 
+import javafx.scene.control.ScrollPane;
 import javafx.util.Pair;
 import model.Owner;
 import model.UserStatus;
 import tools.Db;
 import view.Window;
+import view.cleaner.CleanerWelcome;
+import view.owner.OwnerWelcome;
 import view.SceneId;
 
 public class ConnectionController {
@@ -40,14 +43,15 @@ public class ConnectionController {
 			case CLEANER :
 				db.DAOReadCleaner(user.getKey());
 				// window.displayWelcomeCleaner();
-				window.setScene(SceneId.CLEANER_WECLOME);
-
+				window.setScene(new CleanerWelcome(new ScrollPane()));
 				break;
 			case OWNER :
 				Window.currentOwner = db.DAOReadOwner(user.getKey());
 				// window.displayWelcomeOwner();
 				// TODO: scene for OWNER_WELCOME
-				window.setScene(SceneId.OWNER_MAIN);
+
+				window.setScene(new OwnerWelcome(new ScrollPane(), window));
+
 				break;
 			}
 		} catch (Exception e) {

@@ -4,9 +4,12 @@ public enum SceneId {
     CONNECTION(1),
     OWNER_REGISTRATION(2),
     CLEANER_REGISTRATION(3),
+
     OWNER_MAIN(5),
+
     CLEANER_WECLOME(6),
 	OWNER_PROFILE(8);
+
 
     private final int id;
 
@@ -23,6 +26,7 @@ public enum SceneId {
         case 3:
             return SceneId.CLEANER_REGISTRATION;
         case 5:
+
         	return SceneId.OWNER_MAIN;
         case 6:
             return SceneId.CLEANER_WECLOME;

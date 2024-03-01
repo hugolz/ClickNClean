@@ -13,6 +13,7 @@ import model.Address;
 import model.Mission;
 import model.OwnerMotivation;
 import model.Property;
+import model.User;
 import model.UserStatus;
 
 public class Main {
@@ -79,38 +80,32 @@ public class Main {
 
     public static void testCleaner() throws SQLException, InterruptedException, ExecutionException {
         Db connection = new Db();
-        int cleanerID = connection.DAOAddCleaner(
-                            "Doe",
-                            "null",
-                            "John",
-                            null,
-                            null,
-                            LocalDate.now(),
-                            false,
-                            new Address("28", "av yves thepot" , "29000", "quimper"),
-                            0, 0,
-                            null,
-                            null,
-                            null,
-                            null, false,
-                            null,
-                            null);
+        connection.DAOAddCleaner(
+            "Doe",
+            "null",
+            "John",
+            null,
+            null,
+            LocalDate.now(),
+            false,
+            new Address("28", "av yves thepot" , "29000", "quimper"),
+            0, 0,
+            null,
+            null,
+            null,
+            null, false,
+            null,
+            null);
         connection.disconnect();
         connection = null;
     }
 
     public static void testPlanning() throws Exception, SQLException, InterruptedException, ExecutionException {
 
-
     };
 
-
     public static void main(String[] args) throws SQLException, InterruptedException, ExecutionException {
-
-        // try {
-        //     testActivity();
-        // } catch (SQLException e) {
-        // }
         new Window().run();
+        System.out.println(User.sha3256Hashing("gogo"));
     }
 }

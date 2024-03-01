@@ -1,41 +1,30 @@
 package view;
 
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import java.io.File;
-import controller.AskRegistrationController;
-
-import controller.CleanerRegistrationController;
-import controller.owner.OwnerRegistrationController;
-import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
+import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
+
+import javafx.application.Application;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.stage.Stage;
 import model.Cleaner;
 import model.Owner;
 import model.OwnerMotivation;
+
 import view.cleaner.CleanerRegistration;
-import view.cleaner.CleanerWelcome;
 import view.owner.OwnerRegistration;
-import view.owner.OwnerMain;
+import view.cleaner.CleanerWelcome;
+
+import view.owner.OwnerWelcome;
+
+import view.owner.OwnerRegistration;
 import view.owner.OwnerProfile;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+
 
 public class Window extends Application {
 	private static double xOffset = 0;
@@ -57,47 +46,10 @@ public class Window extends Application {
 		this.stage.setTitle(newTitle);
 	}
 
-	public void setScene(Scene s) {
+	public <T extends Scene> void setScene(T s) {
+		System.out.println("New set scene");
 		this.stage.setScene(s);
 		this.currentScene = null;
-		System.out.println("New set scene");
-	}
-
-	public void setScene(SceneId id) {
-		if (this.currentScene == id) {
-			// TODO: Can this cause problem ? does switching to the same scene be usefull ?
-			// like a refresh or something
-			System.err.println("Current scene is already " + id);
-			return;
-		}
-
-
-		System.out.println("Requested new scene: " + id);
-		switch (id) {
-		case CONNECTION:
-			new Connection(this);
-			break;
-		case OWNER_REGISTRATION:
-			new OwnerRegistration(this);
-			break;
-		case CLEANER_REGISTRATION:
-			new CleanerRegistration(this);
-			break;
-		case OWNER_MAIN:
-			new OwnerMain(this);
-			break; 
-		case CLEANER_WECLOME:
-			new CleanerWelcome(this);
-			break;
-		case OWNER_PROFILE:
-			new OwnerProfile(this);
-			break;
-		}
-		this.currentScene = id;
-
-		System.out.println(this.currentScene);
-
-		this.stage.show();
 	}
 
 	public void run() {
@@ -143,9 +95,9 @@ public class Window extends Application {
 		this.stage.setTitle("Hello World!");
 		ScrollPane root = this.initStage(stage);
 
-		this.setScene(SceneId.CONNECTION);
+		this.setScene(new Connection(new ScrollPane(), this));
 
-		// this.stage.show();
+		this.stage.show();
 
 	}
 

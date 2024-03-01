@@ -21,10 +21,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 
-public class OwnerMain {
-public OwnerMain(Window window) {
+class OwnerMain extends Scene {
+    public OwnerMain(ScrollPane container, Window widow) {
+        super(container, 800, 600);
+        System.out.println("OwnerMain constructor");
 		
-		window.setTitle("Accueil de Propriétaire");
+		//window.setTitle("Accueil de Propriétaire");
 		
 		Label welcomeMessage = new Label("Bienvenu "+Window.currentOwner.getName()+" !");
 		Label missionInProgress = new Label("Vos missions en cours :");
@@ -76,7 +78,7 @@ public OwnerMain(Window window) {
 		
 		EventHandler<ActionEvent> eventDisconnect = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				window.setScene(SceneId.CONNECTION);
+				
 				//disconnectController? see for right
 			}
 
@@ -85,7 +87,7 @@ public OwnerMain(Window window) {
 		
 		EventHandler<ActionEvent> eventViewProfil = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				new OwnerProfileController(window);
+				
 			}
 		};
 		seeProfile.setOnAction(eventViewProfil);
@@ -111,15 +113,15 @@ public OwnerMain(Window window) {
 		vbox.setPadding(new Insets(100, 300, 20, 300));
 		vbox.setAlignment(Pos.TOP_CENTER);
 
-		ScrollPane scrollPane = new ScrollPane();
-	    scrollPane.setContent(vbox);
 
-	    scrollPane.setPannable(true);
-	    scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-	    scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+	    container.setContent(vbox);
 
-	    Scene scene = new Scene(scrollPane, 800, 600);
-	    scene.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
-	    window.setScene(scene);
+	    container.setPannable(true);
+	    container.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+	    container.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+
+            this.getStylesheets()
+        .add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
 	}
 }
+

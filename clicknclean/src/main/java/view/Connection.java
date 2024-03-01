@@ -16,8 +16,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 
-class Connection {
-    public Connection(Window window) {
+public class Connection extends Scene {
+    public Connection(ScrollPane container, Window window) {
+        super(container, 800, 600);
         System.out.println("Connection constructor");
 
         window.setTitle("Connexion");
@@ -67,12 +68,11 @@ class Connection {
         vbox.setSpacing(10);
         vbox.setPadding(new Insets(220, 300, 20, 300));
 
-        ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setContent(vbox);
+        container.setContent(vbox);
 
-        scrollPane.setPannable(true);
-        scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-        scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+        container.setPannable(true);
+        container.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+        container.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 
         loginLabel.setMaxWidth(Double.MAX_VALUE);
         passwordLabel.setMaxWidth(Double.MAX_VALUE);
@@ -86,8 +86,6 @@ class Connection {
         VBox.setVgrow(newOwner, Priority.ALWAYS);
         VBox.setVgrow(newCleaner, Priority.ALWAYS);
 
-        Scene scene = new Scene(scrollPane, 800, 600);
-        scene.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
-        window.setScene(scene);
+        this.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
     }
 }

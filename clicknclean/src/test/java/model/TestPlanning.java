@@ -27,7 +27,7 @@ public class TestPlanning {
                                 "null",
                                 "null",
                                 "null",
-                                "null",
+                                CleanerExperience.MORE_3_YEARS,
                                 false,
                                 "null",
                                 "null");
