@@ -51,12 +51,11 @@ public class CleanerRegistrationController {
 			return;
 		}
 
-
-
 		if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || rawPassword.isEmpty() || rawConfirmpassword.isEmpty() || phone.isEmpty() || birthDate == null || address == null || km == 0 || hourlyRate == 0 || biography.isEmpty() || motivation.isEmpty() || photo.isEmpty() || idPhoto.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Champs non remplis !");
 			return;
 		}
+
 		if (!rawPassword.equals(rawConfirmpassword)) {
 
 			// Password doesn't match confirmpassword
@@ -90,14 +89,14 @@ public class CleanerRegistrationController {
 			return;
 		}
 
-		
-		if (isEmailAdress(email)==false) {
+
+		if (isEmailAdress(email) == false) {
 			//not good email format
 			JOptionPane.showMessageDialog(null, "Mauvais format d'email !");
 			return;
 		}
-		
-		if (hourlyRate>40 || hourlyRate<15) {
+
+		if (hourlyRate > 40 || hourlyRate < 15) {
 			//too much or not enough hourlyRate
 			JOptionPane.showMessageDialog(null, "Rémunération trop ou pas assez élevée");
 			return;
@@ -138,6 +137,6 @@ public class CleanerRegistrationController {
 		            .compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$");
 		Matcher m = p.matcher(email.toUpperCase());
 		return m.matches();
-    }
+	}
 
 }

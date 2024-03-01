@@ -67,7 +67,6 @@ public class User {
 		return  new DigestUtils("SHA3-256").digestAsHex(pwd);
 	}
 
-
 	public boolean isSuspended() {
 		return suspended;
 	}
