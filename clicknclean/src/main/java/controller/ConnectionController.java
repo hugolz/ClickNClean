@@ -25,7 +25,6 @@ public class ConnectionController {
 		try {
 			user = db.DAOReadUser(login, psw);
 		} catch (Exception e) {
-
 			return;
 		}
 
