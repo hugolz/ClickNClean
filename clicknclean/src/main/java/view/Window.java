@@ -33,6 +33,7 @@ import view.cleaner.CleanerRegistration;
 import view.cleaner.CleanerWelcome;
 import view.owner.OwnerRegistration;
 import view.owner.OwnerMain;
+import view.owner.OwnerProfile;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 
@@ -87,6 +88,9 @@ public class Window extends Application {
 			break; 
 		case CLEANER_WECLOME:
 			new CleanerWelcome(this);
+			break;
+		case OWNER_PROFILE:
+			new OwnerProfile(this);
 			break;
 		}
 		this.currentScene = id;

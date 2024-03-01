@@ -128,10 +128,10 @@ public class CleanerRegistrationController {
 	}
 	
 	public boolean isEmailAdress(String email) {
-        Pattern p = Pattern
-                .compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$");
-        Matcher m = p.matcher(email.toUpperCase());
-        return m.matches();
+		Pattern p = Pattern
+		            .compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$");
+		Matcher m = p.matcher(email.toUpperCase());
+		return m.matches();
     }
 	
 	
