@@ -6,7 +6,10 @@ public enum SceneId {
     CLEANER_REGISTRATION(3),
 
     OWNER_MAIN(5),
-    CLEANER_WELCOME(6);
+
+    CLEANER_WECLOME(6),
+	OWNER_PROFILE(8);
+
 
     private final int id;
 
@@ -22,15 +25,13 @@ public enum SceneId {
             return SceneId.OWNER_REGISTRATION;
         case 3:
             return SceneId.CLEANER_REGISTRATION;
-        case 4:
-            return SceneId.OWNER_WELCOME;
         case 5:
 
         	return SceneId.OWNER_MAIN;
         case 6:
-            return SceneId.CLEANER_WELCOME;
-        case 6:
-            return SceneId.ADMIN_WELCOME;
+            return SceneId.CLEANER_WECLOME;
+        case 8:
+        	return SceneId.OWNER_PROFILE;
         default:
             throw new Exception("Given int status could not be converted into UserStatus: " + id);
         }
