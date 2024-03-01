@@ -1,6 +1,7 @@
 package view.owner;
 
 import java.io.File;
+import java.util.concurrent.ExecutionException;
 
 import view.Connection;
 import view.SceneId;
@@ -70,16 +71,27 @@ public class OwnerRegistration extends Scene {
 					break;
 				}
 
-				new OwnerRegistrationController(
-				    nameInputField.getText(),
-				    surnameInputField.getText(),
-				    emailInputField.getText(),
-				    passwordInputField.getText(),
-				    confirmpasswordInputField.getText(),
-				    phoneInputField.getText(),
-				    birthDateInputField.getValue(),
-				    om,
-				    window);
+				try {
+					new OwnerRegistrationController(
+					    nameInputField.getText(),
+					    surnameInputField.getText(),
+					    emailInputField.getText(),
+					    passwordInputField.getText(),
+					    confirmpasswordInputField.getText(),
+					    phoneInputField.getText(),
+					    birthDateInputField.getValue(),
+					    om,
+					    window);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (ExecutionException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		};
 

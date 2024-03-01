@@ -2,11 +2,13 @@ package view;
 
 public enum SceneId {
     CONNECTION(1),
+
     OWNER_REGISTRATION(2),
     CLEANER_REGISTRATION(3),
-
-    OWNER_MAIN(5),
-    CLEANER_WELCOME(6);
+    
+    OWNER_MAIN(4),
+    CLEANER_MAIN(5), 
+    ADMIN_MAIN(6);
 
     private final int id;
 
@@ -23,14 +25,13 @@ public enum SceneId {
         case 3:
             return SceneId.CLEANER_REGISTRATION;
         case 4:
-            return SceneId.OWNER_WELCOME;
+            return SceneId.OWNER_MAIN;
         case 5:
-
-        	return SceneId.OWNER_MAIN;
+            return SceneId.CLEANER_MAIN;
         case 6:
-            return SceneId.CLEANER_WELCOME;
-        case 6:
-            return SceneId.ADMIN_WELCOME;
+            return SceneId.ADMIN_MAIN;    
+ 
+            
         default:
             throw new Exception("Given int status could not be converted into UserStatus: " + id);
         }

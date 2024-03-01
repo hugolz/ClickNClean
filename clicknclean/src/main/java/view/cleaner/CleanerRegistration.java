@@ -7,6 +7,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.util.concurrent.ExecutionException;
+
 import view.Connection;
 
 import controller.cleaner.CleanerRegistrationController;
@@ -146,28 +148,39 @@ public class CleanerRegistration extends Scene {
 					break;
 				}
 				
-				new CleanerRegistrationController(
-				    nameInputField.getText(),
-				    surnameInputField.getText(),
-				    emailInputField.getText(),
-				    passwordInputField.getText(),
-				    confirmpasswordInputField.getText(),
-				    phoneInputField.getText(),
-				    birthDateInputField.getValue(),
-				    houseNumberInputField.getText(),
-				    labelInputField.getText(),
-				    postCodeInputField.getText(),
-				    cityInputField.getText(),
-				    km,
-				    hourlyRate,
-				    biographyInputField.getText(),
-				    motivationInputField.getText(),
-				    ce,
-				    photo,
-				    idPhoto, 
-				    photoLive,
-				    window
-				);
+				try {
+					new CleanerRegistrationController(
+					    nameInputField.getText(),
+					    surnameInputField.getText(),
+					    emailInputField.getText(),
+					    passwordInputField.getText(),
+					    confirmpasswordInputField.getText(),
+					    phoneInputField.getText(),
+					    birthDateInputField.getValue(),
+					    houseNumberInputField.getText(),
+					    labelInputField.getText(),
+					    postCodeInputField.getText(),
+					    cityInputField.getText(),
+					    km,
+					    hourlyRate,
+					    biographyInputField.getText(),
+					    motivationInputField.getText(),
+					    ce,
+					    photo,
+					    idPhoto, 
+					    photoLive,
+					    window
+					);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (ExecutionException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		};
 
