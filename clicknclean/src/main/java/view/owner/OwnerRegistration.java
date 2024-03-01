@@ -2,6 +2,7 @@ package view.owner;
 
 import java.io.File;
 
+import view.Connection;
 import view.SceneId;
 import view.Window;
 import controller.owner.OwnerRegistrationController;
@@ -23,8 +24,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.DatePicker;
 
-public class OwnerRegistration {
-	public OwnerRegistration(Window window) {
+public class OwnerRegistration extends Scene {
+	public OwnerRegistration(ScrollPane container, Window window ) {
+		super(container, 800, 600);
 		System.out.println("OwnerRegistration constructor");
 		window.setTitle("Inscription");
 
@@ -86,7 +88,9 @@ public class OwnerRegistration {
 		EventHandler<ActionEvent> eventReturn = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				// window.displayConnectionView();
-				window.setScene(SceneId.CONNECTION);
+				// window.setScene(SceneId.CONNECTION);
+				window.setScene(new Connection(new ScrollPane(), window));
+
 			}
 
 		};
@@ -116,12 +120,11 @@ public class OwnerRegistration {
 		vbox.setSpacing(10);
 		vbox.setPadding(new Insets(100, 300, 20, 300));
 
-		ScrollPane scrollPane = new ScrollPane();
-		scrollPane.setContent(vbox);
+		container.setContent(vbox);
 
-		scrollPane.setPannable(true);
-		scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		container.setPannable(true);
+		container.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+		container.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 
 		nameLabel.setMaxWidth(Double.MAX_VALUE);
 		surnameLabel.setMaxWidth(Double.MAX_VALUE);
@@ -130,8 +133,6 @@ public class OwnerRegistration {
 		VBox.setVgrow(surnameLabel, Priority.ALWAYS);
 		VBox.setVgrow(registerButton, Priority.ALWAYS);
 
-		Scene scene = new Scene(scrollPane, 800, 600);
-		scene.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
-		window.setScene(scene);
+		this.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
 	}
 }

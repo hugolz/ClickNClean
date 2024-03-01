@@ -17,13 +17,12 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.VBox;
 
 
-public class OwnerWelcome {
-	public OwnerWelcome(Window window) {
+public class OwnerWelcome extends Scene {
+	public OwnerWelcome(ScrollPane container, Window window) {
+		super(container, 800, 600);
+		window.setTitle("Accueil de Propriétaire");
 
-		window.setTitle("Acceuil de Propriétaire");
-
-		Label welcomeMessage = new Label("Bienvenu");
-
+		Label welcomeMessage = new Label("Bienvenue");
 
 		MenuBar bar = new MenuBar();
 		Menu profile = new Menu("Profil");
@@ -40,21 +39,16 @@ public class OwnerWelcome {
 		MenuItem seeMission = new MenuItem("Voir les Missions");
 		MenuItem addMission = new MenuItem("Proposer une Mission");
 
-
-
 		profile.getItems().addAll(seeProfile, disconnect);
 		property.getItems().addAll(seeProperty, addProperty);
 		mission.getItems().addAll(seeMission, addMission);
 		bar.getMenus().addAll(profile, property, mission);
 
-
-
 		EventHandler<ActionEvent> eventDisconnect = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				window.setScene(SceneId.CONNECTION);
+				// window.setScene(SceneId.CONNECTION);
 				//disconnectController? see for right
 			}
-
 		};
 		disconnect.setOnAction(eventDisconnect);
 
@@ -74,16 +68,15 @@ public class OwnerWelcome {
 		vbox.setSpacing(10);
 		vbox.setPadding(new Insets(100, 300, 20, 300));
 
-		ScrollPane scrollPane = new ScrollPane();
-		scrollPane.setContent(vbox);
+		container.setContent(vbox);
 
-		scrollPane.setPannable(true);
-		scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		container.setPannable(true);
+		container.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+		container.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 
-		Scene scene = new Scene(scrollPane, 800, 600);
-		scene.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
-		window.setScene(scene);
+		this.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
+
+		// return scene;
 	}
 
 }

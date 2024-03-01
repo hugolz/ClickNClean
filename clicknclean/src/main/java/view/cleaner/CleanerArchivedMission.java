@@ -5,13 +5,14 @@ import java.io.File;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 
-class ArchivedMission {
-    public ArchivedMission(Window window) {
+class ArchivedMission extends Scene {
+    public ArchivedMission(VBox container) {
+        super(container, 800, 600);
         System.out.println("Archive missions");
 
-        Scene scene = new Scene(new VBox(), 800, 600);
-        scene.getStylesheets()
+
+        this.getStylesheets()
         .add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
-        window.setScene(scene);
+
     }
 }

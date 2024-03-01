@@ -18,8 +18,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.VBox;
 
-public class OwnerMain {
-public OwnerMain(Window window) {
+class OwnerMain extends Scene {
+    public OwnerMain(ScrollPane container, Window widow) {
+        super(container, 800, 600);
+        System.out.println("OwnerMain constructor");
 		
 		window.setTitle("Acceuil de Propriétaire");
 		
@@ -85,15 +87,15 @@ public OwnerMain(Window window) {
 		vbox.setPadding(new Insets(100, 300, 20, 300));
 		vbox.setAlignment(Pos.TOP_CENTER);
 
-		ScrollPane scrollPane = new ScrollPane();
-	    scrollPane.setContent(vbox);
 
-	    scrollPane.setPannable(true);
-	    scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-	    scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+	    container.setContent(vbox);
 
-	    Scene scene = new Scene(scrollPane, 800, 600);
-	    scene.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
-	    window.setScene(scene);
+	    container.setPannable(true);
+	    container.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+	    container.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+
+            this.getStylesheets()
+        .add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
 	}
 }
+

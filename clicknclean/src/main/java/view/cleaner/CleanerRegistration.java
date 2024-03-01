@@ -7,12 +7,18 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import view.Connection;
+
+import controller.cleaner.CleanerRegistrationController;
+import view.SceneId;
+import view.Window;
 
 import controller.cleaner.CleanerRegistrationController;
 import view.SceneId;
 import view.Window;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -28,7 +34,7 @@ import model.OwnerMotivation;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 
-public class CleanerRegistration {
+public class CleanerRegistration extends Scene {
 
 	String photo;
 	String idPhoto;
@@ -38,7 +44,9 @@ public class CleanerRegistration {
 	int km;
 	int hourlyRate;
 
-	public CleanerRegistration(Window window) {
+	public CleanerRegistration(ScrollPane container, Window window) {
+		super(container, 800, 600);
+
 		System.out.println("CleanerRegistration constructor");
 
 		window.setTitle("Inscription");
@@ -158,7 +166,8 @@ public class CleanerRegistration {
 				    photo,
 				    idPhoto, 
 				    photoLive,
-				    window);
+				    window
+				);
 			}
 		};
 
@@ -167,7 +176,9 @@ public class CleanerRegistration {
 		EventHandler<ActionEvent> eventReturn = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				// window.displayConnectionView();
-				window.setScene(SceneId.CONNECTION);
+
+				window.setScene(new Connection(new ScrollPane(), window));
+
 			}
 
 		};
@@ -221,12 +232,11 @@ public class CleanerRegistration {
 		vbox.setSpacing(10);
 		vbox.setPadding(new Insets(100, 300, 20, 300));
 
-		ScrollPane scrollPane = new ScrollPane();
-		scrollPane.setContent(vbox);
+		container.setContent(vbox);
 
-		scrollPane.setPannable(true);
-		scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		container.setPannable(true);
+		container.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+		container.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 
 		nameLabel.setMaxWidth(Double.MAX_VALUE);
 		surnameLabel.setMaxWidth(Double.MAX_VALUE);
@@ -235,8 +245,7 @@ public class CleanerRegistration {
 		VBox.setVgrow(surnameLabel, Priority.ALWAYS);
 		VBox.setVgrow(registerButton, Priority.ALWAYS);
 
-		Scene scene = new Scene(scrollPane, 800, 600);
-		scene.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
-		window.setScene(scene);
+		this.getStylesheets()
+		.add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
 	}
 }

@@ -6,9 +6,11 @@ import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 
+import javafx.scene.control.ScrollPane;
 import model.OwnerMotivation;
 import view.SceneId;
 import view.Window;
+import view.owner.OwnerWelcome;
 import tools.Db;
 
 public class OwnerRegistrationController {
@@ -50,8 +52,9 @@ public class OwnerRegistrationController {
 		}
 
 		JOptionPane.showMessageDialog(null, "Inscription réussi ! Vous allez être redirigez vers votre page d'acceuil !");
-		// window.displayWelcomeOwner();
-		window.setScene(SceneId.OWNER_MAIN);
+
+		window.setScene(new OwnerWelcome(new ScrollPane(), window));
+
 
 		//db.close();
 

@@ -4,11 +4,13 @@ import java.time.LocalDate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+
 import model.Address;
 import model.CleanerExperience;
 import model.User;
 import model.UserStatus;
 import view.Window;
+
 import view.SceneId;
 import tools.Db;
 
@@ -17,8 +19,10 @@ public class CleanerRegistrationController {
 	    String name,
 	    String surname,
 	    String email,
+
 	    String rawPassword,
 	    String rawConfirmpassword,
+
 	    String phone,
 	    LocalDate birthDate,
 	    String houseNumber,
@@ -29,7 +33,9 @@ public class CleanerRegistrationController {
 	    int hourlyRate,
 	    String biography,
 	    String motivation,
+
 	    CleanerExperience experience,
+
 	    String photo,
 	    String idPhoto,
 	    String photoLive,
@@ -46,11 +52,13 @@ public class CleanerRegistrationController {
 		}
 
 
+
 		if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || rawPassword.isEmpty() || rawConfirmpassword.isEmpty() || phone.isEmpty() || birthDate == null || address == null || km == 0 || hourlyRate == 0 || biography.isEmpty() || motivation.isEmpty() || photo.isEmpty() || idPhoto.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Champs non remplis !");
 			return;
 		}
 		if (!rawPassword.equals(rawConfirmpassword)) {
+
 			// Password doesn't match confirmpassword
 			JOptionPane.showMessageDialog(null, "Le mot de passe n'est pas le même que la confirmation !");
 			return;
@@ -81,6 +89,7 @@ public class CleanerRegistrationController {
 			JOptionPane.showMessageDialog(null, "Motivation trop longue !");
 			return;
 		}
+
 		
 		if (isEmailAdress(email)==false) {
 			//not good email format
@@ -93,7 +102,6 @@ public class CleanerRegistrationController {
 			JOptionPane.showMessageDialog(null, "Rémunération trop ou pas assez élevée");
 			return;
 		}
-
 
 		try {
 			db.DAOAddCleaner(
@@ -120,17 +128,18 @@ public class CleanerRegistrationController {
 		}
 
 		JOptionPane.showMessageDialog(null, "Inscription réussi ! Vous allez être dirigé vers votre page d'acceuil, vos accès sont limités en attente de confirmation de votre compte");
-		// window.displayWelcomeCleaner();
-		window.setScene(SceneId.CLEANER_WELCOME);
+
+		window.setScene(new CleanerWelcome(new ScrollPane() ));
 		// db.close();
 	}
-	
+
 	public boolean isEmailAdress(String email) {
-        Pattern p = Pattern
-                .compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$");
-        Matcher m = p.matcher(email.toUpperCase());
-        return m.matches();
-    }
-	
-	
+		Pattern p = Pattern
+		            .compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$");
+		Matcher m = p.matcher(email.toUpperCase());
+		return m.matches();
+	}
+
+
+
 }
