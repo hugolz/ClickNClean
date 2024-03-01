@@ -132,19 +132,19 @@ public class CleanerRegistrationController {
 		}
 
 		JOptionPane.showMessageDialog(null, "Inscription réussi ! Vous allez être dirigé vers votre page d'acceuil, vos accès sont limités en attente de confirmation de votre compte");
+
 		Db connection = new Db();
 		Cleaner currentCleaner = connection.DAOReadCleaner(currentCleanerId);
 		window.setScene(new CleanerWelcome(new ScrollPane(), window, currentCleaner));
+
 		// db.close();
 	}
 
 	public boolean isEmailAdress(String email) {
 		Pattern p = Pattern
-		            .compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$");
+		            .compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$");
 		Matcher m = p.matcher(email.toUpperCase());
 		return m.matches();
-	}
-
-
+    }
 
 }
