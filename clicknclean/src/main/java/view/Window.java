@@ -21,7 +21,7 @@ import view.cleaner.CleanerWelcome;
 import view.owner.OwnerWelcome;
 
 import view.owner.OwnerRegistration;
-import view.owner.OwnerMain;
+import view.owner.OwnerProfile;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 
@@ -51,6 +51,7 @@ public class Window extends Application {
 		this.stage.setScene(s);
 		this.currentScene = null;
 	}
+
 	public void run() {
 		launch();
 	}
