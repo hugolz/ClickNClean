@@ -16,7 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 
-class Connection extends Scene {
+public class Connection extends Scene {
     public Connection(ScrollPane container, Window window) {
         super(container, 800, 600);
         System.out.println("Connection constructor");

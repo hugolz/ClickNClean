@@ -8,6 +8,8 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 
+import view.Connection;
+
 import controller.cleaner.CleanerRegistrationController;
 import view.SceneId;
 import view.Window;
@@ -131,7 +133,8 @@ public class CleanerRegistration extends Scene {
 				    photo,
 				    idPhoto,
 				    photoLive,
-				    window);
+				    window
+				);
 			}
 		};
 
@@ -140,7 +143,9 @@ public class CleanerRegistration extends Scene {
 		EventHandler<ActionEvent> eventReturn = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				// window.displayConnectionView();
-				// window.setScene(SceneId.CONNECTION);
+
+				window.setScene(new Connection(new ScrollPane(), window));
+
 			}
 
 		};
