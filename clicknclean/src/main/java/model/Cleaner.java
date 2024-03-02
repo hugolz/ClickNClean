@@ -15,7 +15,7 @@ public class Cleaner extends User {
     private String idPhoto;
     private String profilePhoto;
     private String motivation;
-    private String experience;
+    private CleanerExperience experience;
     private boolean confirmedId;
 
     private ArrayList<Integer> reviews;
@@ -30,8 +30,7 @@ public class Cleaner extends User {
         String biography,
         String profilePhoto,
         String idPhoto,
-        String motivation,
-        String experience,
+        String string, CleanerExperience experience,
         boolean confirmed,
         String name,
         String pwd,
@@ -39,9 +38,7 @@ public class Cleaner extends User {
         String email,
         String phoneNumber,
         LocalDate birthLocalDate,
-        boolean suspended,
-        ArrayList<Integer> reviews,
-        Planning planning
+        boolean suspended, ArrayList<Integer> arrayList, Planning planning2
     ) {
 
         super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, UserStatus.CLEANER);
@@ -62,40 +59,7 @@ public class Cleaner extends User {
         this.planning = planning;
     }
 
-    // Creates a basic Cleaner
-    public Cleaner(
-        Address departureAddress,
-        int kmRange,
-        int hourlyRate,
-        String biography,
-        String photo,
-        String motivation,
-        String experience,
-        boolean confirmed,
-        String name,
-        String pwd,
-        String surname,
-        String email,
-        String phoneNumber,
-        LocalDate birthLocalDate,
-        boolean suspended
-    ) {
-
-        super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, UserStatus.CLEANER);
-
-
-        this.departureAddress = departureAddress;
-        this.kmRange = kmRange;
-        this.hourlyRate = hourlyRate;
-        this.biography = biography;
-        this.idPhoto = "idPhoto";
-        this.profilePhoto = "profilePhoto";
-        this.motivation = motivation;
-        this.experience = experience;
-
-        this.confirmedId = false;
-        this.reviews = new ArrayList<Integer>();
-    }
+    
 
     public int getCleanerId() {
         return cleanerId;
@@ -161,11 +125,11 @@ public class Cleaner extends User {
         this.motivation = motivation;
     }
 
-    public String getExperience() {
+    public CleanerExperience getExperience() {
         return this.experience;
     }
 
-    public void setExperience(String experience) {
+    public void setExperience(CleanerExperience experience) {
         this.experience = experience;
     }
 
