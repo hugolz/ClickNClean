@@ -14,7 +14,6 @@ import model.User;
 import view.SceneId;
 import view.Window;
 import view.owner.OwnerMain;
-import view.owner.OwnerWelcome;
 import tools.Db;
 
 public class OwnerRegistrationController {

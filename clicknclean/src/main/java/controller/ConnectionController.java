@@ -12,7 +12,7 @@ import tools.Db;
 import view.Window;
 import view.admin.AdminMain;
 import view.cleaner.CleanerWelcome;
-import view.owner.OwnerWelcome;
+import view.owner.OwnerMain;
 import view.SceneId;
 
 public class ConnectionController {
@@ -48,11 +48,11 @@ public class ConnectionController {
 				window.setScene(new CleanerWelcome(new ScrollPane(), window, cleaner));
 				break;
 			case OWNER :
-				Window.currentOwner = db.DAOReadOwner(user.getKey());
+				Owner owner = db.DAOReadOwner(user.getKey());
 				// window.displayWelcomeOwner();
 				// TODO: scene for OWNER_WELCOME
 
-				window.setScene(new OwnerWelcome(new ScrollPane(), window));
+				window.setScene(new OwnerMain(new ScrollPane(), window, owner));
 
 				break;
 			}

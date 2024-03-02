@@ -8,8 +8,8 @@ public enum SceneId {
 
     OWNER_MAIN(4),
     CLEANER_MAIN(5), 
-    ADMIN_MAIN(6);
-	  OWNER_PROFILE(7);
+    ADMIN_MAIN(6),
+	OWNER_PROFILE(7);
 
 
     private final int id;

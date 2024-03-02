@@ -29,8 +29,8 @@ public enum CleanerExperience {
         return this.experience;
     }
 
-    public static String asString(int experience) throws Exception {
-        switch (experience) {
+    public static String asString(CleanerExperience cleanerExperience) throws Exception {
+        switch (cleanerExperience.asInt()) {
             case 1:
                 return "Aucune expérience";
             case 2:
@@ -39,7 +39,7 @@ public enum CleanerExperience {
                 return "1 à 3 ans d'expérience";
             case 4:
                 return "plus de 3 ans d'expérience";
-            default: throw new Exception("Given experience doesn't match with cleaner experience" + experience);
+            default: throw new Exception("Given experience doesn't match with cleaner experience" + cleanerExperience);
             }
     }
 }
