@@ -1,29 +1,33 @@
 package controller.owner;
 
 import java.time.LocalDate;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 
 import javafx.scene.control.ScrollPane;
+import model.Owner;
 import model.OwnerMotivation;
+import model.User;
 import view.SceneId;
 import view.Window;
+import view.owner.OwnerMain;
 import view.owner.OwnerWelcome;
 import tools.Db;
 
 public class OwnerRegistrationController {
-
-	public OwnerRegistrationController(String name, String surname, String email, String password, String confirmpassword, String phone, LocalDate birthDate, OwnerMotivation motivation, Window window) {
+	private int currentOwnerId;
+	public OwnerRegistrationController(String name, String surname, String email, String rawPassword, String rawConfirmpassword, String phone, LocalDate birthDate, OwnerMotivation motivation, Window window) throws InterruptedException, ExecutionException, Exception {
 		Db db = new Db();
 
-		if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || password.isEmpty() || confirmpassword.isEmpty() || phone.isEmpty() || birthDate == null || motivation == null) {
+		if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || rawPassword.isEmpty() || rawConfirmpassword.isEmpty() || phone.isEmpty() || birthDate == null || motivation == null) {
 			JOptionPane.showMessageDialog(null, "Champs non remplis !");
 			return;
 		}
 
-		if (!password.equals(confirmpassword)) {
+		if (!rawPassword.equals(rawConfirmpassword)) {
 			// Password doesn't match confirmpassword
 			JOptionPane.showMessageDialog(null, "Le mot de passe n'est pas le même que la confirmation !");
 			return;
@@ -44,7 +48,7 @@ public class OwnerRegistrationController {
 
 
 		try {
-			db.DAOAddOwner(name, password, surname, email, phone, birthDate, false, motivation);
+			currentOwnerId = db.DAOAddOwner(name, User.sha3256Hashing(rawPassword), surname, email, phone, birthDate, false, motivation);
 		}
 
 		catch (Exception e) {
@@ -52,8 +56,9 @@ public class OwnerRegistrationController {
 		}
 
 		JOptionPane.showMessageDialog(null, "Inscription réussi ! Vous allez être redirigez vers votre page d'acceuil !");
-
-		window.setScene(new OwnerWelcome(new ScrollPane(), window));
+		Db connection = new Db();
+		Owner currentOwner = connection.DAOReadOwner(currentOwnerId);
+		window.setScene(new OwnerMain(new ScrollPane(), window, currentOwner));
 
 
 		//db.close();

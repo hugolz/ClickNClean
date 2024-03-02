@@ -1,20 +1,24 @@
 package controller.cleaner;
 
 import java.time.LocalDate;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
+import javafx.scene.control.ScrollPane;
 import model.Address;
+import model.Cleaner;
 import model.CleanerExperience;
 import model.User;
 import model.UserStatus;
 import view.Window;
-
+import view.cleaner.CleanerWelcome;
 import view.SceneId;
 import tools.Db;
 
 public class CleanerRegistrationController {
+	private int currentCleanerId;
 	public CleanerRegistrationController(
 	    String name,
 	    String surname,
@@ -40,7 +44,7 @@ public class CleanerRegistrationController {
 	    String idPhoto,
 	    String photoLive,
 	    Window window
-	) {
+	) throws InterruptedException, ExecutionException, Exception {
 
 		Db db = new Db();
 		Address address;
@@ -103,7 +107,7 @@ public class CleanerRegistrationController {
 		}
 
 		try {
-			db.DAOAddCleaner(
+				currentCleanerId = db.DAOAddCleaner(
 			    name,
 			    User.sha3256Hashing(rawPassword),
 			    surname,
@@ -128,7 +132,10 @@ public class CleanerRegistrationController {
 
 		JOptionPane.showMessageDialog(null, "Inscription réussi ! Vous allez être dirigé vers votre page d'acceuil, vos accès sont limités en attente de confirmation de votre compte");
 
-		//window.setScene(new CleanerWelcome(new ScrollPane() ));
+		Db connection = new Db();
+		Cleaner currentCleaner = connection.DAOReadCleaner(currentCleanerId);
+		window.setScene(new CleanerWelcome(new ScrollPane(), window, currentCleaner));
+
 		// db.close();
 	}
 

@@ -20,9 +20,10 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
+import model.Owner;
 
-class OwnerMain extends Scene {
-    public OwnerMain(ScrollPane container, Window widow) {
+public class OwnerMain extends Scene {
+    public OwnerMain(ScrollPane container, Window window, Owner owner) {
         super(container, 800, 600);
         System.out.println("OwnerMain constructor");
 		
@@ -78,7 +79,9 @@ class OwnerMain extends Scene {
 		
 		EventHandler<ActionEvent> eventDisconnect = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				
+
+				//window.setScene(SceneId.CONNECTION);
+
 				//disconnectController? see for right
 			}
 
