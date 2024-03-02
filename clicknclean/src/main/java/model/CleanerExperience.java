@@ -28,4 +28,18 @@ public enum CleanerExperience {
     public int asInt() {
         return this.experience;
     }
+
+    public static String asString(int experience) throws Exception {
+        switch (experience) {
+            case 1:
+                return "Aucune expérience";
+            case 2:
+                return "Moins d'un an d'expérience en ménages";
+            case 3:
+                return "1 à 3 ans d'expérience";
+            case 4:
+                return "plus de 3 ans d'expérience";
+            default: throw new Exception("Given experience doesn't match with cleaner experience" + experience);
+            }
+    }
 }

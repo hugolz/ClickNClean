@@ -94,23 +94,31 @@ public class Db {
 					                   + cleaner_range + ").");
 					continue;
 				}
+				Planning planning = this.DAOReadPlanning(cleaner_id);
 
 				Cleaner cleaner = new Cleaner(
-				    cleaner_addr,
-				    cleaner_range,
-				    rSet.getInt("hourly_rate"),
-				    rSet.getString("biography"),
-				    rSet.getString("photo_profile"),
-				    rSet.getString("motivation"),
-				    rSet.getString("experience"),
-				    rSet.getBoolean("confirmed"),
-				    rSet.getString("name"),
-				    rSet.getString("password"),
-				    rSet.getString("surname"),
-				    rSet.getString("email"),
-				    rSet.getString("phone_number"),
-				    rSet.getDate("birth_date").toLocalDate(),
-				    rSet.getBoolean("suspended"));
+					rSet.getInt("id_cleaner"),
+					new Address(
+						rSet.getString("address_display"),
+						rSet.getDouble("latitude"),
+						rSet.getDouble("longitude")),
+					rSet.getInt("km_range"),
+					rSet.getInt("hourly_rate"),
+					rSet.getString("biography"),
+					rSet.getString("photo_profile"),
+					rSet.getString("photo_identity"),
+					rSet.getString("motivation"),
+					CleanerExperience.fromInt(rSet.getInt("experience")),
+					rSet.getBoolean("confirmed"),
+					rSet.getString("name"),
+					rSet.getString("password"),
+					rSet.getString("surname"),
+					rSet.getString("email"),
+					rSet.getString("phone_number"),
+					rSet.getDate("birth_date").toLocalDate(),
+					rSet.getBoolean("suspended"),
+					new ArrayList<Integer>(), // reviews,
+					planning);
 				out.add(cleaner);
 			}
 			rSet.close();
@@ -167,7 +175,7 @@ public class Db {
 			    rSet.getString("photo_profile"),
 			    rSet.getString("photo_identity"),
 			    rSet.getString("motivation"),
-			    rSet.getString("experience"),
+			    CleanerExperience.fromInt(rSet.getInt("experience")),
 			    rSet.getBoolean("confirmed"),
 			    rSet.getString("name"),
 			    rSet.getString("password"),
@@ -301,7 +309,7 @@ public class Db {
 		return properties;
 	}
 
-	public ArrayList<Activity> DAOReadActivities(int targetId) throws SQLException {
+	public ArrayList<Activity> DAOReadActivities(int targetId) throws SQLException, Exception {
 		ArrayList<Activity> out = new ArrayList<Activity>();
 
 		String query = "SELECT * FROM activity where id_target  = '" + targetId + "';";
@@ -312,7 +320,7 @@ public class Db {
 			out.add(
 			    new Activity(
 			        rSet.getInt("id_activity"),
-			        rSet.getString("type"),
+			        ActivityType.fromInt(rSet.getInt("type_service")),
 			        rSet.getBoolean("read"),
 			        rSet.getInt("id_owner"),
 			        rSet.getInt("id_cleaner"),
@@ -338,6 +346,7 @@ public class Db {
 				throw new Exception("Found a user with given email & password, but it's not a cleaner;");
 			}
 			Admin admin = new Admin(
+				rSet.getInt("id_admin"),
 			    rSet.getString("name"),
 			    rSet.getString("password"),
 			    rSet.getString("surname"),
