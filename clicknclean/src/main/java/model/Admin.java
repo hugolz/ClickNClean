@@ -5,7 +5,10 @@ import tools.Db;
 import java.time.LocalDate;
 
 public class Admin extends User {
+    private int adminId;
+
     public Admin(
+        int adminId,
         String name,
         String pwd,
         String surname,
@@ -17,7 +20,10 @@ public class Admin extends User {
         UserStatus status
     ) {
         super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, status);
+        this.adminId = adminId;
     }
+
+
 
     // -------------------------------------------------------------------------------------------------------------------------
     // Manage users
@@ -76,7 +82,7 @@ public class Admin extends User {
             break;
         }
         default : {
-            System.out.println("Dispute has failed to resolve on  mission : " + missionID + ", dispute status : " + userWinner);
+            System.out.println("Dispute has failed to be resolved on  mission : " + missionID + ", dispute status : " + userWinner);
         }
         connection.disconnect();
         connection  = null;
@@ -150,6 +156,10 @@ public class Admin extends User {
     // ArrayList<Mission> result = new ArrayList<Mission>();
     // return result;
     // }
+
+    public int getAdminId() {
+        return this.adminId;
+    }
 
     public ArrayList<String> getSatisfactions(String userType) {
         // Insert code here

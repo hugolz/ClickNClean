@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 import javafx.scene.control.ScrollPane;
+import model.ActivityType;
 import model.Address;
 import model.Cleaner;
 import model.CleanerExperience;
@@ -127,13 +128,16 @@ public class CleanerRegistrationController {
 			    photoLive);
 
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "L'inscription a échouée");
+			JOptionPane.showMessageDialog(null, "L'inscription a échoué");
 		}
 
-		JOptionPane.showMessageDialog(null, "Inscription réussi ! Vous allez être dirigé vers votre page d'acceuil, vos accès sont limités en attente de confirmation de votre compte");
+		JOptionPane.showMessageDialog(null, "Inscription réussie ! Vous allez être dirigé vers votre page d'accueil, vos accès sont limités en attente de confirmation de votre compte");
 
 		Db connection = new Db();
 		Cleaner currentCleaner = connection.DAOReadCleaner(currentCleanerId);
+		connection.DAOaddActivity(ActivityType.WELCOME_CLEANER, currentCleanerId, null, null, null, null, null);
+		//TODO : Send to all admin below
+		connection.DAOaddActivity(ActivityType.CLEANER_WAITING_TO_BE_CONFIRMED, 1, null, null, null, null, null);
 		window.setScene(new CleanerWelcome(new ScrollPane(), window, currentCleaner));
 
 		// db.close();
