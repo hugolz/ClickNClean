@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : jeu. 22 fév. 2024 à 15:57
+-- Généré le : sam. 02 mars 2024 à 15:05
 -- Version du serveur : 8.0.32
 -- Version de PHP : 8.1.10
 
@@ -49,6 +49,13 @@ CREATE TABLE `admin` (
   `id_admin` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
+--
+-- Déchargement des données de la table `admin`
+--
+
+INSERT INTO `admin` (`id_admin`) VALUES
+(1);
+
 -- --------------------------------------------------------
 
 --
@@ -63,21 +70,13 @@ CREATE TABLE `cleaner` (
   `km_range` int NOT NULL,
   `hourly_rate` int NOT NULL,
   `biography` varchar(100) NOT NULL,
-  `photo_identity` varchar(36) NOT NULL,
+  `photo` varchar(36) NOT NULL,
   `photo_profile` varchar(36) NOT NULL,
   `photo_live` varchar(36) NOT NULL,
   `motivation` varchar(250) NOT NULL,
   `experience` varchar(250) NOT NULL,
   `confirmed` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Déchargement des données de la table `cleaner`
---
-
-INSERT INTO `cleaner` (`id_cleaner`, `address_display`, `latitude`, `longitude`, `km_range`, `hourly_rate`, `biography`, `photo_identity`, `photo_profile`, `photo_live`, `motivation`, `experience`, `confirmed`) VALUES
-(4, '28 av yves thepot 29000 quimper', 47.988373, -4.088107, 0, 0, 'null', 'null', 'null', 'null', 'null', 'null', 0),
-(5, '28 av yves thepot 29000 quimper', 47.988373, -4.088107, 0, 0, 'null', 'null', 'null', 'null', 'null', 'null', 0);
 
 -- --------------------------------------------------------
 
@@ -116,15 +115,6 @@ CREATE TABLE `mission` (
   `id_property` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
---
--- Déchargement des données de la table `mission`
---
-
-INSERT INTO `mission` (`id_mission`, `date_start`, `cost`, `duration`, `commision`, `state`, `before_photo`, `after_photo`, `id_owner`, `id_cleaner`, `id_property`) VALUES
-(1, '2024-02-22 15:31:48', 0, 2, 0, 1, 'null', 'null', 6, NULL, 2),
-(2, '2024-02-22 15:33:35', 0, 2, 0, 1, NULL, NULL, 6, NULL, 2),
-(3, '2024-02-22 16:06:51', 0, 2, 0, 1, NULL, NULL, 6, NULL, 2);
-
 -- --------------------------------------------------------
 
 --
@@ -135,7 +125,7 @@ CREATE TABLE `mission_proposal` (
   `id_mission` int NOT NULL,
   `id_cleaner` int NOT NULL,
   `starting_hour` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -148,14 +138,6 @@ CREATE TABLE `owner` (
   `type_service` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
---
--- Déchargement des données de la table `owner`
---
-
-INSERT INTO `owner` (`id_owner`, `type_service`) VALUES
-(5, 1),
-(6, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -164,10 +146,10 @@ INSERT INTO `owner` (`id_owner`, `type_service`) VALUES
 
 CREATE TABLE `planning` (
   `id_cleaner` int UNSIGNED NOT NULL,
-  `datetime` datetime NOT NULL,
-  `durationH` double NOT NULL,
-  `id_mission` int DEFAULT -1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `date` date NOT NULL,
+  `time` time NOT NULL,
+  `availability` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -187,13 +169,6 @@ CREATE TABLE `property` (
   `special_instruction` varchar(80) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
---
--- Déchargement des données de la table `property`
---
-
-INSERT INTO `property` (`id_property`, `address_display`, `latitude`, `longitude`, `surface`, `id_owner`, `acces_code`, `key_box_code`, `special_instruction`) VALUES
-(2, '1 Pl. Louis Armand 29000 quimper', 47.994435, -4.092603, 35, 6, 'null', 'null', 'null');
-
 -- --------------------------------------------------------
 
 --
@@ -204,7 +179,7 @@ CREATE TABLE `review` (
   `id_review` int UNSIGNED NOT NULL,
   `content` varchar(100) NOT NULL,
   `grade` int NOT NULL,
-  `id_user` int UNSIGNED NOT NULL,
+  `id_user_receiving` int UNSIGNED NOT NULL,
   `id_mission` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -217,7 +192,7 @@ CREATE TABLE `review` (
 CREATE TABLE `status` (
   `id_status` int UNSIGNED NOT NULL,
   `name_status` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `status`
@@ -237,7 +212,7 @@ INSERT INTO `status` (`id_status`, `name_status`) VALUES
 CREATE TABLE `user` (
   `id_user` int UNSIGNED NOT NULL,
   `name` varchar(25) NOT NULL,
-  `password` varchar(35) NOT NULL,
+  `password` varchar(80) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `surname` varchar(15) NOT NULL,
   `email` varchar(50) NOT NULL,
   `phone_number` varchar(10) NOT NULL,
@@ -252,9 +227,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `account_date`, `suspended`, `status`) VALUES
-(4, 'Doe', 'null', 'John', 'null', 'null', '2024-02-20', '2024-02-20', 0, 2),
-(5, 'Doe', 'null', 'John', 'null', 'null', '2024-02-20', '2024-02-20', 0, 2),
-(6, 'Lezoualch', 'noobie', 'gogo', 'email', 'null', '2024-02-22', '2024-02-22', 0, 3);
+(1, 'nom', 'ab18826ad72e84d6832fb10587090945e935c823bae7cadf0530464823d27d24', 'prenom', 'admin@admin.fr', '', '2024-03-12', '2024-03-01', 0, 1);
 
 --
 -- Index pour les tables déchargées
@@ -332,7 +305,7 @@ ALTER TABLE `property`
 ALTER TABLE `review`
   ADD PRIMARY KEY (`id_review`),
   ADD KEY `mission_of_the_review` (`id_mission`),
-  ADD KEY `target_of_the_review` (`id_user`);
+  ADD KEY `target_of_the_review` (`id_user_receiving`);
 
 --
 -- Index pour la table `status`
@@ -355,7 +328,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `activity`
 --
 ALTER TABLE `activity`
-  MODIFY `id_activity` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_activity` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `dispute`
@@ -391,7 +364,7 @@ ALTER TABLE `status`
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_user` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Contraintes pour les tables déchargées
@@ -455,7 +428,7 @@ ALTER TABLE `property`
 --
 ALTER TABLE `review`
   ADD CONSTRAINT `mission_of_the_review` FOREIGN KEY (`id_mission`) REFERENCES `mission` (`id_mission`),
-  ADD CONSTRAINT `target_of_the_review` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`);
+  ADD CONSTRAINT `target_of_the_review` FOREIGN KEY (`id_user_receiving`) REFERENCES `user` (`id_user`);
 
 --
 -- Contraintes pour la table `user`

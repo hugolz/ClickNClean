@@ -1,97 +1,101 @@
 package model;
 
 public class Activity {
-    private int activityID;
-    private String type;
-    private boolean opened;
-    private int ownerID;
-    private int cleanerID;
-    private int missionID;
-    private int disputeID;
-    private int adminID;
+    private int activityId;
+    private ActivityType type;
+    private boolean read;
+    private int ownerId;
+    private int cleanerId;
+    private int missionId;
+    private int disputeId;
+    private int adminId;
+    private int targetId;
 
     public Activity(
-        int activityID,
-        String type,
-        boolean opened,
-        int ownerID,
-        int cleanerID,
-        int missionID,
-        int disputeID,
-        int adminID) {
+        int activityId,
+        ActivityType type,
+        boolean read,
+        int ownerId,
+        int cleanerId,
+        int missionId,
+        int disputeId,
+        int adminId,
+        int targetId
+    ) {
 
-        this.activityID = activityID;
+        this.activityId = activityId;
         this.type = type;
-        this.opened = opened;
-        this.ownerID = ownerID;
-        this.cleanerID = cleanerID;
-        this.missionID = missionID;
-        this.disputeID = disputeID;
-        this.adminID = adminID;
+        this.read = read;
+        this.ownerId = ownerId;
+        this.cleanerId = cleanerId;
+        this.missionId = missionId;
+        this.disputeId = disputeId;
+        this.adminId = adminId;
+        this.targetId = targetId;
     }
 
-    public int getActivityID() {
-        return activityID;
+    public int getActivityId() {
+        return activityId;
     }
 
-    public void setActivityID(int activityID) {
-        this.activityID = activityID;
+    public void setActivityId(int activityId) {
+        this.activityId = activityId;
     }
 
-    public String getType() {
+    public ActivityType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(ActivityType type) {
         this.type = type;
     }
 
-    public boolean isOpened() {
-        return opened;
+    public boolean isRead() {
+        return this.read;
     }
 
-    public void setOpened(boolean opened) {
-        this.opened = opened;
+    public void setRead(boolean read) {
+        this.read = read;
     }
 
-    public int getOwnerID() {
-        return ownerID;
+    public int getOwnerId() {
+        return ownerId;
     }
 
-    public void setOwnerID(int ownerID) {
-        this.ownerID = ownerID;
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
     }
 
-    public int getCleanerID() {
-        return cleanerID;
+    public int getCleanerId() {
+        return cleanerId;
     }
 
-    public void setCleanerID(int cleanerID) {
-        this.cleanerID = cleanerID;
+    public void setCleanerId(int cleanerId) {
+        this.cleanerId = cleanerId;
     }
 
-    public int getMissionID() {
-        return missionID;
+    public int getMissionId() {
+        return missionId;
     }
 
-    public void setMissionID(int missionID) {
-        this.missionID = missionID;
+    public void setMissionId(int missionId) {
+        this.missionId = missionId;
     }
 
-    public int getDisputeID() {
-        return disputeID;
+    public int getDisputeId() {
+        return disputeId;
     }
 
-    public void setDisputeID(int disputeID) {
-        this.disputeID = disputeID;
+    public void setDisputeId(int disputeId) {
+        this.disputeId = disputeId;
     }
 
-    public int getAdminID() {
-        return adminID;
+    public int getAdminId() {
+        return adminId;
     }
 
-    public void setAdminID(int adminID) {
-        this.adminID = adminID;
+    public void setAdminId(int adminId) {
+        this.adminId = adminId;
     }
 
 

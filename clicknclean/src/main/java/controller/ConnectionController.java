@@ -4,9 +4,15 @@ import javax.swing.JOptionPane;
 
 import javafx.scene.control.ScrollPane;
 import javafx.util.Pair;
+
+import model.Cleaner;
+import model.Owner;
+import model.Admin;
+
 import model.UserStatus;
 import tools.Db;
 import view.Window;
+import view.admin.AdminMain;
 import view.cleaner.CleanerWelcome;
 import view.owner.OwnerMain;
 
@@ -24,7 +30,7 @@ public class ConnectionController {
 		try {
 			user = db.DAOReadUser(login, psw);
 		} catch (Exception e) {
-			System.out.println(e);
+
 			return;
 		}
 
@@ -34,16 +40,23 @@ public class ConnectionController {
 			switch (user.getValue()) {
 
 			case ADMIN :
-				db.DAOReadAdmin(user.getKey());
-				//  window.setScene(SceneId.ADMIN_WELCOME);
+				Admin admin = db.DAOReadAdmin(user.getKey());
+				// window.displayWelcomeAdmin();
+				// TODO: scene for ADMIN_WELCOME
+				window.setScene(new AdminMain(new ScrollPane(), window, admin));
 				break;
 			case CLEANER :
-				db.DAOReadCleaner(user.getKey());
-				window.setScene(new CleanerWelcome(new ScrollPane()));
+				Cleaner cleaner = db.DAOReadCleaner(user.getKey());
+				// window.displayWelcomeCleaner();
+				window.setScene(new CleanerWelcome(new ScrollPane(), window, cleaner));
 				break;
 			case OWNER :
-				db.DAOReadOwner(user.getKey());
-				window.setScene(new OwnerMain(new ScrollPane(), window));
+				Owner owner = db.DAOReadOwner(user.getKey());
+				// window.displayWelcomeOwner();
+				// TODO: scene for OWNER_WELCOME
+
+				window.setScene(new OwnerMain(new ScrollPane(), window, owner));
+
 				break;
 			}
 		} catch (Exception e) {

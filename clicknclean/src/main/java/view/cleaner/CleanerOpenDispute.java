@@ -11,8 +11,7 @@ class OpenDisputeCleaner extends Scene {
         System.out.println("Menu");
 
 
-        this.getStylesheets()
-        .add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
+        this.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
 
     }
 }

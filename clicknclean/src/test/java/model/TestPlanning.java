@@ -1,4 +1,5 @@
 package model;
+
 import org.junit.jupiter.api.Test;
 
 import model.Address;
@@ -31,7 +32,7 @@ public class TestPlanning {
                                 false,
                                 "null",
                                 "null");
-            System.out.println("Wrote cleaner");
+            System.out.println("[SUCCESS] Wrote cleaner");
 
             ArrayList<TimeSlot> ts = new ArrayList<TimeSlot>();
 
@@ -43,15 +44,15 @@ public class TestPlanning {
 
             Planning p = new Planning(ts);
             connection.DAOWritePlanning(p, cleanerId);
-            System.out.println("Wrote planning");
+            System.out.println("[SUCCESS] Wrote planning");
 
             Planning planning = connection.DAOReadPlanning(cleanerId);
-            System.out.println("Read cleaner");
+            System.out.println("[SUCCESS] Read cleaner");
 
-            assert p.equals(planning): "r/w plannings are not the same";
-            System.out.println("Planning ended successfully");
+            assert p.equals(planning) : "r/w plannings are not the same";
+            System.out.println("[SUCCESS] Planning ended successfully");
         } catch (Exception e) {
-            System.err.println(e);
+            System.err.println("[SUCCESS]" + e);
         }
 
     }

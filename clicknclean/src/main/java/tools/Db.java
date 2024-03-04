@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import javafx.util.Pair;
+import model.Activity;
 import model.ActivityType;
 import model.Address;
 import model.Admin;
@@ -93,23 +94,31 @@ public class Db {
 					                   + cleaner_range + ").");
 					continue;
 				}
+				Planning planning = this.DAOReadPlanning(cleaner_id);
 
 				Cleaner cleaner = new Cleaner(
-				    cleaner_addr,
-				    cleaner_range,
-				    rSet.getInt("hourly_rate"),
-				    rSet.getString("biography"),
-				    rSet.getString("photo_profile"),
-				    rSet.getString("motivation"),
-				    rSet.getString("experience"),
-				    rSet.getBoolean("confirmed"),
-				    rSet.getString("name"),
-				    rSet.getString("password"),
-				    rSet.getString("surname"),
-				    rSet.getString("email"),
-				    rSet.getString("phone_number"),
-				    rSet.getDate("birth_date").toLocalDate(),
-				    rSet.getBoolean("suspended"));
+					rSet.getInt("id_cleaner"),
+					new Address(
+						rSet.getString("address_display"),
+						rSet.getDouble("latitude"),
+						rSet.getDouble("longitude")),
+					rSet.getInt("km_range"),
+					rSet.getInt("hourly_rate"),
+					rSet.getString("biography"),
+					rSet.getString("photo_profile"),
+					rSet.getString("photo_identity"),
+					rSet.getString("motivation"),
+					CleanerExperience.fromInt(rSet.getInt("experience")),
+					rSet.getBoolean("confirmed"),
+					rSet.getString("name"),
+					rSet.getString("password"),
+					rSet.getString("surname"),
+					rSet.getString("email"),
+					rSet.getString("phone_number"),
+					rSet.getDate("birth_date").toLocalDate(),
+					rSet.getBoolean("suspended"),
+					new ArrayList<Integer>(), // reviews,
+					planning);
 				out.add(cleaner);
 			}
 			rSet.close();
@@ -166,7 +175,7 @@ public class Db {
 			    rSet.getString("photo_profile"),
 			    rSet.getString("photo_identity"),
 			    rSet.getString("motivation"),
-			    rSet.getString("experience"),
+			    CleanerExperience.fromInt(rSet.getInt("experience")),
 			    rSet.getBoolean("confirmed"),
 			    rSet.getString("name"),
 			    rSet.getString("password"),
@@ -300,6 +309,34 @@ public class Db {
 		return properties;
 	}
 
+	public ArrayList<Activity> DAOReadActivities(int targetId) throws SQLException, Exception {
+		ArrayList<Activity> out = new ArrayList<Activity>();
+
+		String query = "SELECT * FROM activity where id_target  = '" + targetId + "';";
+
+		ResultSet rSet = this.stRead.executeQuery(query);
+		while (rSet.next()) {
+
+			out.add(
+			    new Activity(
+			        rSet.getInt("id_activity"),
+			        ActivityType.fromInt(rSet.getInt("type_service")),
+			        rSet.getBoolean("read"),
+			        rSet.getInt("id_owner"),
+			        rSet.getInt("id_cleaner"),
+			        rSet.getInt("id_mission"),
+			        rSet.getInt("id_dispute"),
+			        rSet.getInt("id_admin"),
+			        rSet.getInt("id_target")
+			    )
+			);
+		}
+		rSet.close();
+
+		return out;
+
+	}
+
 	public Admin DAOReadAdmin(int id_user) throws InterruptedException, ExecutionException, Exception {
 		String query = "SELECT * FROM admin JOIN user ON (admin.id_admin = user.id_user) WHERE id_admin = " + id_user;
 
@@ -309,6 +346,7 @@ public class Db {
 				throw new Exception("Found a user with given email & password, but it's not a cleaner;");
 			}
 			Admin admin = new Admin(
+				rSet.getInt("id_admin"),
 			    rSet.getString("name"),
 			    rSet.getString("password"),
 			    rSet.getString("surname"),
@@ -535,28 +573,39 @@ public class Db {
 
 	/*--------------------------------------MANAGE ACTIVITY--------------------------------------------------------------------- */
 
-	public void DAOaddActivity(ActivityType type, int receivingUser, Integer ownerId, Integer cleanerId, Integer missionId, Integer disputeId, Integer adminId) {
-			
+	public void DAOaddActivity(ActivityType type, int targetUser, Integer ownerId, Integer cleanerId,
+	                           Integer missionId, Integer disputeId, Integer adminId) {
+
 		try {
-			String sql = "INSERT INTO `activity`" 
-							+ "(`type`, `opened`, `id_owner`, `id_cleaner`, `id_mission`, `id_dispute`, `id_admin`, `id_user_receiving`)"
-							+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?) ";
+			String sql = "INSERT INTO `activity`"
+			             + "(`type`, `read`, `id_owner`, `id_cleaner`, `id_mission`, `id_dispute`, `id_admin`, `id_target`)"
+			             + " VALUES (?, ?, ?, ?, ?, ?, ?, ?) ";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, type.asInt());
 			pstmt.setInt(2, 0);
 
-			if (ownerId == null) pstmt.setNull(3, java.sql.Types.INTEGER);
-			else pstmt.setInt(3, ownerId);
-			if (cleanerId == null) pstmt.setNull(4, java.sql.Types.INTEGER);
-			else  pstmt.setInt(4, cleanerId);
-			if (missionId == null) pstmt.setNull(5, java.sql.Types.INTEGER);
-			else pstmt.setInt(5, missionId);
-			if (disputeId == null) pstmt.setNull(6, java.sql.Types.INTEGER);
-			else  pstmt.setInt(6, disputeId);
-			if (adminId == null) pstmt.setNull(7, java.sql.Types.INTEGER);
-			else pstmt.setInt(7, adminId);
-			pstmt.setInt(8, receivingUser);
-			
+			if (ownerId == null)
+				pstmt.setNull(3, java.sql.Types.INTEGER);
+			else
+				pstmt.setInt(3, ownerId);
+			if (cleanerId == null)
+				pstmt.setNull(4, java.sql.Types.INTEGER);
+			else
+				pstmt.setInt(4, cleanerId);
+			if (missionId == null)
+				pstmt.setNull(5, java.sql.Types.INTEGER);
+			else
+				pstmt.setInt(5, missionId);
+			if (disputeId == null)
+				pstmt.setNull(6, java.sql.Types.INTEGER);
+			else
+				pstmt.setInt(6, disputeId);
+			if (adminId == null)
+				pstmt.setNull(7, java.sql.Types.INTEGER);
+			else
+				pstmt.setInt(7, adminId);
+			pstmt.setInt(8, targetUser);
+
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -601,7 +650,7 @@ public class Db {
 	}
 
 	/*--------------------------------------CREATE REVIEW-------------------------------------------------------------- */
-	public void DAOCreateNewReview(String content, double/*menton*/ grade, int userReceivingId, int missionId) {
+	public void DAOCreateNewReview(String content, double/* menton */ grade, int userReceivingId, int missionId) {
 
 		try {
 			String strQuery = "INSERT INTO `review`"
