@@ -1,20 +1,25 @@
 package controller.cleaner;
 
 import java.time.LocalDate;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
+import javafx.scene.control.ScrollPane;
+import model.ActivityType;
 import model.Address;
+import model.Cleaner;
 import model.CleanerExperience;
 import model.User;
 import model.UserStatus;
 import view.Window;
-
+import view.cleaner.CleanerWelcome;
 import view.SceneId;
 import tools.Db;
 
 public class CleanerRegistrationController {
+	private int currentCleanerId;
 	public CleanerRegistrationController(
 	    String name,
 	    String surname,
@@ -40,7 +45,7 @@ public class CleanerRegistrationController {
 	    String idPhoto,
 	    String photoLive,
 	    Window window
-	) {
+	) throws InterruptedException, ExecutionException, Exception {
 
 		Db db = new Db();
 		Address address;
@@ -103,7 +108,7 @@ public class CleanerRegistrationController {
 		}
 
 		try {
-			db.DAOAddCleaner(
+				currentCleanerId = db.DAOAddCleaner(
 			    name,
 			    User.sha3256Hashing(rawPassword),
 			    surname,
@@ -123,12 +128,18 @@ public class CleanerRegistrationController {
 			    photoLive);
 
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "L'inscription a échouée");
+			JOptionPane.showMessageDialog(null, "L'inscription a échoué");
 		}
 
-		JOptionPane.showMessageDialog(null, "Inscription réussi ! Vous allez être dirigé vers votre page d'acceuil, vos accès sont limités en attente de confirmation de votre compte");
+		JOptionPane.showMessageDialog(null, "Inscription réussie ! Vous allez être dirigé vers votre page d'accueil, vos accès sont limités en attente de confirmation de votre compte");
 
-		//window.setScene(new CleanerWelcome(new ScrollPane() ));
+		Db connection = new Db();
+		Cleaner currentCleaner = connection.DAOReadCleaner(currentCleanerId);
+		connection.DAOaddActivity(ActivityType.WELCOME_CLEANER, currentCleanerId, null, null, null, null, null);
+		//TODO : Send to all admin below
+		connection.DAOaddActivity(ActivityType.CLEANER_WAITING_TO_BE_CONFIRMED, 1, null, null, null, null, null);
+		window.setScene(new CleanerWelcome(new ScrollPane(), window, currentCleaner));
+
 		// db.close();
 	}
 

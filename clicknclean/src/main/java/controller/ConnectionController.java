@@ -4,12 +4,15 @@ import javax.swing.JOptionPane;
 
 import javafx.scene.control.ScrollPane;
 import javafx.util.Pair;
+import model.Cleaner;
 import model.Owner;
+import model.Admin;
 import model.UserStatus;
 import tools.Db;
 import view.Window;
+import view.admin.AdminMain;
 import view.cleaner.CleanerWelcome;
-import view.owner.OwnerWelcome;
+import view.owner.OwnerMain;
 import view.SceneId;
 
 public class ConnectionController {
@@ -34,22 +37,22 @@ public class ConnectionController {
 			switch (user.getValue()) {
 
 			case ADMIN :
-				db.DAOReadAdmin(user.getKey());
+				Admin admin = db.DAOReadAdmin(user.getKey());
 				// window.displayWelcomeAdmin();
 				// TODO: scene for ADMIN_WELCOME
-				//  window.setScene(SceneId.ADMIN_WELCOME);
+				window.setScene(new AdminMain(new ScrollPane(), window, admin));
 				break;
 			case CLEANER :
-				db.DAOReadCleaner(user.getKey());
+				Cleaner cleaner = db.DAOReadCleaner(user.getKey());
 				// window.displayWelcomeCleaner();
-				window.setScene(new CleanerWelcome(new ScrollPane()));
+				window.setScene(new CleanerWelcome(new ScrollPane(), window, cleaner));
 				break;
 			case OWNER :
-				Window.currentOwner = db.DAOReadOwner(user.getKey());
+				Owner owner = db.DAOReadOwner(user.getKey());
 				// window.displayWelcomeOwner();
 				// TODO: scene for OWNER_WELCOME
 
-				window.setScene(new OwnerWelcome(new ScrollPane(), window));
+				window.setScene(new OwnerMain(new ScrollPane(), window, owner));
 
 				break;
 			}

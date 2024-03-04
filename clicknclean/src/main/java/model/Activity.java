@@ -2,7 +2,7 @@ package model;
 
 public class Activity {
     private int activityId;
-    private String type;
+    private ActivityType type;
     private boolean read;
     private int ownerId;
     private int cleanerId;
@@ -13,7 +13,7 @@ public class Activity {
 
     public Activity(
         int activityId,
-        String type,
+        ActivityType type,
         boolean read,
         int ownerId,
         int cleanerId,
@@ -42,11 +42,11 @@ public class Activity {
         this.activityId = activityId;
     }
 
-    public String getType() {
+    public ActivityType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(ActivityType type) {
         this.type = type;
     }
 

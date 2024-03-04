@@ -106,6 +106,6 @@ public class Main {
 
     public static void main(String[] args) throws SQLException, InterruptedException, ExecutionException {
         new Window().run();
-        System.out.println(User.sha3256Hashing("gogo"));
+        System.out.println(User.sha3256Hashing("adminPwd"));
     }
 }
