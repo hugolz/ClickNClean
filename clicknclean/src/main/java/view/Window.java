@@ -52,6 +52,17 @@ public class Window extends Application {
 		this.currentScene = null;
 	}
 
+
+	public void setScene(SceneId id) {
+		if (this.currentScene == id) {
+			// TODO: Can this cause problem ? does switching to the same scene be usefull ?
+			// like a refresh or something
+			System.err.println("Current scene is already " + id);
+			return;
+		}
+	}
+
+
 	public void run() {
 		launch();
 	}

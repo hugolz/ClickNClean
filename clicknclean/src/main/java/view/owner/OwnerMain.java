@@ -1,6 +1,6 @@
 package view.owner;
 
-import view.SceneId;
+
 import view.Window;
 import java.io.File;
 
@@ -11,7 +11,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -21,14 +20,15 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 
-class OwnerMain extends Scene {
-    public OwnerMain(ScrollPane container, Window widow) {
+public class OwnerMain extends Scene {
+    public OwnerMain(ScrollPane container, Window window) {
         super(container, 800, 600);
         System.out.println("OwnerMain constructor");
+        window.setTitle("Accueil Propriétaire");
 		
-		//window.setTitle("Accueil de Propriétaire");
+	
 		
-		Label welcomeMessage = new Label("Bienvenu "+Window.currentOwner.getName()+" !");
+		Label welcomeMessage = new Label("Bienvenu !");
 		Label missionInProgress = new Label("Vos missions en cours :");
 		Label missionCome = new Label("Vos missions à venir");
 		
@@ -42,7 +42,7 @@ class OwnerMain extends Scene {
 	    tableViewMissionCome.getColumns().add(column2);
 	    tableViewMissionCome.getColumns().add(column3);
 		
-		TableView tableViewMissionInprogress = new TableView();
+		TableView<String> tableViewMissionInprogress = new TableView<String>();
 
 	    TableColumn column1p = new TableColumn("Date et heure");
 	    TableColumn column2p = new TableColumn("Durée");
@@ -120,8 +120,7 @@ class OwnerMain extends Scene {
 	    container.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 	    container.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 
-            this.getStylesheets()
-        .add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
+            this.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
 	}
 }
 
