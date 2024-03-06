@@ -11,7 +11,6 @@ import javafx.scene.control.ScrollPane;
 import model.Owner;
 import model.OwnerMotivation;
 import model.User;
-import view.SceneId;
 import view.Window;
 import view.owner.OwnerMain;
 import tools.Db;
@@ -58,6 +57,7 @@ public class OwnerRegistrationController {
 		Db connection = new Db();
 		Owner currentOwner = connection.DAOReadOwner(currentOwnerId);
 		window.setScene(new OwnerMain(new ScrollPane(), window, currentOwner));
+
 
 
 		//db.close();
