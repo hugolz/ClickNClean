@@ -105,6 +105,7 @@ public class Window extends Application {
 		this.stage = stage;
 		this.stage.setTitle("Hello World!");
 		ScrollPane root = this.initStage(stage);
+		
 
 		this.setScene(new Connection(new ScrollPane(), this));
 

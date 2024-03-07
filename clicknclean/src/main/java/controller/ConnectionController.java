@@ -41,6 +41,7 @@ public class ConnectionController {
 
 			case ADMIN :
 				Admin admin = db.DAOReadAdmin(user.getKey());
+				System.out.println("okkkkkkkk");
 				// window.displayWelcomeAdmin();
 				// TODO: scene for ADMIN_WELCOME
 				window.setScene(new AdminMain(new ScrollPane(), window, admin));

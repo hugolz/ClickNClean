@@ -63,13 +63,15 @@ public class CleanerRegistrationController {
 			return;
 		}
 
+
 		if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || rawPassword.isEmpty()
 		        || rawConfirmpassword.isEmpty() || phone.isEmpty() || birthDate == null || address == null || km == 0
 		        || hourlyRate == 0 || biography.isEmpty() || motivation.isEmpty() || photo.isEmpty()
 		        || idPhoto.isEmpty()) {
+
 			JOptionPane.showMessageDialog(null, "Champs non remplis !");
 			return;
-		}
+		} */
 
 		if (!rawPassword.equals(rawConfirmpassword)) {
 
@@ -111,7 +113,9 @@ public class CleanerRegistrationController {
 		}
 
 		if (hourlyRate > 40 || hourlyRate < 15) {
+
 			// too much or not enough hourlyRate
+
 			JOptionPane.showMessageDialog(null, "Rémunération trop ou pas assez élevée");
 			return;
 		}
