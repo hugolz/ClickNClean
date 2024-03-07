@@ -1,6 +1,6 @@
 package view.owner;
 
-import view.SceneId;
+
 import view.Window;
 import java.io.File;
 
@@ -11,7 +11,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -30,20 +29,23 @@ public class OwnerMain extends Scene {
 		//window.setTitle("Accueil de Propriétaire");
 
 		Label welcomeMessage = new Label("Bienvenu " + owner.getName() + " !");
+
 		Label missionInProgress = new Label("Vos missions en cours :");
 		Label missionCome = new Label("Vos missions à venir");
 
 		TableView tableViewMissionCome = new TableView();
 
-		TableColumn column1 = new TableColumn("Date et heure");
-		TableColumn column2 = new TableColumn("Durée");
-		TableColumn column3 = new TableColumn("Cleaner");
+	  TableColumn column1 = new TableColumn("Date et heure");
+	  TableColumn column2 = new TableColumn("Durée");
+	  TableColumn column3 = new TableColumn("Cleaner");
+	    
+	  tableViewMissionCome.getColumns().add(column1);
+	  tableViewMissionCome.getColumns().add(column2);
+	  tableViewMissionCome.getColumns().add(column3);
+		
+		TableView<String> tableViewMissionInprogress = new TableView<String>();
 
-		tableViewMissionCome.getColumns().add(column1);
-		tableViewMissionCome.getColumns().add(column2);
-		tableViewMissionCome.getColumns().add(column3);
-
-		TableView tableViewMissionInprogress = new TableView();
+    
 
 		TableColumn column1p = new TableColumn("Date et heure");
 		TableColumn column2p = new TableColumn("Durée");
@@ -122,6 +124,7 @@ public class OwnerMain extends Scene {
 		container.setPannable(true);
 		container.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 		container.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+
 
 		this.getStylesheets()
 		.add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
