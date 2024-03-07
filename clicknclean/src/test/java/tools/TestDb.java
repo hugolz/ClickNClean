@@ -22,7 +22,7 @@ public class TestDb {
     void cleanerRegistration() {
         // Init vars
         String name = "cleaner username";
-        String pwd = User.sha3256Hashing("a cool password");
+        String pwd = "a cool password";
         String surname = "surname";
         String email = "aa.aa@aa.aa";
         String phoneN = "1234567890";
@@ -91,7 +91,7 @@ public class TestDb {
     void ownerRegistration() {
         // Init vars
         String name = "owner name";
-        String pwd = User.sha3256Hashing("}yvhP&k5y?hYY5;U}nuG%Yl5!^~IkM8K%");
+        String pwd = "}yvhP&k5y?hYY5;U}nuG%Yl5!^~IkM8K%";
         String surname = "a cool surname";
         String email = "aa.aa@aa.aa";
         String phoneN = "1234567890";
@@ -162,7 +162,7 @@ public class TestDb {
         try {
             int cleanerId = connection.DAOAddCleaner(
                                 name,
-                                User.sha3256Hashing(pwd),
+                                pwd,
                                 surname,
                                 email,
                                 phoneN,
@@ -201,7 +201,7 @@ public class TestDb {
     void ownerLogin() {
         // Init vars
         String name = "owner username";
-        String pwd = "a cool owner password";
+        String pwd = "}yvhP&k5y?hYY5;U}nuG%Yl5!^~IkM8K%";
         String surname = "surname";
         String email = "a_very.original@email.aa2";
         String phoneN = "0987654321";
@@ -215,7 +215,7 @@ public class TestDb {
         try {
             int ownerId = connection.DAOAddOwner(
                               name,
-                              User.sha3256Hashing(pwd),
+                              pwd,
                               surname,
                               email,
                               phoneN,

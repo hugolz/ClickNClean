@@ -46,7 +46,7 @@ public class Db {
 		this.dbName = "click_n_clean";
 
 		this.login = "root";
-		this.password = "root";
+		this.password = "";
 
 		this.strUrl = "jdbc:mysql://localhost:3306/" + dbName
 		              + "?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Europe/Paris";
@@ -98,29 +98,29 @@ public class Db {
 
 				Cleaner cleaner = new Cleaner(
 
-					rSet.getInt("id_cleaner"),
-					new Address(
-						rSet.getString("address_display"),
-						rSet.getDouble("latitude"),
-						rSet.getDouble("longitude")),
-					rSet.getInt("km_range"),
-					rSet.getInt("hourly_rate"),
-					rSet.getString("biography"),
-					rSet.getString("photo_identity"),
-					rSet.getString("photo_profile"),
-					rSet.getString("photo_live"),
-					rSet.getString("motivation"),
-					CleanerExperience.fromInt(rSet.getInt("experience")),
-					rSet.getBoolean("confirmed"),
-					rSet.getString("name"),
-					rSet.getString("password"),
-					rSet.getString("surname"),
-					rSet.getString("email"),
-					rSet.getString("phone_number"),
-					rSet.getDate("birth_date").toLocalDate(),
-					rSet.getBoolean("suspended"),
-					new ArrayList<Integer>(), // reviews,
-					planning);
+				    rSet.getInt("id_cleaner"),
+				    new Address(
+				        rSet.getString("address_display"),
+				        rSet.getDouble("latitude"),
+				        rSet.getDouble("longitude")),
+				    rSet.getInt("km_range"),
+				    rSet.getInt("hourly_rate"),
+				    rSet.getString("biography"),
+				    rSet.getString("photo_identity"),
+				    rSet.getString("photo_profile"),
+				    rSet.getString("photo_live"),
+				    rSet.getString("motivation"),
+				    CleanerExperience.fromInt(rSet.getInt("experience")),
+				    rSet.getBoolean("confirmed"),
+				    rSet.getString("name"),
+				    rSet.getString("password"),
+				    rSet.getString("surname"),
+				    rSet.getString("email"),
+				    rSet.getString("phone_number"),
+				    rSet.getDate("birth_date").toLocalDate(),
+				    rSet.getBoolean("suspended"),
+				    new ArrayList<Integer>(), // reviews,
+				    planning);
 
 				out.add(cleaner);
 			}
@@ -131,10 +131,10 @@ public class Db {
 		return out;
 	}
 
-	public Pair<Integer, UserStatus> DAOReadUser(String login, String password)
+	public Pair<Integer, UserStatus> DAOReadUser(String login, String pwd)
 	throws InterruptedException, ExecutionException, Exception {
-		password = User.sha3256Hashing(password);
-		String query = "SELECT * FROM user where email  = '" + login + "' AND password = '" + password + "';";
+		String pwd_hash = User.sha3256Hashing(pwd);
+		String query = "SELECT * FROM user where email  = '" + login + "' AND password = '" + pwd_hash + "';";
 
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
@@ -177,7 +177,7 @@ public class Db {
 			    rSet.getInt("km_range"),
 			    rSet.getInt("hourly_rate"),
 			    rSet.getString("biography"),
-				rSet.getString("photo_identity"),
+			    rSet.getString("photo_identity"),
 			    rSet.getString("photo_profile"),
 			    rSet.getString("photo_live"),
 			    rSet.getString("motivation"),
@@ -193,7 +193,7 @@ public class Db {
 			    new ArrayList<Integer>(), // reviews,
 			    planning);
 
-				rSet.close();
+			rSet.close();
 			return cleaner;
 		}
 		rSet.close();
@@ -263,7 +263,7 @@ public class Db {
 	public ArrayList<Integer> DAOReadOwnerReviewsIds(int id_owner)
 	throws InterruptedException, ExecutionException, Exception {
 		ArrayList<Integer> reviews = new ArrayList<Integer>();
-		String query = "SELECT * FROM review JOIN owner ON (review.id_user_receiving = owner.id_owner) WHERE owner.id_owner = "
+		String query = "SELECT * FROM review JOIN owner ON (review.id_user = owner.id_owner) WHERE owner.id_owner = "
 		               + id_owner;
 
 		ResultSet rSet = this.stRead.executeQuery(query);
@@ -451,7 +451,6 @@ public class Db {
 	                         boolean isConfirmed,
 	                         String photoProfile,
 	                         String photoLive) {
-
 		int cleanerID = DAOAddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.CLEANER);
 		try {
 			String strQuery = "INSERT INTO `cleaner`"
@@ -471,6 +470,7 @@ public class Db {
 
 	public int DAOAddOwner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate,
 	                       boolean isSuspended, OwnerMotivation serviceType) {
+
 		int ownerId = DAOAddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.OWNER);
 
 		try {
@@ -553,10 +553,12 @@ public class Db {
 		Date sqlBirthDate = Date.valueOf(birthDate);
 		Date sqlAccountdate = Date.valueOf(accountDate);
 
+		String pwd_hash = User.sha3256Hashing(pwd);
+
 		try {
 			String strQuery = "INSERT INTO `user`"
 			                  + "(`name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `account_date`, `suspended`, `status`) "
-			                  + "VALUES ('" + name + "','" + pwd + "','" + surname + "','" + email + "','" + phoneN + "','"
+			                  + "VALUES ('" + name + "','" + pwd_hash + "','" + surname + "','" + email + "','" + phoneN + "','"
 			                  + sqlBirthDate + "','" + sqlAccountdate + "','" + (isSuspended ? 1 : 0) + "','" + status.asInt()
 			                  + "');";
 
@@ -661,7 +663,7 @@ public class Db {
 
 		try {
 			String strQuery = "INSERT INTO `review`"
-			                  + "(`content`, `grade`, `id_user_receiving`, `id_mission`, `id_owner`) "
+			                  + "(`content`, `grade`, `id_user`, `id_mission`, `id_owner`) "
 			                  + "VALUES ('" + content + "','" + userReceivingId + "','" + missionId + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
