@@ -32,7 +32,7 @@ public class TestDb {
         try {
             departureAddress = new Address("28", "av yves thepot", "29000", "quimper");
         } catch (Exception e) {
-            System.out.println("[ERROR] cleanerRegistration test failled on address constructor");
+            System.out.println("[ERROR] cleanerRegistration test failed on address constructor");
             return;
         }
         int kmRange = 5;
@@ -79,7 +79,7 @@ public class TestDb {
                 assert cleaner.getBiography().equals(bio);
                 System.out.println("[SUCCESS] cleanerRegistration done");
             } catch (Exception e) {
-                System.out.println("[ERROR] cleanerRegistration test failled on cleaner read: " + e);
+                System.out.println("[ERROR] cleanerRegistration test failed on cleaner read: " + e);
                 return;
             }
         } catch (Exception e) {
@@ -121,7 +121,7 @@ public class TestDb {
                 assert owner.getServiceType().equals(serviceType);
                 System.out.println("[SUCCESS] onwerRegistration done");
             } catch (Exception e) {
-                System.out.println("[ERROR] ownerRegistration test failled on owner read: " + e);
+                System.out.println("[ERROR] ownerRegistration test failed on owner read: " + e);
                 return;
             }
         } catch (Exception e) {
@@ -143,7 +143,7 @@ public class TestDb {
         try {
             departureAddress = new Address("28", "av yves thepot", "29000", "quimper");
         } catch (Exception e) {
-            System.out.println("cleanerRegistration test failled on address constructor");
+            System.out.println("cleanerRegistration test failed on address constructor");
             return;
         }
         int kmRange = 5;
@@ -186,13 +186,14 @@ public class TestDb {
 
         try {
             Pair<Integer, UserStatus> id_status = connection.DAOReadUser(email, pwd);
-            if (id_status.getValue() != UserStatus.CLEANER) {
+            if (!id_status.getValue().equals(UserStatus.CLEANER)) {
+
                 assert 1 == 0 : "what have you done";
             }
             Cleaner cleaner = connection.DAOReadCleaner(id_status.getKey());
             System.out.println("[SUCCESS] Succesfully logged in cleaner");
         } catch (Exception e) {
-            System.err.println("[ERROR] Could not login cleaner");
+            System.err.println("[ERROR] Could not login cleaner " + e);
         }
     }
 
@@ -260,7 +261,7 @@ public class TestDb {
             System.out.println("[SUCCESS] Read " + activities.size() + " activities for cleaner with id: " + cleanerId);
 
         } catch (Exception e) {
-            System.err.println("[ERROR] Failled to fetch activities for id: " + cleanerId);
+            System.err.println("[ERROR] Failled to fetch activities for id: " + e);
         }
 
     }

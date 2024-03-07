@@ -52,16 +52,13 @@ public class AdminMain extends Scene {
                 ObservableList<String> items = FXCollections.observableArrayList();
                 items.add("Nom :" + currentCleaner.getSurname() + " " +currentCleaner.getName());
                 items.add("Date de naissance : " + currentCleaner.getBirthDate());
-                items.add("Experience : " + CleanerExperience.asString(currentCleaner.getExperience()));
+                items.add("Expérience : " + CleanerExperience.asString(currentCleaner.getExperience()));
                 items.add("Motivation :  "+ currentCleaner.getMotivation());
                 listView.setItems(items);
             }
         }
 		
         
-        
-        listView.getItems().add("Cleaner 2");
-        listView.getItems().add("Cleaner 3");
 
 		Label displayDispute = new Label("Litiges à gérer");
 

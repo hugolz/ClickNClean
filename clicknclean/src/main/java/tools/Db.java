@@ -105,8 +105,9 @@ public class Db {
 					rSet.getInt("km_range"),
 					rSet.getInt("hourly_rate"),
 					rSet.getString("biography"),
-					rSet.getString("photo_profile"),
 					rSet.getString("photo_identity"),
+					rSet.getString("photo_profile"),
+					rSet.getString("photo_live"),
 					rSet.getString("motivation"),
 					CleanerExperience.fromInt(rSet.getInt("experience")),
 					rSet.getBoolean("confirmed"),
@@ -158,10 +159,12 @@ public class Db {
 		// ArrayList<Integer> reviews_ids = // we can't read cleaner review yet !
 
 		ResultSet rSet = this.stRead.executeQuery(query);
+		int cleanerIdTest = 0;
 		while (rSet.next()) {
 			if (UserStatus.fromInt(rSet.getInt("status")) != UserStatus.CLEANER) {
 				throw new Exception("Found a user with given id, but it's not a cleaner;");
 			}
+			cleanerIdTest = rSet.getInt("id_cleaner");
 
 			Cleaner cleaner = new Cleaner(
 			    rSet.getInt("id_cleaner"),
@@ -172,8 +175,9 @@ public class Db {
 			    rSet.getInt("km_range"),
 			    rSet.getInt("hourly_rate"),
 			    rSet.getString("biography"),
+				rSet.getString("photo_identity"),
 			    rSet.getString("photo_profile"),
-			    rSet.getString("photo_identity"),
+			    rSet.getString("photo_live"),
 			    rSet.getString("motivation"),
 			    CleanerExperience.fromInt(rSet.getInt("experience")),
 			    rSet.getBoolean("confirmed"),
@@ -186,11 +190,13 @@ public class Db {
 			    rSet.getBoolean("suspended"),
 			    new ArrayList<Integer>(), // reviews,
 			    planning);
+
+				rSet.close();
 			return cleaner;
 		}
 		rSet.close();
 
-		throw new Exception("Could not find any cleaner with the given id");
+		throw new Exception("Could not find any cleaner with the given id " + cleanerIdTest);
 	}
 
 	public Owner DAOReadOwner(int id_user) throws InterruptedException, ExecutionException, Exception {
@@ -235,7 +241,7 @@ public class Db {
 	public ArrayList<Review> DAOReadOwnerReviews(int id_owner)
 	throws InterruptedException, ExecutionException, Exception {
 		ArrayList<Review> reviews = new ArrayList<Review>();
-		String query = "SELECT * FROM review JOIN owner ON (review.id_user = owner.id_owner) WHERE owner.id_owner = "
+		String query = "SELECT * FROM review JOIN owner ON (review.id_user_receiving = owner.id_owner) WHERE owner.id_owner = "
 		               + id_owner;
 
 		ResultSet rSet = this.stRead.executeQuery(query);
@@ -255,7 +261,7 @@ public class Db {
 	public ArrayList<Integer> DAOReadOwnerReviewsIds(int id_owner)
 	throws InterruptedException, ExecutionException, Exception {
 		ArrayList<Integer> reviews = new ArrayList<Integer>();
-		String query = "SELECT * FROM review JOIN owner ON (review.id_user = owner.id_owner) WHERE owner.id_owner = "
+		String query = "SELECT * FROM review JOIN owner ON (review.id_user_receiving = owner.id_owner) WHERE owner.id_owner = "
 		               + id_owner;
 
 		ResultSet rSet = this.stRead.executeQuery(query);
@@ -320,7 +326,7 @@ public class Db {
 			out.add(
 			    new Activity(
 			        rSet.getInt("id_activity"),
-			        ActivityType.fromInt(rSet.getInt("type_service")),
+			        ActivityType.fromInt(rSet.getInt("type")),
 			        rSet.getBoolean("read"),
 			        rSet.getInt("id_owner"),
 			        rSet.getInt("id_cleaner"),
@@ -452,7 +458,7 @@ public class Db {
 			                  + "VALUES ('" + cleanerID + "','" + departureAddress.asString() + "','"
 			                  + departureAddress.getLatitude() + "','" + departureAddress.getLongitude() + "','" + kmRange + "','"
 			                  + hourlyRate + "','" + bio + "','"
-			                  + photoIdentity + "','" + motivation + "','" + experience + "','" + (isConfirmed ? 1 : 0) + "','"
+			                  + photoIdentity + "','" + motivation + "','" + experience.asInt() + "','" + (isConfirmed ? 1 : 0) + "','"
 			                  + photoProfile + "','" + photoLive + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
