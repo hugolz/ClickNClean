@@ -75,10 +75,6 @@ CREATE TABLE `cleaner` (
 -- Déchargement des données de la table `cleaner`
 --
 
-INSERT INTO `cleaner` (`id_cleaner`, `address_display`, `latitude`, `longitude`, `km_range`, `hourly_rate`, `biography`, `photo_identity`, `photo_profile`, `photo_live`, `motivation`, `experience`, `confirmed`) VALUES
-(4, '28 av yves thepot 29000 quimper', 47.988373, -4.088107, 0, 0, 'null', 'null', 'null', 'null', 'null', 'null', 0),
-(5, '28 av yves thepot 29000 quimper', 47.988373, -4.088107, 0, 0, 'null', 'null', 'null', 'null', 'null', 'null', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -120,10 +116,6 @@ CREATE TABLE `mission` (
 -- Déchargement des données de la table `mission`
 --
 
-INSERT INTO `mission` (`id_mission`, `date_start`, `cost`, `duration`, `commision`, `state`, `before_photo`, `after_photo`, `id_owner`, `id_cleaner`, `id_property`) VALUES
-(1, '2024-02-22 15:31:48', 0, 2, 0, 1, 'null', 'null', 6, NULL, 2),
-(2, '2024-02-22 15:33:35', 0, 2, 0, 1, NULL, NULL, 6, NULL, 2),
-(3, '2024-02-22 16:06:51', 0, 2, 0, 1, NULL, NULL, 6, NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -152,9 +144,6 @@ CREATE TABLE `owner` (
 -- Déchargement des données de la table `owner`
 --
 
-INSERT INTO `owner` (`id_owner`, `type_service`) VALUES
-(5, 1),
-(6, 1);
 
 -- --------------------------------------------------------
 
@@ -191,8 +180,6 @@ CREATE TABLE `property` (
 -- Déchargement des données de la table `property`
 --
 
-INSERT INTO `property` (`id_property`, `address_display`, `latitude`, `longitude`, `surface`, `id_owner`, `acces_code`, `key_box_code`, `special_instruction`) VALUES
-(2, '1 Pl. Louis Armand 29000 quimper', 47.994435, -4.092603, 35, 6, 'null', 'null', 'null');
 
 -- --------------------------------------------------------
 
@@ -223,11 +210,6 @@ CREATE TABLE `status` (
 -- Déchargement des données de la table `status`
 --
 
-INSERT INTO `status` (`id_status`, `name_status`) VALUES
-(1, 'Admin'),
-(2, 'Cleaner'),
-(3, 'Owner');
-
 -- --------------------------------------------------------
 
 --
@@ -250,11 +232,6 @@ CREATE TABLE `user` (
 --
 -- Déchargement des données de la table `user`
 --
-
-INSERT INTO `user` (`id_user`, `name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `account_date`, `suspended`, `status`) VALUES
-(4, 'Doe', 'null', 'John', 'null', 'null', '2024-02-20', '2024-02-20', 0, 2),
-(5, 'Doe', 'null', 'John', 'null', 'null', '2024-02-20', '2024-02-20', 0, 2),
-(6, 'Lezoualch', 'noobie', 'gogo', 'email', 'null', '2024-02-22', '2024-02-22', 0, 3);
 
 --
 -- Index pour les tables déchargées
