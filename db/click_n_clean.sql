@@ -185,9 +185,10 @@ CREATE TABLE `status` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `status` (`id_status`, `name_status` ) VALUES
-(1, `Admin`),
-(2, `Cleaner`),
-(3, `Owner`),
+(1, 'Admin'),
+(2, 'Cleaner'),
+(3, 'Owner');
+
 --
 -- Déchargement des données de la table `status`
 --

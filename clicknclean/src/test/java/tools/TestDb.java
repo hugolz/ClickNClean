@@ -186,7 +186,7 @@ public class TestDb {
 
         try {
             Pair<Integer, UserStatus> id_status = connection.DAOReadUser(email, pwd);
-            if (!id_status.getValue().equals(UserStatus.CLEANER)) {
+            if (id_status.getValue().asInt() != UserStatus.CLEANER.asInt()) {
 
                 assert 1 == 0 : "what have you done";
             }
@@ -231,7 +231,7 @@ public class TestDb {
 
         try {
             Pair<Integer, UserStatus> id_status = connection.DAOReadUser(email, pwd);
-            if (id_status.getValue() != UserStatus.OWNER) {
+            if (id_status.getValue().asInt() != UserStatus.OWNER.asInt()) {
                 assert 1 == 0 : "what have you done";
             }
             Owner owner = connection.DAOReadOwner(id_status.getKey());
@@ -245,7 +245,7 @@ public class TestDb {
     public void activityReadWrite() {
         Db connection = new Db();
 
-        int cleanerId = 7;
+        int cleanerId = 2;
 
         connection.DAOaddActivity(
             ActivityType.WELCOME_CLEANER,

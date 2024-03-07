@@ -71,7 +71,7 @@ public class CleanerRegistrationController {
 
 			JOptionPane.showMessageDialog(null, "Champs non remplis !");
 			return;
-		} */
+		} 
 
 		if (!rawPassword.equals(rawConfirmpassword)) {
 
