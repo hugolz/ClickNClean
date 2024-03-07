@@ -71,7 +71,7 @@ public class CleanerRegistrationController {
 
 			JOptionPane.showMessageDialog(null, "Champs non remplis !");
 			return;
-		} 
+		}
 
 		if (!rawPassword.equals(rawConfirmpassword)) {
 
@@ -123,7 +123,7 @@ public class CleanerRegistrationController {
 		try {
 			currentCleanerId = db.DAOAddCleaner(
 			                       name,
-			                       User.sha3256Hashing(rawPassword),
+			                       rawPassword,
 			                       surname,
 			                       email,
 			                       phone,
