@@ -9,6 +9,8 @@ import javafx.stage.FileChooser;
 import java.io.File;
 import java.util.concurrent.ExecutionException;
 
+import javax.swing.plaf.basic.BasicProgressBarUI;
+
 import view.Connection;
 
 import controller.cleaner.CleanerRegistrationController;
@@ -76,37 +78,56 @@ public class CleanerRegistration extends Scene {
 		Label photoLiveLabel = new Label("Photo de vérification d'Id");
 
 		TextField nameInputField = new TextField();
+		nameInputField.setText("aa");
 		TextField surnameInputField = new TextField();
+		surnameInputField.setText("aa");
 		TextField emailInputField = new TextField();
+		emailInputField.setText("aa.aa@aa.aa");
 		PasswordField passwordInputField = new PasswordField();
+		passwordInputField.setText("ee");
 		PasswordField confirmpasswordInputField = new PasswordField();
+		confirmpasswordInputField.setText("ee");
 		TextField phoneInputField = new TextField();
+		phoneInputField.setText("1234567890");
 		DatePicker birthDateInputField = new DatePicker();
+
 		TextField houseNumberInputField = new TextField();
+		houseNumberInputField.setText("28");
 		TextField labelInputField = new TextField();
+		labelInputField.setText("av yves thepot");
+
 		TextField postCodeInputField = new TextField();
+		postCodeInputField.setText("29000");
 		TextField cityInputField = new TextField();
+		cityInputField.setText("quimper");
 		TextField kmInputField = new TextField();
+		kmInputField.setText("5");
 		TextField hourlyRateInputField = new TextField();
+		hourlyRateInputField.setText("30");
 		TextField biographyInputField = new TextField();
+		biographyInputField.setText("aa");
 		TextField motivationInputField = new TextField();
+		motivationInputField.setText("aa");
 		ChoiceBox<String> experienceChoiceBox = new ChoiceBox<>();
 
-		
+
 		FileChooser photoInputField = new FileChooser();
+		photoInputField.setInitialDirectory(new File("C:/vfcompat.dll"));
 		FileChooser idPhotoInputField = new FileChooser();
+		idPhotoInputField.setInitialDirectory(new File("C:/vfcompat.dll"));
 		FileChooser photoLiveInputField = new FileChooser();
+		photoLiveInputField.setInitialDirectory(new File("C:/vfcompat.dll"));
 		Button returnview = new Button("Retour");
 
 		Button registerButton = new Button("Inscription");
 		Button registerPhoto = new Button("Parcourir");
 		Button registerIdPhoto = new Button("Parcourir");
 		Button registerPhotoLive = new Button("Parcourir");
-		
+
 		ObservableList<String> options = FXCollections.observableArrayList(
 		                                     "Aucune", "Moins d'un an", "De 1 à 3ans", "Plus de 3ans");
-			experienceChoiceBox.setItems(options);
-			
+		experienceChoiceBox.setItems(options);
+
 		EventHandler<ActionEvent> eventphoto = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				photo = photoInputField.showOpenDialog(window.getStage()).toString();
@@ -147,40 +168,34 @@ public class CleanerRegistration extends Scene {
 					ce = CleanerExperience.MORE_3_YEARS;
 					break;
 				}
-				
-				try {
-					new CleanerRegistrationController(
-					    nameInputField.getText(),
-					    surnameInputField.getText(),
-					    emailInputField.getText(),
-					    passwordInputField.getText(),
-					    confirmpasswordInputField.getText(),
-					    phoneInputField.getText(),
-					    birthDateInputField.getValue(),
-					    houseNumberInputField.getText(),
-					    labelInputField.getText(),
-					    postCodeInputField.getText(),
-					    cityInputField.getText(),
-					    km,
-					    hourlyRate,
-					    biographyInputField.getText(),
-					    motivationInputField.getText(),
-					    ce,
-					    photo,
-					    idPhoto, 
-					    photoLive,
-					    window
-					);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (ExecutionException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+
+				new CleanerRegistrationController(
+				    nameInputField.getText(),
+				    surnameInputField.getText(),
+				    emailInputField.getText(),
+
+				    passwordInputField.getText(),
+				    confirmpasswordInputField.getText(),
+
+				    phoneInputField.getText(),
+				    birthDateInputField.getValue(),
+				    houseNumberInputField.getText(),
+				    labelInputField.getText(),
+				    postCodeInputField.getText(),
+				    cityInputField.getText(),
+				    Integer.valueOf(kmInputField.getText(), 10),
+				    Integer.valueOf(hourlyRateInputField.getText(), 10),
+				    biographyInputField.getText(),
+				    motivationInputField.getText(),
+
+				    ce,
+
+				    registerPhoto.getText(),
+				    registerIdPhoto.getText(),
+				    registerIdPhoto.getText(),
+				    window
+				);
+
 			}
 		};
 

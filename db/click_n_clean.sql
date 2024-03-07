@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : sam. 02 mars 2024 à 15:05
+-- Généré le : jeu. 22 fév. 2024 à 15:57
 -- Version du serveur : 8.0.32
 -- Version de PHP : 8.1.10
 
@@ -30,13 +30,13 @@ SET time_zone = "+00:00";
 CREATE TABLE `activity` (
   `id_activity` int NOT NULL,
   `type` int NOT NULL,
-  `opened` tinyint(1) NOT NULL,
+  `read` tinyint(1) NOT NULL,
   `id_owner` int UNSIGNED DEFAULT NULL,
   `id_cleaner` int UNSIGNED DEFAULT NULL,
   `id_mission` int UNSIGNED DEFAULT NULL,
   `id_dispute` int UNSIGNED DEFAULT NULL,
   `id_admin` int UNSIGNED DEFAULT NULL,
-  `id_user_receiving` int UNSIGNED NOT NULL
+  `id_target` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
@@ -48,13 +48,6 @@ CREATE TABLE `activity` (
 CREATE TABLE `admin` (
   `id_admin` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Déchargement des données de la table `admin`
---
-
-INSERT INTO `admin` (`id_admin`) VALUES
-(1);
 
 -- --------------------------------------------------------
 
@@ -70,13 +63,17 @@ CREATE TABLE `cleaner` (
   `km_range` int NOT NULL,
   `hourly_rate` int NOT NULL,
   `biography` varchar(100) NOT NULL,
-  `photo` varchar(36) NOT NULL,
+  `photo_identity` varchar(36) NOT NULL,
   `photo_profile` varchar(36) NOT NULL,
   `photo_live` varchar(36) NOT NULL,
   `motivation` varchar(250) NOT NULL,
   `experience` varchar(250) NOT NULL,
   `confirmed` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Déchargement des données de la table `cleaner`
+--
 
 -- --------------------------------------------------------
 
@@ -115,6 +112,11 @@ CREATE TABLE `mission` (
   `id_property` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
+--
+-- Déchargement des données de la table `mission`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -125,7 +127,7 @@ CREATE TABLE `mission_proposal` (
   `id_mission` int NOT NULL,
   `id_cleaner` int NOT NULL,
   `starting_hour` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -138,6 +140,11 @@ CREATE TABLE `owner` (
   `type_service` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
+--
+-- Déchargement des données de la table `owner`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -146,10 +153,10 @@ CREATE TABLE `owner` (
 
 CREATE TABLE `planning` (
   `id_cleaner` int UNSIGNED NOT NULL,
-  `date` date NOT NULL,
-  `time` time NOT NULL,
-  `availability` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `datetime` datetime NOT NULL,
+  `durationH` double NOT NULL,
+  `id_mission` int DEFAULT -1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -169,6 +176,11 @@ CREATE TABLE `property` (
   `special_instruction` varchar(80) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
+--
+-- Déchargement des données de la table `property`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -179,7 +191,7 @@ CREATE TABLE `review` (
   `id_review` int UNSIGNED NOT NULL,
   `content` varchar(100) NOT NULL,
   `grade` int NOT NULL,
-  `id_user_receiving` int UNSIGNED NOT NULL,
+  `id_user` int UNSIGNED NOT NULL,
   `id_mission` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -192,16 +204,15 @@ CREATE TABLE `review` (
 CREATE TABLE `status` (
   `id_status` int UNSIGNED NOT NULL,
   `name_status` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+INSERT INTO `status` (`id_status`, `name_status` ) VALUES
+(1, `Admin`),
+(2, `Cleaner`),
+(3, `Owner`),
 --
 -- Déchargement des données de la table `status`
 --
-
-INSERT INTO `status` (`id_status`, `name_status`) VALUES
-(1, 'Admin'),
-(2, 'Cleaner'),
-(3, 'Owner');
 
 -- --------------------------------------------------------
 
@@ -212,7 +223,7 @@ INSERT INTO `status` (`id_status`, `name_status`) VALUES
 CREATE TABLE `user` (
   `id_user` int UNSIGNED NOT NULL,
   `name` varchar(25) NOT NULL,
-  `password` varchar(80) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `password` varchar(90) NOT NULL,
   `surname` varchar(15) NOT NULL,
   `email` varchar(50) NOT NULL,
   `phone_number` varchar(10) NOT NULL,
@@ -225,9 +236,6 @@ CREATE TABLE `user` (
 --
 -- Déchargement des données de la table `user`
 --
-
-INSERT INTO `user` (`id_user`, `name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `account_date`, `suspended`, `status`) VALUES
-(1, 'nom', 'ab18826ad72e84d6832fb10587090945e935c823bae7cadf0530464823d27d24', 'prenom', 'admin@admin.fr', '', '2024-03-12', '2024-03-01', 0, 1);
 
 --
 -- Index pour les tables déchargées
@@ -243,7 +251,7 @@ ALTER TABLE `activity`
   ADD KEY `mission_of_the_activity` (`id_mission`),
   ADD KEY `dispute_of_the_mission` (`id_dispute`),
   ADD KEY `admin_of_the_mission` (`id_admin`),
-  ADD KEY `user_receiving_activity` (`id_user_receiving`);
+  ADD KEY `user_receiving_activity` (`id_target`);
 
 --
 -- Index pour la table `admin`
@@ -305,7 +313,7 @@ ALTER TABLE `property`
 ALTER TABLE `review`
   ADD PRIMARY KEY (`id_review`),
   ADD KEY `mission_of_the_review` (`id_mission`),
-  ADD KEY `target_of_the_review` (`id_user_receiving`);
+  ADD KEY `target_of_the_review` (`id_user`);
 
 --
 -- Index pour la table `status`
@@ -328,7 +336,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `activity`
 --
 ALTER TABLE `activity`
-  MODIFY `id_activity` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_activity` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `dispute`
@@ -364,7 +372,7 @@ ALTER TABLE `status`
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_user` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Contraintes pour les tables déchargées
@@ -379,7 +387,7 @@ ALTER TABLE `activity`
   ADD CONSTRAINT `dispute_of_the_mission` FOREIGN KEY (`id_dispute`) REFERENCES `dispute` (`id_dispute`),
   ADD CONSTRAINT `mission_of_the_activity` FOREIGN KEY (`id_mission`) REFERENCES `mission` (`id_mission`),
   ADD CONSTRAINT `owner_of_the_activity` FOREIGN KEY (`id_owner`) REFERENCES `owner` (`id_owner`),
-  ADD CONSTRAINT `user_receiving_activity` FOREIGN KEY (`id_user_receiving`) REFERENCES `user` (`id_user`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `user_receiving_activity` FOREIGN KEY (`id_target`) REFERENCES `user` (`id_user`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Contraintes pour la table `admin`
@@ -428,7 +436,7 @@ ALTER TABLE `property`
 --
 ALTER TABLE `review`
   ADD CONSTRAINT `mission_of_the_review` FOREIGN KEY (`id_mission`) REFERENCES `mission` (`id_mission`),
-  ADD CONSTRAINT `target_of_the_review` FOREIGN KEY (`id_user_receiving`) REFERENCES `user` (`id_user`);
+  ADD CONSTRAINT `target_of_the_review` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`);
 
 --
 -- Contraintes pour la table `user`

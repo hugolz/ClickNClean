@@ -17,7 +17,7 @@ public class TestPlanning {
             Db connection = new Db();
             int cleanerId = connection.DAOAddCleaner(
                                 "Doe",
-                                "null",
+                                User.sha3256Hashing("null"),
                                 "John",
                                 "null",
                                 "null",

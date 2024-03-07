@@ -41,9 +41,7 @@ public class OwnerRegistrationController {
 			//not good email format
 			JOptionPane.showMessageDialog(null, "Mauvais format d'email !");
 			return;
-
 		}
-
 
 		try {
 			currentOwnerId = db.DAOAddOwner(name, User.sha3256Hashing(rawPassword), surname, email, phone, birthDate, false, motivation);

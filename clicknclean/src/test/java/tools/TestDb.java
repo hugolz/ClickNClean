@@ -244,7 +244,7 @@ public class TestDb {
     public void activityReadWrite() {
         Db connection = new Db();
 
-        int cleanerId = 8;
+        int cleanerId = 7;
 
         connection.DAOaddActivity(
             ActivityType.WELCOME_CLEANER,
@@ -260,7 +260,7 @@ public class TestDb {
             System.out.println("[SUCCESS] Read " + activities.size() + " activities for cleaner with id: " + cleanerId);
 
         } catch (Exception e) {
-            System.err.println("[ERROR] Failled to fetch activities for id: " + cleanerId);
+            System.err.println("[ERROR] Failled to fetch activities for id: " + cleanerId + " due to: " + e);
         }
 
     }
