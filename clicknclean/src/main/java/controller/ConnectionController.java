@@ -4,16 +4,18 @@ import javax.swing.JOptionPane;
 
 import javafx.scene.control.ScrollPane;
 import javafx.util.Pair;
+
 import model.Cleaner;
 import model.Owner;
 import model.Admin;
+
 import model.UserStatus;
 import tools.Db;
 import view.Window;
 import view.admin.AdminMain;
 import view.cleaner.CleanerWelcome;
 import view.owner.OwnerMain;
-import view.SceneId;
+
 
 public class ConnectionController {
 	public ConnectionController(String login, String psw, Window window) {
@@ -28,6 +30,7 @@ public class ConnectionController {
 		try {
 			user = db.DAOReadUser(login, psw);
 		} catch (Exception e) {
+
 			return;
 		}
 

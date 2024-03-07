@@ -46,7 +46,7 @@ public class Db {
 		this.dbName = "click_n_clean";
 
 		this.login = "root";
-		this.password = "root";
+		this.password = "";
 
 		this.strUrl = "jdbc:mysql://localhost:3306/" + dbName
 		              + "?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Europe/Paris";
@@ -97,6 +97,7 @@ public class Db {
 				Planning planning = this.DAOReadPlanning(cleaner_id);
 
 				Cleaner cleaner = new Cleaner(
+
 					rSet.getInt("id_cleaner"),
 					new Address(
 						rSet.getString("address_display"),
@@ -120,6 +121,7 @@ public class Db {
 					rSet.getBoolean("suspended"),
 					new ArrayList<Integer>(), // reviews,
 					planning);
+
 				out.add(cleaner);
 			}
 			rSet.close();
@@ -322,7 +324,6 @@ public class Db {
 
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
-
 			out.add(
 			    new Activity(
 			        rSet.getInt("id_activity"),
@@ -352,7 +353,7 @@ public class Db {
 				throw new Exception("Found a user with given email & password, but it's not a cleaner;");
 			}
 			Admin admin = new Admin(
-				rSet.getInt("id_admin"),
+			    rSet.getInt("id_admin"),
 			    rSet.getString("name"),
 			    rSet.getString("password"),
 			    rSet.getString("surname"),
@@ -456,7 +457,7 @@ public class Db {
 			String strQuery = "INSERT INTO `cleaner`"
 			                  + "(`id_cleaner`, `address_display`, `latitude`, `longitude`, `km_range`, `hourly_rate`, `biography`, `photo_identity`, `motivation`, `experience`, `confirmed`, `photo_profile`, `photo_live`) "
 			                  + "VALUES ('" + cleanerID + "','" + departureAddress.asString() + "','"
-			                  + departureAddress.getLatitude() + "','" + departureAddress.getLongitude() + "','" + kmRange + "','"
+			                  + departureAddress.getLatitude() + "','" + departureAddress.getLongitude() + "',' " + kmRange + "','"
 			                  + hourlyRate + "','" + bio + "','"
 			                  + photoIdentity + "','" + motivation + "','" + experience.asInt() + "','" + (isConfirmed ? 1 : 0) + "','"
 			                  + photoProfile + "','" + photoLive + "');";

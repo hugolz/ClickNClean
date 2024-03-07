@@ -3,7 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
+
 -- Généré le : jeu. 07 mars 2024 à 10:55
+
 -- Version du serveur : 8.0.32
 -- Version de PHP : 8.1.10
 
@@ -64,14 +66,15 @@ CREATE TABLE `cleaner` (
   `km_range` int NOT NULL,
   `hourly_rate` int NOT NULL,
   `biography` varchar(100) NOT NULL,
-  `photo_identity` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+
+  `photo_identity` varchar(36) NOT NULL,
+
   `photo_profile` varchar(36) NOT NULL,
   `photo_live` varchar(36) NOT NULL,
   `motivation` varchar(250) NOT NULL,
   `experience` varchar(250) NOT NULL,
   `confirmed` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
 
 --
 -- Structure de la table `dispute`
@@ -108,7 +111,6 @@ CREATE TABLE `mission` (
   `id_property` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
-
 --
 -- Structure de la table `mission_proposal`
 --
@@ -117,7 +119,7 @@ CREATE TABLE `mission_proposal` (
   `id_mission` int NOT NULL,
   `id_cleaner` int NOT NULL,
   `starting_hour` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -130,7 +132,6 @@ CREATE TABLE `owner` (
   `type_service` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
-
 --
 -- Structure de la table `planning`
 --
@@ -139,8 +140,10 @@ CREATE TABLE `planning` (
   `id_cleaner` int UNSIGNED NOT NULL,
   `datetime` datetime NOT NULL,
   `durationH` double NOT NULL,
-  `id_mission` int DEFAULT '-1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+  `id_mission` int DEFAULT -1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 --
 -- Structure de la table `property`
@@ -166,7 +169,7 @@ CREATE TABLE `review` (
   `id_review` int UNSIGNED NOT NULL,
   `content` varchar(100) NOT NULL,
   `grade` int NOT NULL,
-  `id_user_receiving` int UNSIGNED NOT NULL,
+  `id_user` int UNSIGNED NOT NULL,
   `id_mission` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -179,16 +182,15 @@ CREATE TABLE `review` (
 CREATE TABLE `status` (
   `id_status` int UNSIGNED NOT NULL,
   `name_status` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+INSERT INTO `status` (`id_status`, `name_status` ) VALUES
+(1, `Admin`),
+(2, `Cleaner`),
+(3, `Owner`),
 --
 -- Déchargement des données de la table `status`
 --
-
-INSERT INTO `status` (`id_status`, `name_status`) VALUES
-(1, 'Admin'),
-(2, 'Cleaner'),
-(3, 'Owner');
 
 -- --------------------------------------------------------
 
@@ -281,7 +283,7 @@ ALTER TABLE `property`
 ALTER TABLE `review`
   ADD PRIMARY KEY (`id_review`),
   ADD KEY `mission_of_the_review` (`id_mission`),
-  ADD KEY `target_of_the_review` (`id_user_receiving`);
+  ADD KEY `target_of_the_review` (`id_user`);
 
 --
 -- Index pour la table `status`
@@ -304,7 +306,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `activity`
 --
 ALTER TABLE `activity`
-  MODIFY `id_activity` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_activity` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `dispute`
@@ -316,13 +318,13 @@ ALTER TABLE `dispute`
 -- AUTO_INCREMENT pour la table `mission`
 --
 ALTER TABLE `mission`
-  MODIFY `id_mission` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_mission` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `property`
 --
 ALTER TABLE `property`
-  MODIFY `id_property` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_property` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `review`
@@ -334,13 +336,14 @@ ALTER TABLE `review`
 -- AUTO_INCREMENT pour la table `status`
 --
 ALTER TABLE `status`
-  MODIFY `id_status` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_status` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id_user` int UNSIGNED NOT NULL AUTO_INCREMENT;
+
 
 --
 -- Contraintes pour les tables déchargées
@@ -404,7 +407,7 @@ ALTER TABLE `property`
 --
 ALTER TABLE `review`
   ADD CONSTRAINT `mission_of_the_review` FOREIGN KEY (`id_mission`) REFERENCES `mission` (`id_mission`),
-  ADD CONSTRAINT `target_of_the_review` FOREIGN KEY (`id_user_receiving`) REFERENCES `user` (`id_user`);
+  ADD CONSTRAINT `target_of_the_review` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`);
 
 --
 -- Contraintes pour la table `user`
