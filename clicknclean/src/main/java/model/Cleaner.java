@@ -14,6 +14,7 @@ public class Cleaner extends User {
     private String biography;
     private String idPhoto;
     private String profilePhoto;
+    private String livePhoto;
     private String motivation;
     private CleanerExperience experience;
     private boolean confirmedId;
@@ -28,9 +29,11 @@ public class Cleaner extends User {
         int kmRange,
         int hourlyRate,
         String biography,
-        String profilePhoto,
         String idPhoto,
-        String string, CleanerExperience experience,
+        String profilePhoto,
+        String livePhoto,
+        String motivation,
+        CleanerExperience experience,
         boolean confirmed,
         String name,
         String pwd,
@@ -38,7 +41,9 @@ public class Cleaner extends User {
         String email,
         String phoneNumber,
         LocalDate birthLocalDate,
-        boolean suspended, ArrayList<Integer> arrayList, Planning planning2
+        boolean suspended, 
+        ArrayList<Integer> arrayList, 
+        Planning planning2
     ) {
 
         super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, UserStatus.CLEANER);
@@ -159,9 +164,20 @@ public class Cleaner extends User {
         this.planning = planning;
     }
 
+
+
+    @Override
+    public String toString() {
+        return "Cleaner [cleanerId=" + cleanerId + ", departureAddress=" + departureAddress + ", kmRange=" + kmRange
+                + ", hourlyRate=" + hourlyRate + ", biography=" + biography + ", idPhoto=" + idPhoto + ", profilePhoto="
+                + profilePhoto + ", livePhoto=" + livePhoto + ", motivation=" + motivation + ", experience="
+                + experience + ", confirmedId=" + confirmedId + ", reviews=" + reviews + ", planning=" + planning + "]";
+    }
+
     // public UserStatus getStatus() {
     //     return this.status;
     // }
 
+    
 
 }

@@ -3,7 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : jeu. 22 fév. 2024 à 15:57
+
+-- Généré le : jeu. 07 mars 2024 à 10:55
+
 -- Version du serveur : 8.0.32
 -- Version de PHP : 8.1.10
 
@@ -39,6 +41,7 @@ CREATE TABLE `activity` (
   `id_target` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
+
 -- --------------------------------------------------------
 
 --
@@ -63,19 +66,15 @@ CREATE TABLE `cleaner` (
   `km_range` int NOT NULL,
   `hourly_rate` int NOT NULL,
   `biography` varchar(100) NOT NULL,
+
   `photo_identity` varchar(36) NOT NULL,
+
   `photo_profile` varchar(36) NOT NULL,
   `photo_live` varchar(36) NOT NULL,
   `motivation` varchar(250) NOT NULL,
   `experience` varchar(250) NOT NULL,
   `confirmed` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Déchargement des données de la table `cleaner`
---
-
--- --------------------------------------------------------
 
 --
 -- Structure de la table `dispute`
@@ -113,13 +112,6 @@ CREATE TABLE `mission` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
--- Déchargement des données de la table `mission`
---
-
-
--- --------------------------------------------------------
-
---
 -- Structure de la table `mission_proposal`
 --
 
@@ -141,13 +133,6 @@ CREATE TABLE `owner` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
--- Déchargement des données de la table `owner`
---
-
-
--- --------------------------------------------------------
-
---
 -- Structure de la table `planning`
 --
 
@@ -155,10 +140,10 @@ CREATE TABLE `planning` (
   `id_cleaner` int UNSIGNED NOT NULL,
   `datetime` datetime NOT NULL,
   `durationH` double NOT NULL,
+
   `id_mission` int DEFAULT -1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
 
 --
 -- Structure de la table `property`
@@ -175,13 +160,6 @@ CREATE TABLE `property` (
   `key_box_code` varchar(10) DEFAULT NULL,
   `special_instruction` varchar(80) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Déchargement des données de la table `property`
---
-
-
--- --------------------------------------------------------
 
 --
 -- Structure de la table `review`
@@ -232,14 +210,6 @@ CREATE TABLE `user` (
   `suspended` tinyint(1) NOT NULL DEFAULT '0',
   `status` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Déchargement des données de la table `user`
---
-
---
--- Index pour les tables déchargées
---
 
 --
 -- Index pour la table `activity`
@@ -348,13 +318,13 @@ ALTER TABLE `dispute`
 -- AUTO_INCREMENT pour la table `mission`
 --
 ALTER TABLE `mission`
-  MODIFY `id_mission` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_mission` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `property`
 --
 ALTER TABLE `property`
-  MODIFY `id_property` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_property` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `review`
@@ -366,13 +336,14 @@ ALTER TABLE `review`
 -- AUTO_INCREMENT pour la table `status`
 --
 ALTER TABLE `status`
-  MODIFY `id_status` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_status` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_user` int UNSIGNED NOT NULL AUTO_INCREMENT;
+
 
 --
 -- Contraintes pour les tables déchargées
