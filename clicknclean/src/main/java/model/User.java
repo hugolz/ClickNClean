@@ -62,7 +62,7 @@ public class User {
 
 	public static String sha3256Hashing(String pwd) {
 		StringBuilder salted = new StringBuilder(pwd);
-		salted.insert(3, 'P');
+		// salted.insert(3, 'P');
 		pwd = salted.toString();;
 		return  new DigestUtils("SHA3-256").digestAsHex(pwd);
 	}

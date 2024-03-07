@@ -46,7 +46,7 @@ public class Db {
 		this.dbName = "click_n_clean";
 
 		this.login = "root";
-		this.password = "root";
+		this.password = "";
 
 		this.strUrl = "jdbc:mysql://localhost:3306/" + dbName
 		              + "?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Europe/Paris";
@@ -97,28 +97,28 @@ public class Db {
 				Planning planning = this.DAOReadPlanning(cleaner_id);
 
 				Cleaner cleaner = new Cleaner(
-					rSet.getInt("id_cleaner"),
-					new Address(
-						rSet.getString("address_display"),
-						rSet.getDouble("latitude"),
-						rSet.getDouble("longitude")),
-					rSet.getInt("km_range"),
-					rSet.getInt("hourly_rate"),
-					rSet.getString("biography"),
-					rSet.getString("photo_profile"),
-					rSet.getString("photo_identity"),
-					rSet.getString("motivation"),
-					CleanerExperience.fromInt(rSet.getInt("experience")),
-					rSet.getBoolean("confirmed"),
-					rSet.getString("name"),
-					rSet.getString("password"),
-					rSet.getString("surname"),
-					rSet.getString("email"),
-					rSet.getString("phone_number"),
-					rSet.getDate("birth_date").toLocalDate(),
-					rSet.getBoolean("suspended"),
-					new ArrayList<Integer>(), // reviews,
-					planning);
+				    rSet.getInt("id_cleaner"),
+				    new Address(
+				        rSet.getString("address_display"),
+				        rSet.getDouble("latitude"),
+				        rSet.getDouble("longitude")),
+				    rSet.getInt("km_range"),
+				    rSet.getInt("hourly_rate"),
+				    rSet.getString("biography"),
+				    rSet.getString("photo_profile"),
+				    rSet.getString("photo_identity"),
+				    rSet.getString("motivation"),
+				    CleanerExperience.fromInt(rSet.getInt("experience")),
+				    rSet.getBoolean("confirmed"),
+				    rSet.getString("name"),
+				    rSet.getString("password"),
+				    rSet.getString("surname"),
+				    rSet.getString("email"),
+				    rSet.getString("phone_number"),
+				    rSet.getDate("birth_date").toLocalDate(),
+				    rSet.getBoolean("suspended"),
+				    new ArrayList<Integer>(), // reviews,
+				    planning);
 				out.add(cleaner);
 			}
 			rSet.close();
@@ -316,11 +316,10 @@ public class Db {
 
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
-
 			out.add(
 			    new Activity(
 			        rSet.getInt("id_activity"),
-			        ActivityType.fromInt(rSet.getInt("type_service")),
+			        ActivityType.fromInt(rSet.getInt("type")),
 			        rSet.getBoolean("read"),
 			        rSet.getInt("id_owner"),
 			        rSet.getInt("id_cleaner"),
@@ -346,7 +345,7 @@ public class Db {
 				throw new Exception("Found a user with given email & password, but it's not a cleaner;");
 			}
 			Admin admin = new Admin(
-				rSet.getInt("id_admin"),
+			    rSet.getInt("id_admin"),
 			    rSet.getString("name"),
 			    rSet.getString("password"),
 			    rSet.getString("surname"),
@@ -450,9 +449,9 @@ public class Db {
 			String strQuery = "INSERT INTO `cleaner`"
 			                  + "(`id_cleaner`, `address_display`, `latitude`, `longitude`, `km_range`, `hourly_rate`, `biography`, `photo_identity`, `motivation`, `experience`, `confirmed`, `photo_profile`, `photo_live`) "
 			                  + "VALUES ('" + cleanerID + "','" + departureAddress.asString() + "','"
-			                  + departureAddress.getLatitude() + "','" + departureAddress.getLongitude() + "','" + kmRange + "','"
+			                  + departureAddress.getLatitude() + "','" + departureAddress.getLongitude() + "',' " + kmRange + "','"
 			                  + hourlyRate + "','" + bio + "','"
-			                  + photoIdentity + "','" + motivation + "','" + experience + "','" + (isConfirmed ? 1 : 0) + "','"
+			                  + photoIdentity + "','" + motivation + "','" + experience.asInt() + "','" + (isConfirmed ? 1 : 0) + "','"
 			                  + photoProfile + "','" + photoLive + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
