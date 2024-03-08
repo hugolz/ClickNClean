@@ -140,7 +140,6 @@ CREATE TABLE `planning` (
   `id_cleaner` int UNSIGNED NOT NULL,
   `datetime` datetime NOT NULL,
   `durationH` double NOT NULL,
-
   `id_mission` int DEFAULT -1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
