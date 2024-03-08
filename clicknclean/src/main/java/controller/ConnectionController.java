@@ -2,6 +2,7 @@ package controller;
 
 import javax.swing.JOptionPane;
 
+import controller.admin.AdminMainController;
 import javafx.scene.control.ScrollPane;
 import javafx.util.Pair;
 
@@ -38,18 +39,22 @@ public class ConnectionController {
 
 		try {
 			switch (user.getValue()) {
+
 			case ADMIN:
 				Admin admin = db.DAOReadAdmin(user.getKey());
 				// TODO: scene for ADMIN_WELCOME
-				window.setScene(new AdminMain(new ScrollPane(), window, admin));
+				new AdminMainController(window, admin, 0, 0, 0);
+				System.err.println(user.getKey());
 				break;
+          
 			case CLEANER:
 				Cleaner cleaner = db.DAOReadCleaner(user.getKey());
 				// window.displayWelcomeCleaner();
 				window.setScene(new CleanerMain(new VBox(), window, cleaner));
 				break;
+          
 			case OWNER:
-				Owner owner = db.DAOReadOwner(user.getKey());
+
 				// TODO: scene for OWNER_WELCOME
 				window.setScene(new OwnerMain(new ScrollPane(), window, owner));
 
@@ -57,8 +62,26 @@ public class ConnectionController {
 			}
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Internal error: Could not find a given " + user.getValue()
+
 			                              + "for user: " + user.getKey() + "SQL error: " + e);
+
 		}
 
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

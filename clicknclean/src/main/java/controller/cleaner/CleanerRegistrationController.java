@@ -154,8 +154,8 @@ public class CleanerRegistrationController {
 		try {
 			// TODO : Send to all admin below
 			currentCleaner = connection.DAOReadCleaner(currentCleanerId);
-			// connection.DAOaddActivity(ActivityType.WELCOME_CLEANER, currentCleanerId, null, null, null, null, null);
-			// connection.DAOaddActivity(ActivityType.CLEANER_WAITING_TO_BE_CONFIRMED, 1, null, null, null, null, null);
+			connection.DAOaddActivity(ActivityType.WELCOME_CLEANER, currentCleanerId, null, null, null, null, null);
+			connection.DAOaddActivity(ActivityType.CLEANER_WAITING_TO_BE_CONFIRMED, 1, null, currentCleanerId, null, null, null);
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Could not read newly created cleaner due to: " + e);
 			return;
