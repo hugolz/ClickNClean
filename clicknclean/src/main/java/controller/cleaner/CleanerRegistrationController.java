@@ -15,6 +15,7 @@ import model.User;
 import model.UserStatus;
 import view.Window;
 import view.cleaner.CleanerWelcome;
+import javafx.scene.layout.VBox;
 import view.SceneId;
 import tools.Db;
 
@@ -159,7 +160,7 @@ public class CleanerRegistrationController {
 			JOptionPane.showMessageDialog(null, "Could not read newly created cleaner due to: " + e);
 			return;
 		}
-		window.setScene(new CleanerWelcome(new ScrollPane(), window, currentCleaner));
+		window.setScene(new CleanerWelcome(new VBox(), window, currentCleaner));
 
 		// db.close();
 	}
