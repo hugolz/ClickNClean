@@ -49,6 +49,7 @@ public class OwnerRegistrationController {
 
 		catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "L'inscription a échoué");
+			return;
 		}
 
 		JOptionPane.showMessageDialog(null, "Inscription réussi ! Vous allez être redirigez vers votre page d'acceuil !");

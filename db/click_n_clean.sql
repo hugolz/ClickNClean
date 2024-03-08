@@ -146,10 +146,11 @@ CREATE TABLE `planning` (
   `id_cleaner` int UNSIGNED NOT NULL,
   `datetime` datetime NOT NULL,
   `durationH` double NOT NULL,
-  `id_mission` int DEFAULT '-1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
+  `id_mission` int DEFAULT -1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
 
 --
 -- Structure de la table `property`
