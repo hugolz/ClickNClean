@@ -350,7 +350,7 @@ public class Db {
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
 			if (UserStatus.fromInt(rSet.getInt("status")) != UserStatus.ADMIN) {
-				throw new Exception("Found a user with given email & password, but it's not a cleaner;");
+				throw new Exception("Found a user with given email & password, but it's not a admin;");
 			}
 			Admin admin = new Admin(
 			    rSet.getInt("id_admin"),
@@ -670,5 +670,4 @@ public class Db {
 			System.err.println(e.getMessage());
 		}
 	}
-
 }
