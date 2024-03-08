@@ -16,7 +16,7 @@ import model.OwnerMotivation;
 
 import view.cleaner.CleanerRegistration;
 import view.owner.OwnerRegistration;
-import view.cleaner.CleanerWelcome;
+import view.cleaner.CleanerMain;
 
 
 
@@ -51,17 +51,6 @@ public class Window extends Application {
 		this.stage.setScene(s);
 		this.currentScene = null;
 	}
-
-
-	public void setScene(SceneId id) {
-		if (this.currentScene == id) {
-			// TODO: Can this cause problem ? does switching to the same scene be usefull ?
-			// like a refresh or something
-			System.err.println("Current scene is already " + id);
-			return;
-		}
-	}
-
 
 	public void run() {
 		launch();
@@ -105,7 +94,7 @@ public class Window extends Application {
 		this.stage = stage;
 		this.stage.setTitle("Hello World!");
 		ScrollPane root = this.initStage(stage);
-		
+
 
 		this.setScene(new Connection(new ScrollPane(), this));
 

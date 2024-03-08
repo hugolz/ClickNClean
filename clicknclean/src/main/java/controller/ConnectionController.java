@@ -11,11 +11,11 @@ import model.Admin;
 
 import model.UserStatus;
 import tools.Db;
+import javafx.scene.layout.VBox;
 import view.Window;
 import view.admin.AdminMain;
-import view.cleaner.CleanerWelcome;
+import view.cleaner.CleanerMain;
 import view.owner.OwnerMain;
-
 
 public class ConnectionController {
 	public ConnectionController(String login, String psw, Window window) {
@@ -30,7 +30,7 @@ public class ConnectionController {
 		try {
 			user = db.DAOReadUser(login, psw);
 		} catch (Exception e) {
-
+			JOptionPane.showMessageDialog(null, "Incorrect email or password");
 			return;
 		}
 
@@ -38,32 +38,27 @@ public class ConnectionController {
 
 		try {
 			switch (user.getValue()) {
-
-			case ADMIN :
+			case ADMIN:
 				Admin admin = db.DAOReadAdmin(user.getKey());
-				System.out.println("okkkkkkkk");
-				// window.displayWelcomeAdmin();
 				// TODO: scene for ADMIN_WELCOME
 				window.setScene(new AdminMain(new ScrollPane(), window, admin));
 				break;
-			case CLEANER :
+			case CLEANER:
 				Cleaner cleaner = db.DAOReadCleaner(user.getKey());
 				// window.displayWelcomeCleaner();
-				window.setScene(new CleanerWelcome(new ScrollPane(), window, cleaner));
+				window.setScene(new CleanerMain(new VBox(), window, cleaner));
 				break;
-			case OWNER :
+			case OWNER:
 				Owner owner = db.DAOReadOwner(user.getKey());
-				// window.displayWelcomeOwner();
 				// TODO: scene for OWNER_WELCOME
-
 				window.setScene(new OwnerMain(new ScrollPane(), window, owner));
 
 				break;
 			}
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Email ou mot de passe incorrect !");
+			JOptionPane.showMessageDialog(null, "Internal error: Could not find a given " + user.getValue()
+			                              + "for user: " + user.getKey() + "SQL error: " + e);
 		}
-
 
 	}
 }
