@@ -14,7 +14,7 @@ import tools.Db;
 import javafx.scene.layout.VBox;
 import view.Window;
 import view.admin.AdminMain;
-import view.cleaner.CleanerWelcome;
+import view.cleaner.CleanerMain;
 import view.owner.OwnerMain;
 
 public class ConnectionController {
@@ -46,7 +46,7 @@ public class ConnectionController {
 			case CLEANER:
 				Cleaner cleaner = db.DAOReadCleaner(user.getKey());
 				// window.displayWelcomeCleaner();
-				window.setScene(new CleanerWelcome(new VBox(), window, cleaner));
+				window.setScene(new CleanerMain(new VBox(), window, cleaner));
 				break;
 			case OWNER:
 				Owner owner = db.DAOReadOwner(user.getKey());

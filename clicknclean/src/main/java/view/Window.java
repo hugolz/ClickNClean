@@ -16,7 +16,7 @@ import model.OwnerMotivation;
 
 import view.cleaner.CleanerRegistration;
 import view.owner.OwnerRegistration;
-import view.cleaner.CleanerWelcome;
+import view.cleaner.CleanerMain;
 
 
 

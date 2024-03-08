@@ -8,6 +8,11 @@ import java.io.File;
 import javax.swing.Scrollable;
 
 import controller.LogoutController;
+import controller.cleaner.CleanerInboxController;
+import controller.cleaner.CleanerNotificationController;
+import controller.cleaner.CleanerProfileController;
+import controller.cleaner.CleanerPlanningController;
+import controller.cleaner.CleanerMissionController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -17,8 +22,8 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class CleanerWelcome extends Scene {
-	public CleanerWelcome(VBox container, Window window, Cleaner cleaner) {
+public class CleanerMain extends Scene {
+	public CleanerMain(VBox container, Window window, Cleaner cleaner) {
 		super(container, 800, 600);
 		System.out.println("CleanerWelcome constructor");
 		Button profileButton = new Button("Profil");
@@ -30,17 +35,17 @@ public class CleanerWelcome extends Scene {
 
 		profileButton.setOnAction(new EventHandler<ActionEvent> () {
 			public void handle(ActionEvent ev) {
-				System.out.println("profileButton has been clicked with event: " + ev);
+				new CleanerProfileController(window, cleaner);
 			}
 		});
 		notificationButton.setOnAction(new EventHandler<ActionEvent> () {
 			public void handle(ActionEvent ev) {
-				System.out.println("notificationButton has been clicked with event: " + ev);
+				new CleanerNotificationController(window, cleaner);
 			}
 		});
 		inboxButton.setOnAction(new EventHandler<ActionEvent> () {
 			public void handle(ActionEvent ev) {
-				System.out.println("inboxButton has been clicked with event: " + ev);
+				new CleanerInboxController(window, cleaner);
 			}
 		});
 		disconnectButton.setOnAction(new EventHandler<ActionEvent> () {
@@ -50,15 +55,14 @@ public class CleanerWelcome extends Scene {
 		});
 		planningButton.setOnAction(new EventHandler<ActionEvent> () {
 			public void handle(ActionEvent ev) {
-				System.out.println("planningButton has been clicked with event: " + ev);
+				new CleanerPlanningController(window, cleaner);
 			}
 		});
 		archivedMissionsButton.setOnAction(new EventHandler<ActionEvent> () {
 			public void handle(ActionEvent ev) {
-				System.out.println("archivedMissionsButton has been clicked with event: " + ev);
+				new CleanerMissionController(window, cleaner);
 			}
 		});
-
 
 		VBox header = new VBox();
 		header.setId("header");
