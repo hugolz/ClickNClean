@@ -20,6 +20,7 @@ import tools.Db;
 
 public class CleanerRegistrationController {
 	private int currentCleanerId;
+
 	public CleanerRegistrationController(
 	    String name,
 	    String surname,
@@ -44,8 +45,14 @@ public class CleanerRegistrationController {
 	    String photo,
 	    String idPhoto,
 	    String photoLive,
-	    Window window
-	) throws InterruptedException, ExecutionException, Exception {
+	    Window window) {
+
+		System.out.println(
+		    "bd" + birthDate +
+		    "km: " + km +
+		    "rate: " + hourlyRate
+
+		);
 
 		Db db = new Db();
 		Address address;
@@ -56,7 +63,12 @@ public class CleanerRegistrationController {
 			return;
 		}
 
-		if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || rawPassword.isEmpty() || rawConfirmpassword.isEmpty() || phone.isEmpty() || birthDate == null || address == null || km == 0 || hourlyRate == 0 || biography.isEmpty() || motivation.isEmpty() || photo.isEmpty() || idPhoto.isEmpty()) {
+
+		if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || rawPassword.isEmpty()
+		        || rawConfirmpassword.isEmpty() || phone.isEmpty() || birthDate == null || address == null || km == 0
+		        || hourlyRate == 0 || biography.isEmpty() || motivation.isEmpty() || photo.isEmpty()
+		        || idPhoto.isEmpty()) {
+
 			JOptionPane.showMessageDialog(null, "Champs non remplis !");
 			return;
 		}
@@ -94,50 +106,59 @@ public class CleanerRegistrationController {
 			return;
 		}
 
-
 		if (isEmailAdress(email) == false) {
-			//not good email format
+			// not good email format
 			JOptionPane.showMessageDialog(null, "Mauvais format d'email !");
 			return;
 		}
 
 		if (hourlyRate > 40 || hourlyRate < 15) {
-			//too much or not enough hourlyRate
+
+			// too much or not enough hourlyRate
+
 			JOptionPane.showMessageDialog(null, "Rémunération trop ou pas assez élevée");
 			return;
 		}
 
 		try {
-				currentCleanerId = db.DAOAddCleaner(
-			    name,
-			    User.sha3256Hashing(rawPassword),
-			    surname,
-			    email,
-			    phone,
-			    birthDate,
-			    false,
-			    address,
-			    km,
-			    hourlyRate,
-			    biography,
-			    idPhoto,
-			    motivation,
-			    experience,
-			    false,
-			    photo,
-			    photoLive);
+			currentCleanerId = db.DAOAddCleaner(
+			                       name,
+			                       rawPassword,
+			                       surname,
+			                       email,
+			                       phone,
+			                       birthDate,
+			                       false,
+			                       address,
+			                       km,
+			                       hourlyRate,
+			                       biography,
+			                       idPhoto,
+			                       motivation,
+			                       experience,
+			                       false,
+			                       photo,
+			                       photoLive);
 
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "L'inscription a échoué");
+			JOptionPane.showMessageDialog(null, "L'inscription a échoué, erreur: " + e);
+			return;
 		}
 
-		JOptionPane.showMessageDialog(null, "Inscription réussie ! Vous allez être dirigé vers votre page d'accueil, vos accès sont limités en attente de confirmation de votre compte");
+		JOptionPane.showMessageDialog(null,
+		                              "Inscription réussie ! Vous allez être dirigé vers votre page d'accueil, vos accès sont limités en attente de confirmation de votre compte");
 
 		Db connection = new Db();
-		Cleaner currentCleaner = connection.DAOReadCleaner(currentCleanerId);
-		connection.DAOaddActivity(ActivityType.WELCOME_CLEANER, currentCleanerId, null, null, null, null, null);
-		//TODO : Send to all admin below
-		connection.DAOaddActivity(ActivityType.CLEANER_WAITING_TO_BE_CONFIRMED, 1, null, null, null, null, null);
+		Cleaner currentCleaner;
+		try {
+			// TODO : Send to all admin below
+			currentCleaner = connection.DAOReadCleaner(currentCleanerId);
+			// connection.DAOaddActivity(ActivityType.WELCOME_CLEANER, currentCleanerId, null, null, null, null, null);
+			// connection.DAOaddActivity(ActivityType.CLEANER_WAITING_TO_BE_CONFIRMED, 1, null, null, null, null, null);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Could not read newly created cleaner due to: " + e);
+			return;
+		}
 		window.setScene(new CleanerWelcome(new ScrollPane(), window, currentCleaner));
 
 		// db.close();

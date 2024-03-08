@@ -46,7 +46,7 @@ public class Db {
 		this.dbName = "click_n_clean";
 
 		this.login = "root";
-		this.password = "root";
+		this.password = "";
 
 		this.strUrl = "jdbc:mysql://localhost:3306/" + dbName
 		              + "?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Europe/Paris";
@@ -97,28 +97,31 @@ public class Db {
 				Planning planning = this.DAOReadPlanning(cleaner_id);
 
 				Cleaner cleaner = new Cleaner(
-					rSet.getInt("id_cleaner"),
-					new Address(
-						rSet.getString("address_display"),
-						rSet.getDouble("latitude"),
-						rSet.getDouble("longitude")),
-					rSet.getInt("km_range"),
-					rSet.getInt("hourly_rate"),
-					rSet.getString("biography"),
-					rSet.getString("photo_profile"),
-					rSet.getString("photo_identity"),
-					rSet.getString("motivation"),
-					CleanerExperience.fromInt(rSet.getInt("experience")),
-					rSet.getBoolean("confirmed"),
-					rSet.getString("name"),
-					rSet.getString("password"),
-					rSet.getString("surname"),
-					rSet.getString("email"),
-					rSet.getString("phone_number"),
-					rSet.getDate("birth_date").toLocalDate(),
-					rSet.getBoolean("suspended"),
-					new ArrayList<Integer>(), // reviews,
-					planning);
+
+				    rSet.getInt("id_cleaner"),
+				    new Address(
+				        rSet.getString("address_display"),
+				        rSet.getDouble("latitude"),
+				        rSet.getDouble("longitude")),
+				    rSet.getInt("km_range"),
+				    rSet.getInt("hourly_rate"),
+				    rSet.getString("biography"),
+				    rSet.getString("photo_identity"),
+				    rSet.getString("photo_profile"),
+				    rSet.getString("photo_live"),
+				    rSet.getString("motivation"),
+				    CleanerExperience.fromInt(rSet.getInt("experience")),
+				    rSet.getBoolean("confirmed"),
+				    rSet.getString("name"),
+				    rSet.getString("password"),
+				    rSet.getString("surname"),
+				    rSet.getString("email"),
+				    rSet.getString("phone_number"),
+				    rSet.getDate("birth_date").toLocalDate(),
+				    rSet.getBoolean("suspended"),
+				    new ArrayList<Integer>(), // reviews,
+				    planning);
+
 				out.add(cleaner);
 			}
 			rSet.close();
@@ -128,10 +131,10 @@ public class Db {
 		return out;
 	}
 
-	public Pair<Integer, UserStatus> DAOReadUser(String login, String password)
+	public Pair<Integer, UserStatus> DAOReadUser(String login, String pwd)
 	throws InterruptedException, ExecutionException, Exception {
-		password = User.sha3256Hashing(password);
-		String query = "SELECT * FROM user where email  = '" + login + "' AND password = '" + password + "';";
+		String pwd_hash = User.sha3256Hashing(pwd);
+		String query = "SELECT * FROM user where email  = '" + login + "' AND password = '" + pwd_hash + "';";
 
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
@@ -158,10 +161,12 @@ public class Db {
 		// ArrayList<Integer> reviews_ids = // we can't read cleaner review yet !
 
 		ResultSet rSet = this.stRead.executeQuery(query);
+		int cleanerIdTest = 0;
 		while (rSet.next()) {
 			if (UserStatus.fromInt(rSet.getInt("status")) != UserStatus.CLEANER) {
 				throw new Exception("Found a user with given id, but it's not a cleaner;");
 			}
+			cleanerIdTest = rSet.getInt("id_cleaner");
 
 			Cleaner cleaner = new Cleaner(
 			    rSet.getInt("id_cleaner"),
@@ -172,8 +177,9 @@ public class Db {
 			    rSet.getInt("km_range"),
 			    rSet.getInt("hourly_rate"),
 			    rSet.getString("biography"),
-			    rSet.getString("photo_profile"),
 			    rSet.getString("photo_identity"),
+			    rSet.getString("photo_profile"),
+			    rSet.getString("photo_live"),
 			    rSet.getString("motivation"),
 			    CleanerExperience.fromInt(rSet.getInt("experience")),
 			    rSet.getBoolean("confirmed"),
@@ -186,11 +192,13 @@ public class Db {
 			    rSet.getBoolean("suspended"),
 			    new ArrayList<Integer>(), // reviews,
 			    planning);
+
+			rSet.close();
 			return cleaner;
 		}
 		rSet.close();
 
-		throw new Exception("Could not find any cleaner with the given id");
+		throw new Exception("Could not find any cleaner with the given id " + cleanerIdTest);
 	}
 
 	public Owner DAOReadOwner(int id_user) throws InterruptedException, ExecutionException, Exception {
@@ -235,7 +243,7 @@ public class Db {
 	public ArrayList<Review> DAOReadOwnerReviews(int id_owner)
 	throws InterruptedException, ExecutionException, Exception {
 		ArrayList<Review> reviews = new ArrayList<Review>();
-		String query = "SELECT * FROM review JOIN owner ON (review.id_user = owner.id_owner) WHERE owner.id_owner = "
+		String query = "SELECT * FROM review JOIN owner ON (review.id_user_receiving = owner.id_owner) WHERE owner.id_owner = "
 		               + id_owner;
 
 		ResultSet rSet = this.stRead.executeQuery(query);
@@ -316,11 +324,10 @@ public class Db {
 
 		ResultSet rSet = this.stRead.executeQuery(query);
 		while (rSet.next()) {
-
 			out.add(
 			    new Activity(
 			        rSet.getInt("id_activity"),
-			        ActivityType.fromInt(rSet.getInt("type_service")),
+			        ActivityType.fromInt(rSet.getInt("type")),
 			        rSet.getBoolean("read"),
 			        rSet.getInt("id_owner"),
 			        rSet.getInt("id_cleaner"),
@@ -346,7 +353,7 @@ public class Db {
 				throw new Exception("Found a user with given email & password, but it's not a cleaner;");
 			}
 			Admin admin = new Admin(
-				rSet.getInt("id_admin"),
+			    rSet.getInt("id_admin"),
 			    rSet.getString("name"),
 			    rSet.getString("password"),
 			    rSet.getString("surname"),
@@ -444,15 +451,14 @@ public class Db {
 	                         boolean isConfirmed,
 	                         String photoProfile,
 	                         String photoLive) {
-
 		int cleanerID = DAOAddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.CLEANER);
 		try {
 			String strQuery = "INSERT INTO `cleaner`"
 			                  + "(`id_cleaner`, `address_display`, `latitude`, `longitude`, `km_range`, `hourly_rate`, `biography`, `photo_identity`, `motivation`, `experience`, `confirmed`, `photo_profile`, `photo_live`) "
 			                  + "VALUES ('" + cleanerID + "','" + departureAddress.asString() + "','"
-			                  + departureAddress.getLatitude() + "','" + departureAddress.getLongitude() + "','" + kmRange + "','"
+			                  + departureAddress.getLatitude() + "','" + departureAddress.getLongitude() + "',' " + kmRange + "','"
 			                  + hourlyRate + "','" + bio + "','"
-			                  + photoIdentity + "','" + motivation + "','" + experience + "','" + (isConfirmed ? 1 : 0) + "','"
+			                  + photoIdentity + "','" + motivation + "','" + experience.asInt() + "','" + (isConfirmed ? 1 : 0) + "','"
 			                  + photoProfile + "','" + photoLive + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
@@ -464,6 +470,7 @@ public class Db {
 
 	public int DAOAddOwner(String name, String pwd, String surname, String email, String phoneN, LocalDate birthDate,
 	                       boolean isSuspended, OwnerMotivation serviceType) {
+
 		int ownerId = DAOAddUser(name, pwd, surname, email, phoneN, birthDate, isSuspended, UserStatus.OWNER);
 
 		try {
@@ -546,10 +553,12 @@ public class Db {
 		Date sqlBirthDate = Date.valueOf(birthDate);
 		Date sqlAccountdate = Date.valueOf(accountDate);
 
+		String pwd_hash = User.sha3256Hashing(pwd);
+
 		try {
 			String strQuery = "INSERT INTO `user`"
 			                  + "(`name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `account_date`, `suspended`, `status`) "
-			                  + "VALUES ('" + name + "','" + pwd + "','" + surname + "','" + email + "','" + phoneN + "','"
+			                  + "VALUES ('" + name + "','" + pwd_hash + "','" + surname + "','" + email + "','" + phoneN + "','"
 			                  + sqlBirthDate + "','" + sqlAccountdate + "','" + (isSuspended ? 1 : 0) + "','" + status.asInt()
 			                  + "');";
 
@@ -654,7 +663,7 @@ public class Db {
 
 		try {
 			String strQuery = "INSERT INTO `review`"
-			                  + "(`content`, `grade`, `id_user_receiving`, `id_mission`, `id_owner`) "
+			                  + "(`content`, `grade`, `id_user`, `id_mission`, `id_owner`) "
 			                  + "VALUES ('" + content + "','" + userReceivingId + "','" + missionId + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {

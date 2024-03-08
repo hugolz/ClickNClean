@@ -22,7 +22,7 @@ public class TestDb {
     void cleanerRegistration() {
         // Init vars
         String name = "cleaner username";
-        String pwd = User.sha3256Hashing("a cool password");
+        String pwd = "a cool password";
         String surname = "surname";
         String email = "aa.aa@aa.aa";
         String phoneN = "1234567890";
@@ -32,7 +32,7 @@ public class TestDb {
         try {
             departureAddress = new Address("28", "av yves thepot", "29000", "quimper");
         } catch (Exception e) {
-            System.out.println("[ERROR] cleanerRegistration test failled on address constructor");
+            System.out.println("[ERROR] cleanerRegistration test failed on address constructor");
             return;
         }
         int kmRange = 5;
@@ -79,7 +79,7 @@ public class TestDb {
                 assert cleaner.getBiography().equals(bio);
                 System.out.println("[SUCCESS] cleanerRegistration done");
             } catch (Exception e) {
-                System.out.println("[ERROR] cleanerRegistration test failled on cleaner read: " + e);
+                System.out.println("[ERROR] cleanerRegistration test failed on cleaner read: " + e);
                 return;
             }
         } catch (Exception e) {
@@ -91,7 +91,7 @@ public class TestDb {
     void ownerRegistration() {
         // Init vars
         String name = "owner name";
-        String pwd = User.sha3256Hashing("}yvhP&k5y?hYY5;U}nuG%Yl5!^~IkM8K%");
+        String pwd = "}yvhP&k5y?hYY5;U}nuG%Yl5!^~IkM8K%";
         String surname = "a cool surname";
         String email = "aa.aa@aa.aa";
         String phoneN = "1234567890";
@@ -121,7 +121,7 @@ public class TestDb {
                 assert owner.getServiceType().equals(serviceType);
                 System.out.println("[SUCCESS] onwerRegistration done");
             } catch (Exception e) {
-                System.out.println("[ERROR] ownerRegistration test failled on owner read: " + e);
+                System.out.println("[ERROR] ownerRegistration test failed on owner read: " + e);
                 return;
             }
         } catch (Exception e) {
@@ -143,7 +143,7 @@ public class TestDb {
         try {
             departureAddress = new Address("28", "av yves thepot", "29000", "quimper");
         } catch (Exception e) {
-            System.out.println("cleanerRegistration test failled on address constructor");
+            System.out.println("cleanerRegistration test failed on address constructor");
             return;
         }
         int kmRange = 5;
@@ -162,7 +162,7 @@ public class TestDb {
         try {
             int cleanerId = connection.DAOAddCleaner(
                                 name,
-                                User.sha3256Hashing(pwd),
+                                pwd,
                                 surname,
                                 email,
                                 phoneN,
@@ -186,13 +186,14 @@ public class TestDb {
 
         try {
             Pair<Integer, UserStatus> id_status = connection.DAOReadUser(email, pwd);
-            if (id_status.getValue() != UserStatus.CLEANER) {
+            if (id_status.getValue().asInt() != UserStatus.CLEANER.asInt()) {
+
                 assert 1 == 0 : "what have you done";
             }
             Cleaner cleaner = connection.DAOReadCleaner(id_status.getKey());
             System.out.println("[SUCCESS] Succesfully logged in cleaner");
         } catch (Exception e) {
-            System.err.println("[ERROR] Could not login cleaner");
+            System.err.println("[ERROR] Could not login cleaner " + e);
         }
     }
 
@@ -200,7 +201,7 @@ public class TestDb {
     void ownerLogin() {
         // Init vars
         String name = "owner username";
-        String pwd = "a cool owner password";
+        String pwd = "}yvhP&k5y?hYY5;U}nuG%Yl5!^~IkM8K%";
         String surname = "surname";
         String email = "a_very.original@email.aa2";
         String phoneN = "0987654321";
@@ -214,7 +215,7 @@ public class TestDb {
         try {
             int ownerId = connection.DAOAddOwner(
                               name,
-                              User.sha3256Hashing(pwd),
+                              pwd,
                               surname,
                               email,
                               phoneN,
@@ -230,7 +231,7 @@ public class TestDb {
 
         try {
             Pair<Integer, UserStatus> id_status = connection.DAOReadUser(email, pwd);
-            if (id_status.getValue() != UserStatus.OWNER) {
+            if (id_status.getValue().asInt() != UserStatus.OWNER.asInt()) {
                 assert 1 == 0 : "what have you done";
             }
             Owner owner = connection.DAOReadOwner(id_status.getKey());
@@ -244,7 +245,7 @@ public class TestDb {
     public void activityReadWrite() {
         Db connection = new Db();
 
-        int cleanerId = 8;
+        int cleanerId = 2;
 
         connection.DAOaddActivity(
             ActivityType.WELCOME_CLEANER,
@@ -260,7 +261,9 @@ public class TestDb {
             System.out.println("[SUCCESS] Read " + activities.size() + " activities for cleaner with id: " + cleanerId);
 
         } catch (Exception e) {
-            System.err.println("[ERROR] Failled to fetch activities for id: " + cleanerId);
+
+            System.err.println("[ERROR] Failled to fetch activities for id: " + cleanerId + " due to: " + e);
+
         }
 
     }
