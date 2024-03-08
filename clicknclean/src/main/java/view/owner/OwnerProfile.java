@@ -2,11 +2,15 @@ package view.owner;
 
 import java.io.File;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.VBox;
+import view.Connection;
 import view.Window;
 
 public class OwnerProfile extends Scene {
@@ -19,7 +23,17 @@ public class OwnerProfile extends Scene {
 		  Label phoneOwner = new Label("Téléphone :");
 		  Label birthDateOwner = new Label("Date de naissance :");
 		  Label motivationOwner = new Label("Type de prestation recherchée :");
+		  Button updateOwner = new Button("Modifier");
 		  
+		  
+		  EventHandler<ActionEvent> eventUpdate = new EventHandler<ActionEvent>() {
+				public void handle(ActionEvent e) {
+					//go vers le controller OwnerProfileUpdate
+
+				}
+
+			};
+			updateOwner.setOnAction(eventUpdate);
 		  
 		
 		  
@@ -30,6 +44,7 @@ public class OwnerProfile extends Scene {
 		  vbox.getChildren().add(phoneOwner);
 		  vbox.getChildren().add(birthDateOwner);
 		  vbox.getChildren().add(motivationOwner);
+		  vbox.getChildren().add(updateOwner);
 		  
 		  container.setContent(vbox);
 
