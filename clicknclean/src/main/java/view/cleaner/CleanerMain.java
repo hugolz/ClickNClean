@@ -35,7 +35,7 @@ public class CleanerMain extends Scene {
 
 		profileButton.setOnAction(new EventHandler<ActionEvent> () {
 			public void handle(ActionEvent ev) {
-				new CleanerProfileController(window, cleaner);
+				window.setScene(new CleanerProfile(new VBox(), window, cleaner));
 			}
 		});
 		notificationButton.setOnAction(new EventHandler<ActionEvent> () {

@@ -69,9 +69,8 @@ public class AdminMain extends Scene {
             cleanerBlockContainer.getItems().addAll(display, acceptContainer, blockContainer);
             menuButton.getItems().add(cleanerBlockContainer);
         }
-
         Label displayDispute = new Label("Litiges à gérer");
-
+      
         ListView<String> listViewSuspend = new ListView<>();
 
         listViewSuspend.getItems().add("Cleaner 1");
@@ -119,7 +118,6 @@ public class AdminMain extends Scene {
         this.getStylesheets()
                 .add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
     }
-
     public void handleCleaner(Window win, Admin ad, int cleanerId, int isConfirmed) throws Exception {
         new AdminMainController(win, ad, 1, cleanerId, isConfirmed);
     }
