@@ -1,21 +1,20 @@
 package model;
 
 public enum ActivityType {
-    WELCOME_CLEANER(1), // for cleaner
-    CLEANER_WAITING_TO_BE_CONFIRMED(3), // for admin
-    CLEANER_ACCOUNT_CONFIRMED(4), // for cleaner
-    CLEANER_ACCOUNT_NOT_CONFIRMED(5),
-    PROPERTY_IS_PUBLISHED(6), // for owner
-    NEW_MISSION_AVAILABLE(7), // for cleaner
-    CLEANER_OFFERS_SERVICE(8), // for owner
-    PROPOSAL_ACCEPTED(9), // for cleaner
-    MISSION_CANCELED(10), // for cleaner AND owner
-    MISSION_FINISHED_BY_CLEANER(11), // for owner
-    DISPUTE_OPENED(12), // for cleaner AND owner AND admin
-    DISPUTE_RESOLVED(13), // for cleaner AND owner
-    MISSION_FINISHED_BY_OWNER(14), // for cleaner
-    REVIEW_THE_MISSION(15), // for cleaner AND owner
-    REVIEW_HAS_BEEN_RECEIVED(16); // for cleaner OR owner
+    WELCOME_CLEANER(1), //for cleaner
+    CLEANER_WAITING_TO_BE_CONFIRMED(2), //for admin
+    CLEANER_ACCOUNT_CONFIRMED(3), //for cleaner
+    PROPERTY_IS_PUBLISHED(4), //for owner
+    NEW_MISSION_AVAILABLE(5), //for cleaner
+    CLEANER_OFFERS_SERVICE(6), // for owner
+    PROPOSAL_ACCEPTED(7), //for cleaner
+    MISSION_CANCELED(8), //for cleaner AND owner
+    MISSION_FINISHED_BY_CLEANER(9), //for owner
+    DISPUTE_OPENED(10), //for cleaner AND owner AND admin
+    DISPUTE_RESOLVED(11), //for cleaner AND owner
+    MISSION_FINISHED_BY_OWNER(12), //for cleaner
+    REVIEW_THE_MISSION(13), //for cleaner AND owner
+    REVIEW_HAS_BEEN_RECEIVED(14); //for cleaner OR owner
     private int type;
 
     private ActivityType(int type) {

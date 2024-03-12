@@ -55,6 +55,7 @@ public class ConnectionController {
           
 			case OWNER:
 
+				Owner owner = db.DAOReadOwner(user.getKey());
 				// TODO: scene for OWNER_WELCOME
 				window.setScene(new OwnerMain(new ScrollPane(), window, owner));
 

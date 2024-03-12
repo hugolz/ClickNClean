@@ -14,6 +14,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+import com.mysql.cj.x.protobuf.MysqlxPrepare.Prepare;
+
 import javafx.util.Pair;
 import model.Activity;
 import model.ActivityType;
@@ -21,6 +23,7 @@ import model.Address;
 import model.Admin;
 import model.Cleaner;
 import model.CleanerExperience;
+import model.Dispute;
 import model.Mission;
 import model.MissionStatus;
 import model.Owner;
@@ -275,6 +278,34 @@ public class Db {
 		return reviews;
 	}
 
+/*---------------------------------- Read properties methods -----------------------------------------------*/
+
+public Property DAOReadProperty(int propertyId)
+throws InterruptedException, ExecutionException, Exception {
+	String query = "SELECT * FROM property WHERE id_property = "
+				   + propertyId;
+
+	ResultSet rSet = this.stRead.executeQuery(query);
+	if (rSet.next()) {
+		Property property = new Property(
+			rSet.getInt("id_property"),
+			new Address(
+				rSet.getString("address_display"),
+				rSet.getDouble("latitude"),
+				rSet.getDouble("longitude")),
+			rSet.getInt("surface"),
+			rSet.getInt("id_owner"),
+			rSet.getString("acces_code"),
+			rSet.getString("key_box_code"),
+			rSet.getString("special_instruction"));
+			System.out.println(property);
+			return property;
+	}
+	rSet.close();
+	throw new Exception("Cannot find a property for id : " + propertyId);
+	
+}
+
 	public ArrayList<Property> DAOReadOwnerProperties(int id_owner)
 	throws InterruptedException, ExecutionException, Exception {
 		ArrayList<Property> properties = new ArrayList<Property>();
@@ -292,7 +323,7 @@ public class Db {
 			    rSet.getInt("surface"),
 			    rSet.getInt("id_owner"),
 			    rSet.getString("acces_code"),
-			    rSet.getString("keybox_code"),
+			    rSet.getString("key_box_code"),
 			    rSet.getString("special_instruction"));
 
 			properties.add(property);
@@ -417,6 +448,73 @@ public class Db {
 		return new Planning(slots);
 	}
 
+
+	public Dispute DAOReadDispute(int disputeId) throws SQLException {
+		String query = "SELECT *, "
+							+ "(SELECT CONCAT(surname,' ',name)"  
+							+ "FROM user JOIN dispute "
+							+ "ON dispute.id_owner = user.id_user) owner_display,"
+							+ "(SELECT CONCAT(surname,' ',name)  "
+							+ "FROM user JOIN dispute "
+							+ "ON dispute.id_cleaner = user.id_user) cleaner_display"
+						+ "FROM dispute;";
+
+			ResultSet rSet = stRead.executeQuery(query);
+			if (rSet.next()) {
+
+				Dispute dispute = new Dispute(
+					rSet.getInt("id_dispute"), 
+					rSet.getString("content"), 
+					rSet.getString("decision"), 
+					rSet.getString("owner_display"),
+					rSet.getString("cleaner_display"),
+					rSet.getInt("id_owner"), 
+					rSet.getInt("id_cleaner"), 
+					rSet.getInt("id_mission"), 
+					rSet.getInt("id_dispute_creator"), 
+					rSet.getInt("id_admin"));
+				rSet.close();
+				return dispute;	
+			}
+			rSet.close();
+			throw new SQLException("No dispute with id=" + disputeId);
+	}
+
+
+
+	public Mission DAOReadMission(int missionId) throws InterruptedException, ExecutionException, Exception {
+		Statement  st2 = conn.createStatement();
+		String query = "SELECT * FROM mission JOIN property ON mission.id_property = property.id_property WHERE id_mission =" + missionId;
+			Property missionProperty = null;
+
+			ResultSet rSet2 = st2.executeQuery(query);
+			if (rSet2.next()) {
+				ArrayList<Property> propList = DAOReadOwnerProperties(rSet2.getInt("id_owner"));
+				for (Property currentProp : propList) {
+					if (currentProp.getPropertyId() == rSet2.getInt("id_property")) {
+						missionProperty = currentProp;
+						break;
+					}
+				}
+				if (missionProperty == null)  throw new Exception("The property of the mission is not in owner's properties list");
+
+				
+				Mission mission = new Mission(
+					missionProperty, 
+					rSet2.getTimestamp("date_start").toLocalDateTime(),
+					rSet2.getDouble("duration"),
+					rSet2.getDouble("cost"),
+					rSet2.getDouble("commission"),
+					rSet2.getInt("id_owner"),					
+					rSet2.getInt("id_cleaner"),
+					MissionStatus.fromInt(rSet2.getInt("state")));
+				rSet2.close();	
+				return mission;
+			}
+			rSet2.close();
+			throw new SQLException("No mission with id=" + missionId);
+	}
+
 	public void DAOWritePlanning(Planning planning, int id_user) {
 		try {
 			for (TimeSlot ts : planning.getTimeSlots()) {
@@ -515,23 +613,35 @@ public class Db {
 
 	/*--------------------------------------CREATE / MANAGE MISSIONS--------------------------------------------------- */
 
-	public void DAOCreateNewMission(
+	public int DAOCreateNewMission(
 	    Property property,
-	    LocalDateTime localDateTime,
-	    double duration) {
+	    LocalDateTime localDateTime) throws SQLException {
 
-		duration = Mission.setDuration(property.getPropertySurface());
+		int id = 0;
 
-		try {
-			String strQuery = "INSERT INTO `mission`"
-			                  + "(`date_start`, `cost`, `duration`, `commision`, `state`,`id_owner`,`id_property`) "
-			                  + "VALUES ('" + localDateTime + "','" + 0.0 + "','" + duration + "','" + 0.0 + "','"
-			                  + MissionStatus.PUBLISHED.asInt() + "','"
-			                  + property.getOwnerId() + "','" + property.getPropertyId() + "');";
-			stRead.executeUpdate(strQuery);
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}
+		double duration = Mission.setDuration(property.getPropertySurface());
+
+			String strQuery = "INSERT INTO `mission` "
+			+ "(`date_start`, `cost`, `duration`, `commission`, `state`, `id_owner`, `id_property`) "
+			+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+			try (PreparedStatement preparedStatement = conn.prepareStatement(strQuery, Statement.RETURN_GENERATED_KEYS)) {
+			preparedStatement.setObject(1, localDateTime); // Utilise setObject pour les types complexes comme LocalDateTime
+			preparedStatement.setDouble(2, 0.0);
+			preparedStatement.setDouble(3, duration);
+			preparedStatement.setDouble(4, 0.0);
+			preparedStatement.setInt(5, MissionStatus.PUBLISHED.asInt());
+			preparedStatement.setInt(6, property.getOwnerId());
+			preparedStatement.setInt(7, property.getPropertyId());
+
+			preparedStatement.executeUpdate();
+							ResultSet rSet = preparedStatement.getGeneratedKeys();
+							if (rSet.next()) {
+								id = rSet.getInt(1);
+								System.out.println("Id mission : " + id);
+								}
+							}
+							return id;
 	}
 
 	public void DAOResolveDispute(int missionID, int state) {
@@ -638,25 +748,42 @@ public class Db {
 	}
 
 	/*--------------------------------------CREATE PROPERTY-------------------------------------------------------------- */
-	public void DAOCreateNewProperty(
+	public int DAOCreateNewProperty(
 	    Address propertyAddress,
 	    int propertySurface,
 	    String accesCode,
 	    String keyBoxCode,
 	    String specialInstruction,
-	    int ownerId) {
+	    int ownerId) throws SQLException {
+		
+		int id = 0;
 
-		try {
-			String strQuery = "INSERT INTO `property`"
-			                  + "(`address_display`, `latitude`, `longitude`, `surface`, `id_owner`, `acces_code`, `key_box_code`, `special_instruction`) "
-			                  + "VALUES ('" + propertyAddress.asString() + "','" + propertyAddress.getLatitude() + "','"
-			                  + propertyAddress.getLongitude() + "','" + propertySurface + "','" + ownerId + "','"
-			                  + accesCode + "','" + keyBoxCode + "','" + specialInstruction + "');";
-			stRead.executeUpdate(strQuery);
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}
+			String strQuery = "INSERT INTO `property` "
+			+ "(`address_display`, `latitude`, `longitude`, `surface`, `id_owner`, `acces_code`, `key_box_code`, `special_instruction`) "
+			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+			try (PreparedStatement preparedStatement = conn.prepareStatement(strQuery, Statement.RETURN_GENERATED_KEYS)) {
+				preparedStatement.setString(1, propertyAddress.asString());
+				preparedStatement.setDouble(2, propertyAddress.getLatitude());
+				preparedStatement.setDouble(3, propertyAddress.getLongitude());
+				preparedStatement.setDouble(4, propertySurface);
+				preparedStatement.setInt(5, ownerId);
+				preparedStatement.setString(6, accesCode);
+				preparedStatement.setString(7, keyBoxCode);
+				preparedStatement.setString(8, specialInstruction);
+
+				preparedStatement.executeUpdate();
+							ResultSet rSet = preparedStatement.getGeneratedKeys();
+							if (rSet.next()) {
+								id = rSet.getInt(1);
+								System.out.println("Id property : " + id);
+								}
+							}
+							return id;
+	
+				
 	}
+			
 
 	/*--------------------------------------CREATE REVIEW-------------------------------------------------------------- */
 	public void DAOCreateNewReview(String content, double/* menton */ grade, int userReceivingId, int missionId) {

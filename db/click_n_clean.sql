@@ -104,7 +104,7 @@ CREATE TABLE `mission` (
   `date_start` datetime NOT NULL,
   `cost` double NOT NULL DEFAULT '0',
   `duration` double NOT NULL,
-  `commision` double NOT NULL DEFAULT '0',
+  `commission` double NOT NULL DEFAULT '0',
   `state` int NOT NULL,
   `before_photo` varchar(50) DEFAULT NULL,
   `after_photo` varchar(50) DEFAULT NULL,

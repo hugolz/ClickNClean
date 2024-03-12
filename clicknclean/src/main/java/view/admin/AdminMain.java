@@ -14,9 +14,12 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Pair;
 import model.Admin;
 import model.Cleaner;
 import model.CleanerExperience;
+import model.Dispute;
+import model.Mission;
 import view.Window;
 import controller.admin.AdminMainController;
 
@@ -26,7 +29,7 @@ import java.util.ArrayList;
 
 public class AdminMain extends Scene {
 
-    public AdminMain(ScrollPane container, Window window, Admin admin, ArrayList<Cleaner> cleanersToConfirm) throws Exception {
+    public AdminMain(ScrollPane container, Window window, Admin admin, ArrayList<Cleaner> cleanersToConfirm, ArrayList<Pair<Dispute, Mission>> disputeList) throws Exception {
         super(container, 800, 600);
         System.out.println("AdminMain constructor");
 
@@ -35,11 +38,12 @@ public class AdminMain extends Scene {
         Label welcomeMessageLabel = new Label("Bienvenue " + admin.getSurname());
         Label confirmCleanerLabel = new Label("Cleaners en attente de confirmation :");
 
+/*----------------------------------------Display cleaners -----------------------------------------------*/
+
         MenuButton menuButton = new MenuButton("Sélectionnez un Cleaner");
 
         for (Cleaner currentCleaner : cleanersToConfirm) {
             Menu cleanerBlockContainer = new Menu(currentCleaner.getSurname() + " " + currentCleaner.getName());
-
             MenuItem acceptContainer = new MenuItem();
             Button accept = new Button("Confirmer");
             accept.setOnAction(e -> {
@@ -62,21 +66,64 @@ public class AdminMain extends Scene {
             });
             blockContainer.setGraphic(block);
 
-            Menu display = new Menu("Nom :" + currentCleaner.getSurname() + " " + currentCleaner.getName()
-                    + "\nDate de naissance : " + currentCleaner.getBirthDate()
-                    + "\nExpérience : " + CleanerExperience.asString(currentCleaner.getExperience())
-                    + "\nMotivation :  " + currentCleaner.getMotivation());
-            cleanerBlockContainer.getItems().addAll(display, acceptContainer, blockContainer);
+            MenuItem displayContainer = new MenuItem();
+
+            Label display = new Label("Nom :" + currentCleaner.getSurname() + " " + currentCleaner.getName()
+            + "\nDate de naissance : " + currentCleaner.getBirthDate()
+            + "\nExpérience : " + CleanerExperience.asString(currentCleaner.getExperience())
+            + "\nMotivation :  " + currentCleaner.getMotivation());
+            displayContainer.setGraphic(display);
+
+            cleanerBlockContainer.getItems().addAll(displayContainer, acceptContainer, blockContainer);
             menuButton.getItems().add(cleanerBlockContainer);
         }
 
-        Label displayDispute = new Label("Litiges à gérer");
+/*----------------------------------------Display disputes -----------------------------------------------*/
+        Label displayDisputeLabel = new Label("Litiges à gérer");
 
-        ListView<String> listViewSuspend = new ListView<>();
+        MenuButton menuButton2 = new MenuButton("Sélectionnez un litige");
 
-        listViewSuspend.getItems().add("Cleaner 1");
-        listViewSuspend.getItems().add("Cleaner 2");
-        listViewSuspend.getItems().add("Cleaner 3");
+        for (Pair<Dispute, Mission> currentLitigation: disputeList) {
+            Menu cleanerBlockContainer = new Menu(
+                "Client : " + currentLitigation.getKey().getOwnerDisplay() 
+                + "\nCleaner : " + currentLitigation.getValue());
+            MenuItem acceptContainer = new MenuItem();
+            Button accept = new Button("Donner raison au Cleaner");
+            accept.setOnAction(e -> {
+                try {
+                    handleDispute(window, admin, currentLitigation.getKey().getCleanerId(), 1);
+                } catch (Exception e1) {
+                    System.out.println("Failed to execute handleCleaner in AdminMain. Error : " + e1);
+                }
+            });
+            acceptContainer.setGraphic(accept);
+
+            MenuItem blockContainer = new MenuItem();
+            Button block = new Button("Donner raison au client");
+            block.setOnAction(e -> {
+                try {
+                    handleDispute(window, admin, currentLitigation.getKey().getCleanerId(), 99);
+                } catch (Exception e1) {
+                    System.out.println("Failed to execute handleCleaner in AdminMain. Error : " + e1);
+                }
+            });
+            blockContainer.setGraphic(block);
+
+            MenuItem displayContainer = new MenuItem();
+
+            Label display = new Label("Plainte :" + currentLitigation.getKey().getContent()
+            + "\nMission :"
+                + "\n\t Date : " + currentLitigation.getValue().getMissionDate()
+                + "\n\t Prix : " + currentLitigation.getValue().getCost()
+                + "\n\t Status :" + currentLitigation.getValue().getState());
+            displayContainer.setGraphic(display);
+            
+            cleanerBlockContainer.getItems().addAll(displayContainer, acceptContainer, blockContainer);
+            menuButton.getItems().add(cleanerBlockContainer);
+        }
+
+
+/*----------------------------------------------------------------------------------------------------------------- */
 
         MenuBar bar = new MenuBar();
         Menu disconnect = new Menu("Déconnexion");
@@ -102,10 +149,12 @@ public class AdminMain extends Scene {
         vbox.getChildren().add(bar);
         vbox.getChildren().add(confirmCleanerLabel);
         vbox.getChildren().add(menuButton);
-        vbox.getChildren().add(displayDispute);
-        vbox.getChildren().add(listViewSuspend);
+        vbox.getChildren().add(displayDisputeLabel);
+        vbox.getChildren().add(menuButton2);
 
-        listViewSuspend.setMaxHeight(100);
+        //vbox.getChildren().add(listViewSuspend);
+
+        //listViewSuspend.setMaxHeight(100);
         vbox.setSpacing(10);
         vbox.setPadding(new Insets(100, 300, 20, 300));
         vbox.setAlignment(Pos.TOP_CENTER);
@@ -122,5 +171,9 @@ public class AdminMain extends Scene {
 
     public void handleCleaner(Window win, Admin ad, int cleanerId, int isConfirmed) throws Exception {
         new AdminMainController(win, ad, 1, cleanerId, isConfirmed);
+    }
+
+    public void handleDispute(Window win, Admin ad, int userId, int winner) throws Exception {
+        new AdminMainController(win, ad, 2, userId, winner );
     }
 }
