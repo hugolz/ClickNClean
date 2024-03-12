@@ -294,7 +294,7 @@ public class Db {
 			    rSet.getInt("surface"),
 			    rSet.getInt("id_owner"),
 			    rSet.getString("acces_code"),
-			    rSet.getString("keybox_code"),
+			    rSet.getString("key_box_code"),
 			    rSet.getString("special_instruction"));
 
 			properties.add(property);
@@ -586,10 +586,9 @@ public class Db {
 
 	public void DAOCreateNewMission(
 	    Property property,
-	    LocalDateTime localDateTime,
-	    double duration) {
+	    LocalDateTime localDateTime) {
 
-		duration = Mission.setDuration(property.getPropertySurface());
+		double duration = Mission.setDuration(property.getPropertySurface());
 
 		try {
 			String strQuery = "INSERT INTO `mission`"

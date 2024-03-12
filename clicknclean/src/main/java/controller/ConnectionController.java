@@ -31,11 +31,11 @@ public class ConnectionController {
 		try {
 			user = db.DAOReadUser(login, psw);
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Incorrect email or password");
+			JOptionPane.showMessageDialog(null, "Email ou mot de passe incorrect !");
 			return;
 		}
 
-		JOptionPane.showMessageDialog(null, "Connexion réussie");
+		
 
 		try {
 			switch (user.getValue()) {
@@ -49,24 +49,20 @@ public class ConnectionController {
           
 			case CLEANER:
 				Cleaner cleaner = db.DAOReadCleaner(user.getKey());
-				// window.displayWelcomeCleaner();
-				window.setScene(new CleanerMain(new VBox(), window, cleaner));
+
+				window.setScene(new CleanerWelcome(new ScrollPane(), window, cleaner));
 				break;
-          
-			case OWNER:
-
-				// TODO: scene for OWNER_WELCOME
+			case OWNER :
+				System.out.println("okkkkkkkk");
+				Owner owner = db.DAOReadOwner(user.getKey());
 				window.setScene(new OwnerMain(new ScrollPane(), window, owner));
-
 				break;
 			}
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Internal error: Could not find a given " + user.getValue()
 
 			                              + "for user: " + user.getKey() + "SQL error: " + e);
-
 		}
-
 	}
 }
 
