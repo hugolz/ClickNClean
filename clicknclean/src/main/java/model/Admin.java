@@ -28,15 +28,7 @@ public class Admin extends User {
     // -------------------------------------------------------------------------------------------------------------------------
     // Manage users
 
-    /**
-     * @Method
-     *         Confirms cleaner profile whether ID and photo matches, motivations
-     *         are
-     *         ok
-     */
-    public void cleanerValidate() {
-        // Insert code here
-    }
+
 
     /**
      * @Method Suspends a user's access to all features
