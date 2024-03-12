@@ -30,11 +30,11 @@ public class ConnectionController {
 		try {
 			user = db.DAOReadUser(login, psw);
 		} catch (Exception e) {
-
+			JOptionPane.showMessageDialog(null, "Email ou mot de passe incorrect !");
 			return;
 		}
 
-		JOptionPane.showMessageDialog(null, "Connexion réussie");
+		
 
 		try {
 			switch (user.getValue()) {
@@ -42,26 +42,23 @@ public class ConnectionController {
 			case ADMIN :
 				Admin admin = db.DAOReadAdmin(user.getKey());
 				System.out.println("okkkkkkkk");
-				// window.displayWelcomeAdmin();
-				// TODO: scene for ADMIN_WELCOME
 				window.setScene(new AdminMain(new ScrollPane(), window, admin));
 				break;
 			case CLEANER :
 				Cleaner cleaner = db.DAOReadCleaner(user.getKey());
-				// window.displayWelcomeCleaner();
 				window.setScene(new CleanerWelcome(new ScrollPane(), window, cleaner));
 				break;
 			case OWNER :
+				System.out.println("okkkkkkkk");
 				Owner owner = db.DAOReadOwner(user.getKey());
-				// window.displayWelcomeOwner();
-				// TODO: scene for OWNER_WELCOME
-
 				window.setScene(new OwnerMain(new ScrollPane(), window, owner));
 
 				break;
 			}
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Email ou mot de passe incorrect !");
+			JOptionPane.showMessageDialog(null, "Connexion réussie");
+		} 
+		catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Connexion échouée !");
 		}
 
 
