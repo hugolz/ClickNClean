@@ -3,9 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
-
--- Généré le : jeu. 07 mars 2024 à 10:55
-
+-- Généré le : ven. 08 mars 2024 à 16:32
 -- Version du serveur : 8.0.32
 -- Version de PHP : 8.1.10
 
@@ -41,9 +39,7 @@ CREATE TABLE `activity` (
   `id_target` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
-
 -- --------------------------------------------------------
-
 --
 -- Structure de la table `admin`
 --
@@ -51,6 +47,13 @@ CREATE TABLE `activity` (
 CREATE TABLE `admin` (
   `id_admin` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Déchargement des données de la table `admin`
+--
+
+INSERT INTO `admin` (`id_admin`) VALUES
+(1);
 
 -- --------------------------------------------------------
 
@@ -66,9 +69,7 @@ CREATE TABLE `cleaner` (
   `km_range` int NOT NULL,
   `hourly_rate` int NOT NULL,
   `biography` varchar(100) NOT NULL,
-
   `photo_identity` varchar(36) NOT NULL,
-
   `photo_profile` varchar(36) NOT NULL,
   `photo_live` varchar(36) NOT NULL,
   `motivation` varchar(250) NOT NULL,
@@ -76,6 +77,7 @@ CREATE TABLE `cleaner` (
   `confirmed` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
+-- --------------------------------------------------------
 --
 -- Structure de la table `dispute`
 --
@@ -111,6 +113,8 @@ CREATE TABLE `mission` (
   `id_property` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
+-- --------------------------------------------------------
+
 --
 -- Structure de la table `mission_proposal`
 --
@@ -119,7 +123,7 @@ CREATE TABLE `mission_proposal` (
   `id_mission` int NOT NULL,
   `id_cleaner` int NOT NULL,
   `starting_hour` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -132,6 +136,8 @@ CREATE TABLE `owner` (
   `type_service` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
+-- --------------------------------------------------------
+
 --
 -- Structure de la table `planning`
 --
@@ -140,8 +146,10 @@ CREATE TABLE `planning` (
   `id_cleaner` int UNSIGNED NOT NULL,
   `datetime` datetime NOT NULL,
   `durationH` double NOT NULL,
+
   `id_mission` int DEFAULT -1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 
 --
@@ -159,6 +167,8 @@ CREATE TABLE `property` (
   `key_box_code` varchar(10) DEFAULT NULL,
   `special_instruction` varchar(80) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
 
 --
 -- Structure de la table `review`
@@ -181,16 +191,16 @@ CREATE TABLE `review` (
 CREATE TABLE `status` (
   `id_status` int UNSIGNED NOT NULL,
   `name_status` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-INSERT INTO `status` (`id_status`, `name_status` ) VALUES
-(1, 'Admin'),
-(2, 'Cleaner'),
-(3, 'Owner');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `status`
 --
+
+INSERT INTO `status` (`id_status`, `name_status`) VALUES
+(1, 'Admin'),
+(2, 'Cleaner'),
+(3, 'Owner');
 
 -- --------------------------------------------------------
 
@@ -210,6 +220,17 @@ CREATE TABLE `user` (
   `suspended` tinyint(1) NOT NULL DEFAULT '0',
   `status` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Déchargement des données de la table `user`
+--
+
+INSERT INTO `user` (`id_user`, `name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `account_date`, `suspended`, `status`) VALUES
+(1, 'NomAdmin', 'fb0aff9960bdd8512c1251da49c2771a29c5d2e32998f2379104bf4bfbcba612', 'PrenomAdmin', 'admin@admin.fr', '0000000000', '2024-03-13', '2024-03-06', 0, 1);
+
+--
+-- Index pour les tables déchargées
+--
 
 --
 -- Index pour la table `activity`
@@ -342,8 +363,7 @@ ALTER TABLE `status`
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int UNSIGNED NOT NULL AUTO_INCREMENT;
-
+  MODIFY `id_user` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- Contraintes pour les tables déchargées

@@ -14,7 +14,8 @@ import model.CleanerExperience;
 import model.User;
 import model.UserStatus;
 import view.Window;
-import view.cleaner.CleanerWelcome;
+import view.cleaner.CleanerMain;
+import javafx.scene.layout.VBox;
 import view.SceneId;
 import tools.Db;
 
@@ -153,13 +154,13 @@ public class CleanerRegistrationController {
 		try {
 			// TODO : Send to all admin below
 			currentCleaner = connection.DAOReadCleaner(currentCleanerId);
-			// connection.DAOaddActivity(ActivityType.WELCOME_CLEANER, currentCleanerId, null, null, null, null, null);
-			// connection.DAOaddActivity(ActivityType.CLEANER_WAITING_TO_BE_CONFIRMED, 1, null, null, null, null, null);
+			connection.DAOaddActivity(ActivityType.WELCOME_CLEANER, currentCleanerId, null, null, null, null, null);
+			connection.DAOaddActivity(ActivityType.CLEANER_WAITING_TO_BE_CONFIRMED, 1, null, currentCleanerId, null, null, null);
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Could not read newly created cleaner due to: " + e);
 			return;
 		}
-		window.setScene(new CleanerWelcome(new ScrollPane(), window, currentCleaner));
+		window.setScene(new CleanerMain(new VBox(), window, currentCleaner));
 
 		// db.close();
 	}
