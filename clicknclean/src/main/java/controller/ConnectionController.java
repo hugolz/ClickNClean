@@ -43,18 +43,17 @@ public class ConnectionController {
 			case ADMIN:
 				Admin admin = db.DAOReadAdmin(user.getKey());
 				// TODO: scene for ADMIN_WELCOME
-				new AdminMainController(window, admin, 0, 0, 0);
+				new AdminMainController(window, admin, 0, 0, 0, 0, 0, "");
 				System.err.println(user.getKey());
 				break;
           
 			case CLEANER:
 				Cleaner cleaner = db.DAOReadCleaner(user.getKey());
-
 				window.setScene(new CleanerWelcome(new ScrollPane(), window, cleaner));
 				break;
 			case OWNER :
-				System.out.println("okkkkkkkk");
 				Owner owner = db.DAOReadOwner(user.getKey());
+
 				window.setScene(new OwnerMain(new ScrollPane(), window, owner));
 				break;
 			}

@@ -66,4 +66,12 @@ public class Property {
 	public void setSpecialInstruction(String specialInstruction) {
 		this.specialInstruction = specialInstruction;
 	}
+
+	@Override
+	public String toString() {
+		return "Property [propertyId=" + propertyId + ", propertyAddress=" + propertyAddress + ", propertySurface="
+				+ propertySurface + ", ownerId=" + ownerId + ", accesCode=" + accesCode + ", keyBoxCode=" + keyBoxCode
+				+ ", specialInstruction=" + specialInstruction + "]";
+	}
+	
 }
