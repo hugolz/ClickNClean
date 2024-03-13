@@ -81,6 +81,7 @@ public class AdminMain extends Scene {
             menuButton.getItems().add(cleanerBlockContainer);
         }
 
+
 /*----------------------------------------Display disputes -----------------------------------------------*/
         Label displayDisputeLabel = new Label("Litiges à gérer");
 
@@ -96,6 +97,7 @@ public class AdminMain extends Scene {
             decision.setPromptText("Ecrire votre décision ici");
             decision.setPrefSize(200, 40);
             decisionContainer.setGraphic(decision);
+
 
             MenuItem acceptContainer2 = new MenuItem();
             Button accept = new Button("Donner raison au Cleaner");
@@ -190,7 +192,6 @@ public class AdminMain extends Scene {
         this.getStylesheets()
                 .add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
     }
-
     public void handleCleaner(Window win, Admin ad, int cleanerId, int isConfirmed) throws Exception {
         new AdminMainController(win, ad, 1, 0, cleanerId, 0, isConfirmed, "");
     }

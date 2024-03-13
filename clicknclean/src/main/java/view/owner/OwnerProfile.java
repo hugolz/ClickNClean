@@ -1,7 +1,9 @@
 package view.owner;
 
 import java.io.File;
+import java.sql.SQLException;
 
+import controller.owner.OwnerProfileUpdateController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -10,25 +12,32 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.VBox;
+import model.Owner;
 import view.Connection;
 import view.Window;
+import view.admin.AdminMain;
 
 public class OwnerProfile extends Scene {
-	public OwnerProfile(ScrollPane container, Window window) {
+	public OwnerProfile(ScrollPane container, Window window, Owner owner)throws SQLException, Exception {
 		  super(container, 800, 600);
 		  
-		  Label nameOwner = new Label("Nom :");
-		  Label surnameOwner = new Label("Prenom :");
-		  Label mailOwner = new Label("Mail :");
-		  Label phoneOwner = new Label("Téléphone :");
-		  Label birthDateOwner = new Label("Date de naissance :");
-		  Label motivationOwner = new Label("Type de prestation recherchée :");
+		  Label nameOwner = new Label("Nom : "+owner.getName());
+		  Label surnameOwner = new Label("Prenom : "+owner.getSurname());
+		  Label mailOwner = new Label("Mail : "+owner.getEmail());
+		  Label phoneOwner = new Label("Téléphone : "+owner.getPhoneNumber());
+		  Label birthDateOwner = new Label("Date de naissance : "+owner.getBirthDate());
+		  Label motivationOwner = new Label("Type de prestation recherchée : "+owner.getServiceType().name());
 		  Button updateOwner = new Button("Modifier");
 		  
 		  
 		  EventHandler<ActionEvent> eventUpdate = new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent e) {
-					//go vers le controller OwnerProfileUpdate
+				 try {
+					new OwnerProfileUpdateController(window,owner);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 
 				}
 

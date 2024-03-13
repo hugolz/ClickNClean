@@ -108,8 +108,7 @@ public class CleanerRegistration extends Scene {
 		biographyInputField.setText("aa");
 		TextField motivationInputField = new TextField();
 		motivationInputField.setText("aa");
-		ChoiceBox<String> experienceChoiceBox = new ChoiceBox<>();
-
+		ChoiceBox<CleanerExperience> experienceChoiceBox = new ChoiceBox<>();
 
 		FileChooser photoInputField = new FileChooser();
 		photoInputField.setInitialDirectory(new File("C:/vfcompat.dll"));
@@ -124,9 +123,9 @@ public class CleanerRegistration extends Scene {
 		Button registerIdPhoto = new Button("Parcourir");
 		Button registerPhotoLive = new Button("Parcourir");
 
-		ObservableList<String> options = FXCollections.observableArrayList(
-		                                     "Aucune", "Moins d'un an", "De 1 à 3ans", "Plus de 3ans");
-		experienceChoiceBox.setItems(options);
+		experienceChoiceBox.setItems(FXCollections.observableArrayList(
+		                                 CleanerExperience.NONE, CleanerExperience.LESS_1_YEARS, CleanerExperience.BETWEEN_1_3,
+		                                 CleanerExperience.MORE_3_YEARS));
 
 		EventHandler<ActionEvent> eventphoto = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
@@ -152,22 +151,6 @@ public class CleanerRegistration extends Scene {
 
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				System.out.println("Triggered");
-				CleanerExperience ce = null;
-				switch (experienceChoiceBox.getValue()) {
-				case "Aucune":
-					ce = CleanerExperience.NONE;
-					break;
-				case "Moins d'un an":
-					ce = CleanerExperience.LESS_1_YEARS;
-					break;
-				case "De 1 à 3ans":
-					ce = CleanerExperience.BETWEEN_1_3 ;
-					break;
-				case "Plus de 3ans":
-					ce = CleanerExperience.MORE_3_YEARS;
-					break;
-				}
 
 				new CleanerRegistrationController(
 				    nameInputField.getText(),
@@ -188,13 +171,12 @@ public class CleanerRegistration extends Scene {
 				    biographyInputField.getText(),
 				    motivationInputField.getText(),
 
-				    ce,
+				    experienceChoiceBox.getValue(),
 
 				    registerPhoto.getText(),
 				    registerIdPhoto.getText(),
 				    registerIdPhoto.getText(),
-				    window
-				);
+				    window);
 
 			}
 		};

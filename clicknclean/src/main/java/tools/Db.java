@@ -14,7 +14,10 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+
 import com.mysql.cj.x.protobuf.MysqlxPrepare.Prepare;
+import com.mysql.cj.protocol.Resultset;
+
 
 import javafx.util.Pair;
 import model.Activity;
@@ -366,9 +369,7 @@ throws InterruptedException, ExecutionException, Exception {
 			        rSet.getInt("id_mission"),
 			        rSet.getInt("id_dispute"),
 			        rSet.getInt("id_admin"),
-			        rSet.getInt("id_target")
-			    )
-			);
+			        rSet.getInt("id_target")));
 		}
 		rSet.close();
 
@@ -556,9 +557,11 @@ throws InterruptedException, ExecutionException, Exception {
 			String strQuery = "INSERT INTO `cleaner`"
 			                  + "(`id_cleaner`, `address_display`, `latitude`, `longitude`, `km_range`, `hourly_rate`, `biography`, `photo_identity`, `motivation`, `experience`, `confirmed`, `photo_profile`, `photo_live`) "
 			                  + "VALUES ('" + cleanerID + "','" + departureAddress.asString() + "','"
-			                  + departureAddress.getLatitude() + "','" + departureAddress.getLongitude() + "',' " + kmRange + "','"
+			                  + departureAddress.getLatitude() + "','" + departureAddress.getLongitude() + "',' " + kmRange
+			                  + "','"
 			                  + hourlyRate + "','" + bio + "','"
-			                  + photoIdentity + "','" + motivation + "','" + experience.asInt() + "','" + (isConfirmed ? 1 : 0) + "','"
+			                  + photoIdentity + "','" + motivation + "','" + experience.asInt() + "','" + (isConfirmed ? 1 : 0)
+			                  + "','"
 			                  + photoProfile + "','" + photoLive + "');";
 			stRead.executeUpdate(strQuery);
 		} catch (SQLException e) {
@@ -583,6 +586,73 @@ throws InterruptedException, ExecutionException, Exception {
 		}
 
 		return ownerId;
+	}
+
+	public void DAOUpdateCleaner(
+	    int cleanerId,
+	    Address address,
+	    int kmRange,
+	    int hourlyRate,
+	    String biography,
+	    String motivation,
+	    CleanerExperience experience) throws Exception {
+		String query = "SELECT * FROM cleaner WHERE id_cleaner = " + cleanerId;
+		Statement st = this.conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+
+		try {
+			ResultSet rSet = st.executeQuery(query);
+			if (rSet.next()) {
+
+				rSet.updateString("address_display", address.asString());
+				rSet.updateDouble("latitude", address.getLatitude());
+				rSet.updateDouble("longitude", address.getLongitude());
+				rSet.updateInt("km_range", kmRange);
+				rSet.updateInt("hourly_rate", hourlyRate);
+				rSet.updateString("biography", biography);
+				rSet.updateString("motivation", motivation);
+				rSet.updateInt("experience", experience.asInt());
+
+				rSet.updateRow();
+			}
+		} catch (Exception e) {
+			System.err.println("[ERROR] Failled to update Cleaner with id: " + cleanerId + " due to : " + e);
+		}
+		st.close();
+
+	}
+
+	public void DAOUpdateUser(
+	    int userId,
+	    String name,
+	    String surname,
+	    String email,
+	    String phoneNbr,
+	    LocalDate birthDate,
+	    boolean sus/* amogus */,
+	    UserStatus status) throws Exception {
+		Statement st = this.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
+		String query = "SELECT * FROM user WHERE  id_user = " + userId;
+
+		Date sqlBirthDate = Date.valueOf(birthDate);
+
+		try {
+			ResultSet rSet = st.executeQuery(query);
+			if (rSet.first()) {
+				rSet.updateString("name", name);
+				rSet.updateString("surname", surname);
+				rSet.updateString("email", email);
+				rSet.updateString("phone_number", phoneNbr);
+				rSet.updateDate("birth_date", sqlBirthDate);
+				rSet.updateBoolean("suspended", sus);
+				rSet.updateInt("status", status.asInt());
+
+				rSet.updateRow();
+			}
+		} catch (Exception e) {
+			System.err.println("[ERROR] Failled to update User with id: " + userId + " due to : " + e);
+		}
+		st.close();
 	}
 
 	/*--------------------------------------MANAGE RIGHTS ON USER / CLEANER--------------------------------------------------- */
@@ -662,7 +732,6 @@ throws InterruptedException, ExecutionException, Exception {
 	    LocalDateTime localDateTime) throws SQLException {
 
 		int id = 0;
-
 		double duration = Mission.setDuration(property.getPropertySurface());
 
 			String strQuery = "INSERT INTO `mission` "
