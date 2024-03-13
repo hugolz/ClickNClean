@@ -90,7 +90,9 @@ CREATE TABLE `dispute` (
   `id_cleaner` int UNSIGNED NOT NULL,
   `id_mission` int UNSIGNED NOT NULL,
   `id_dispute_creator` int UNSIGNED NOT NULL,
-  `id_admin` int UNSIGNED DEFAULT NULL
+  `id_admin` int UNSIGNED DEFAULT NULL,
+  `decision_type` int UNSIGNED DEFAULT '0'
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------

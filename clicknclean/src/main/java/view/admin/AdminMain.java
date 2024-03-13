@@ -13,6 +13,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 import model.Admin;
@@ -26,6 +27,8 @@ import controller.admin.AdminMainController;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
 
 public class AdminMain extends Scene {
 
@@ -84,42 +87,61 @@ public class AdminMain extends Scene {
         MenuButton menuButton2 = new MenuButton("Sélectionnez un litige");
 
         for (Pair<Dispute, Mission> currentLitigation: disputeList) {
-            Menu cleanerBlockContainer = new Menu(
+            Menu disputeBlockContainer = new Menu(
                 "Client : " + currentLitigation.getKey().getOwnerDisplay() 
-                + "\nCleaner : " + currentLitigation.getValue());
-            MenuItem acceptContainer = new MenuItem();
+                + "\nCleaner : " + currentLitigation.getKey().getCleanerDisplay());
+
+            MenuItem decisionContainer = new MenuItem();
+            TextField decision = new TextField();
+            decision.setPromptText("Ecrire votre décision ici");
+            decision.setPrefSize(200, 40);
+            decisionContainer.setGraphic(decision);
+
+            MenuItem acceptContainer2 = new MenuItem();
             Button accept = new Button("Donner raison au Cleaner");
             accept.setOnAction(e -> {
                 try {
-                    handleDispute(window, admin, currentLitigation.getKey().getCleanerId(), 1);
+                    handleDispute(window, 
+                        admin, 
+                        currentLitigation.getKey().getDisputeId(), 
+                        currentLitigation.getKey().getCleanerId(), 
+                        currentLitigation.getKey().getOwnerId(), 
+                        1, 
+                        decision.getText());
                 } catch (Exception e1) {
                     System.out.println("Failed to execute handleCleaner in AdminMain. Error : " + e1);
                 }
             });
-            acceptContainer.setGraphic(accept);
+            acceptContainer2.setGraphic(accept);
 
-            MenuItem blockContainer = new MenuItem();
+            MenuItem blockContainer2 = new MenuItem();
             Button block = new Button("Donner raison au client");
             block.setOnAction(e -> {
                 try {
-                    handleDispute(window, admin, currentLitigation.getKey().getCleanerId(), 99);
+                    handleDispute(window, 
+                        admin, 
+                        currentLitigation.getKey().getDisputeId(), 
+                        currentLitigation.getKey().getCleanerId(), 
+                        currentLitigation.getKey().getOwnerId(), 
+                        99, 
+                        decision.getText());
                 } catch (Exception e1) {
                     System.out.println("Failed to execute handleCleaner in AdminMain. Error : " + e1);
                 }
             });
-            blockContainer.setGraphic(block);
+            blockContainer2.setGraphic(block);
 
-            MenuItem displayContainer = new MenuItem();
+            MenuItem displayContainer2 = new MenuItem();
 
-            Label display = new Label("Plainte :" + currentLitigation.getKey().getContent()
+            Label display2 = new Label("Plainte :" + currentLitigation.getKey().getContent()
             + "\nMission :"
                 + "\n\t Date : " + currentLitigation.getValue().getMissionDate()
                 + "\n\t Prix : " + currentLitigation.getValue().getCost()
-                + "\n\t Status :" + currentLitigation.getValue().getState());
-            displayContainer.setGraphic(display);
+                + "\n\t Status : " + currentLitigation.getValue().getState());
+            displayContainer2.setGraphic(display2);
             
-            cleanerBlockContainer.getItems().addAll(displayContainer, acceptContainer, blockContainer);
-            menuButton.getItems().add(cleanerBlockContainer);
+            disputeBlockContainer.getItems().addAll(displayContainer2, acceptContainer2, blockContainer2, decisionContainer);
+            menuButton2.getItems().add(disputeBlockContainer);
         }
 
 
@@ -170,10 +192,14 @@ public class AdminMain extends Scene {
     }
 
     public void handleCleaner(Window win, Admin ad, int cleanerId, int isConfirmed) throws Exception {
-        new AdminMainController(win, ad, 1, cleanerId, isConfirmed);
+        new AdminMainController(win, ad, 1, 0, cleanerId, 0, isConfirmed, "");
     }
 
-    public void handleDispute(Window win, Admin ad, int userId, int winner) throws Exception {
-        new AdminMainController(win, ad, 2, userId, winner );
+    public void handleDispute(Window win, Admin ad, int disputeId, int cleanerId, int ownerId, int winner, String decision) throws Exception {
+        if (decision.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vous devez renseigner votre décision");
+        }
+        else new AdminMainController(win, ad, 2, disputeId, cleanerId, ownerId, winner, decision );
+       
     }
 }

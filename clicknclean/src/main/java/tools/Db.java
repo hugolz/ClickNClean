@@ -24,6 +24,7 @@ import model.Admin;
 import model.Cleaner;
 import model.CleanerExperience;
 import model.Dispute;
+import model.DisputeType;
 import model.Mission;
 import model.MissionStatus;
 import model.Owner;
@@ -449,19 +450,19 @@ throws InterruptedException, ExecutionException, Exception {
 	}
 
 
-	public Dispute DAOReadDispute(int disputeId) throws SQLException {
+	public Dispute DAOReadDispute(int disputeId) throws Exception {
 		String query = "SELECT *, "
-							+ "(SELECT CONCAT(surname,' ',name)"  
+							+ "(SELECT CONCAT(surname,' ',name) "  
 							+ "FROM user JOIN dispute "
 							+ "ON dispute.id_owner = user.id_user) owner_display,"
 							+ "(SELECT CONCAT(surname,' ',name)  "
 							+ "FROM user JOIN dispute "
-							+ "ON dispute.id_cleaner = user.id_user) cleaner_display"
-						+ "FROM dispute;";
+							+ "ON dispute.id_cleaner = user.id_user) cleaner_display "
+						+ "FROM dispute WHERE id_dispute = " + disputeId + ";";
 
 			ResultSet rSet = stRead.executeQuery(query);
 			if (rSet.next()) {
-
+				
 				Dispute dispute = new Dispute(
 					rSet.getInt("id_dispute"), 
 					rSet.getString("content"), 
@@ -472,12 +473,13 @@ throws InterruptedException, ExecutionException, Exception {
 					rSet.getInt("id_cleaner"), 
 					rSet.getInt("id_mission"), 
 					rSet.getInt("id_dispute_creator"), 
-					rSet.getInt("id_admin"));
+					rSet.getInt("id_admin"),
+					DisputeType.fromInt(rSet.getInt("decision_type")));
 				rSet.close();
 				return dispute;	
 			}
 			rSet.close();
-			throw new SQLException("No dispute with id=" + disputeId);
+			throw new SQLException("No dispute with id = " + disputeId);
 	}
 
 
@@ -603,6 +605,48 @@ throws InterruptedException, ExecutionException, Exception {
 		}
 	}
 
+	public void DAOResolveDispute(int disputeId, MissionStatus state, String decision) throws Exception {
+		Dispute dispute = DAOReadDispute(disputeId);
+	
+		try {
+			int type = 0;
+			if (state == MissionStatus.RESOLVED_DISPUTE_CLEANER_IS_RIGHT) {
+				type = 1;
+			} else if (state == MissionStatus.RESOLVED_DISPUTE_OWNER_IS_RIGHT) {
+				type = 2;
+			}
+	
+			String strQuery = "UPDATE dispute SET decision = ?, "
+					+ "decision_type = ?, "
+					+ "id_admin = 1 "
+					+ "WHERE id_dispute = ?";  
+	
+			try (PreparedStatement preparedStatement = conn.prepareStatement(strQuery)) {
+				preparedStatement.setString(1, decision);
+				preparedStatement.setInt(2, type);
+				preparedStatement.setInt(3, disputeId);
+	
+				preparedStatement.executeUpdate();
+			}
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+	
+		try {
+			String strQuery = "UPDATE mission SET state = ? WHERE id_mission = ?";  
+	
+			try (PreparedStatement preparedStatement = conn.prepareStatement(strQuery)) {
+				preparedStatement.setInt(1, state.asInt());  
+				preparedStatement.setInt(2, dispute.getMissionId());
+	
+				preparedStatement.executeUpdate();
+			}
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+	}
+	
+
 	public void disconnect() {
 		try {
 			conn.close();
@@ -626,7 +670,7 @@ throws InterruptedException, ExecutionException, Exception {
 			+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 			try (PreparedStatement preparedStatement = conn.prepareStatement(strQuery, Statement.RETURN_GENERATED_KEYS)) {
-			preparedStatement.setObject(1, localDateTime); // Utilise setObject pour les types complexes comme LocalDateTime
+			preparedStatement.setObject(1, localDateTime); 
 			preparedStatement.setDouble(2, 0.0);
 			preparedStatement.setDouble(3, duration);
 			preparedStatement.setDouble(4, 0.0);
@@ -644,14 +688,7 @@ throws InterruptedException, ExecutionException, Exception {
 							return id;
 	}
 
-	public void DAOResolveDispute(int missionID, int state) {
-		try {
-			String strQuery = "UPDATE mission SET state = " + state + "WHERE id_mission = " + missionID + ";";
-			stRead.executeUpdate(strQuery);
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}
-	}
+
 
 	/*--------------------------------------TOOLS METHODS--------------------------------------------------------------------- */
 

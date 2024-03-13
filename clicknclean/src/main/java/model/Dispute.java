@@ -11,9 +11,10 @@ public class Dispute {
     private int missionId;	
     private int disputeCreatorId;	
     private int adminId;
+    private DisputeType type;
     
     public Dispute(int disputeId, String content, String decision, String ownerDisplay, String cleanerDisplay,
-            int ownerId, int cleanerId, int missionId, int disputeCreatorId, int adminId) {
+            int ownerId, int cleanerId, int missionId, int disputeCreatorId, int adminId, DisputeType type) {
 
         this.disputeId = disputeId;
         this.content = content;
@@ -25,6 +26,7 @@ public class Dispute {
         this.missionId = missionId;
         this.disputeCreatorId = disputeCreatorId;
         this.adminId = adminId;
+        this.type  = type;
     }
     public int getDisputeId() {
         return disputeId;
@@ -55,6 +57,9 @@ public class Dispute {
     }
     public int getAdminId() {
         return adminId;
+    }
+    public DisputeType getType() {
+        return type;
     }
     @Override
     public String toString() {

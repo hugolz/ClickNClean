@@ -11,33 +11,62 @@ import model.ActivityType;
 import model.Admin;
 import model.Cleaner;
 import model.Dispute;
+import model.DisputeType;
 import model.Mission;
+import model.MissionStatus;
 import tools.Db;
 import view.admin.AdminMain;
 
 public class AdminMainController {
 
-        public AdminMainController(Window window, Admin admin, int type, int id, int status) throws SQLException, Exception {
+        public AdminMainController(
+            Window window, 
+            Admin admin, 
+            int type, 
+            int disputeId, 
+            int cleanerId, 
+            int ownerId, 
+            int status, 
+            String decision) throws SQLException, Exception {
             
             switch(type) {
                 case 1 : {
                     //Cleaner to confirm / block
                     if (status == 1) {
                         Db connection = new Db();
-                        connection.DAOConfirmCleaner(id);
-                        connection.DAOaddActivity(ActivityType.CLEANER_ACCOUNT_CONFIRMED, id, null, id, null, null, 1);
+                        connection.DAOConfirmCleaner(cleanerId);
+                        connection.DAOaddActivity(ActivityType.CLEANER_ACCOUNT_CONFIRMED, cleanerId, null, cleanerId, null, null, 1);
                         connection.disconnect();
                     }
 
                     else  {
                         Db connection = new Db();
-                        connection.DAOSuspendUser(id, true);
+                        connection.DAOSuspendUser(cleanerId, true);
                         connection.disconnect();
                     }
-                
-                // TODO : case 2 : 
-
+                    break;
                 }
+                case 2 : {
+                    //Cleaner to confirm / block
+                    if (status == 1) {
+                        Db connection = new Db();
+                        connection.DAOResolveDispute(disputeId, MissionStatus.RESOLVED_DISPUTE_CLEANER_IS_RIGHT, decision);
+                        connection.DAOaddActivity(ActivityType.DISPUTE_RESOLVED, cleanerId, ownerId, cleanerId, null, disputeId, 1);
+                        connection.DAOaddActivity(ActivityType.DISPUTE_RESOLVED, ownerId, ownerId, cleanerId, null, disputeId, 1);
+                        connection.disconnect();
+                    }
+
+                    else  {
+                        Db connection = new Db();
+                        connection.DAOResolveDispute(disputeId, MissionStatus.RESOLVED_DISPUTE_OWNER_IS_RIGHT, decision);
+                        connection.DAOaddActivity(ActivityType.DISPUTE_RESOLVED, ownerId, ownerId, cleanerId, null, disputeId, 1);
+                        connection.DAOaddActivity(ActivityType.DISPUTE_RESOLVED, cleanerId, ownerId, cleanerId, null, disputeId, 1);
+                        connection.disconnect();
+                    }
+                    break;
+                }
+
+
             }
 
 
@@ -64,10 +93,13 @@ public class AdminMainController {
                 if (each.getType() == ActivityType.DISPUTE_OPENED) {
                     Db connection = new Db();
                     
-                    Dispute currentDispute = connection.DAOReadDispute(each.getActivityId());
+                    Dispute currentDispute = connection.DAOReadDispute(each.getDisputeId());
                     Mission currentMission = connection.DAOReadMission(each.getMissionId());
-                    System.out.println("entered in dispute : " + currentDispute);
-                    disputeList.add(new Pair<>(currentDispute, currentMission));
+                    if (currentDispute.getType() == DisputeType.NO_TYPE) {
+                        System.out.println("entered in dispute : " + currentDispute);
+                        disputeList.add(new Pair<>(currentDispute, currentMission));
+                    }
+                    
                 }
             }
 

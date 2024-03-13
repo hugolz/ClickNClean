@@ -43,7 +43,7 @@ public class ConnectionController {
 			case ADMIN:
 				Admin admin = db.DAOReadAdmin(user.getKey());
 				// TODO: scene for ADMIN_WELCOME
-				new AdminMainController(window, admin, 0, 0, 0);
+				new AdminMainController(window, admin, 0, 0, 0, 0, 0, "");
 				System.err.println(user.getKey());
 				break;
           
