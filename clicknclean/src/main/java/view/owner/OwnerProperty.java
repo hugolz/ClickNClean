@@ -5,12 +5,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import controller.owner.OwnerAskAddProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene; 
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TableColumn;
@@ -31,21 +34,19 @@ public class OwnerProperty extends Scene{
 		 Button addProperty = new Button("Ajouter une Propriété");
 		 Button returnview = new Button("Retour");
 		 
-		 TableView<Property> tableView = new TableView();
-
-		 TableColumn<Property, String> column1 = new TableColumn<>("Adresse");
-		 TableColumn<Property, String> column2 = new TableColumn<>("Surface");
-		 TableColumn<Property, String> column3 = new TableColumn<>("Code d'accès");
-		 TableColumn<Property, String> column4 = new TableColumn<>("Code Boite à clé");
-		 TableColumn<Property, String> column5 = new TableColumn<>("Instructions Spéciales");
+		
+		 ListView<String> listView = new ListView<String>();
+		 Db db = new Db();
+		 ArrayList<Property> prop = db.DAOReadOwnerProperties(owner.getOwnerID());
 		 
-		 tableView.getColumns().add(column1);
-		 tableView.getColumns().add(column2);
-		 tableView.getColumns().add(column3);
-		 tableView.getColumns().add(column4);
-		 tableView.getColumns().add(column5);
-		 
-	
+		 for (int i=0; i< prop.size(); i++) {
+	        listView.getItems().add("Propriété "+ i
+	        		+ "\nAdresse : " + prop.get(i).getPropertyAddress().asString()
+	                + "\nSurface : " + prop.get(i).getPropertySurface() + "m²"
+	                + "\nCode d'accès : " + prop.get(i).getAccesCode()
+	                + "\nCode boite à clé :  " + prop.get(i).getKeyBoxCode()
+	                + "\nInstructions Spéciales :  " + prop.get(i).getSpecialInstruction());
+		 }
 		 
 		 EventHandler<ActionEvent> eventNewProperty = new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent e) {
@@ -80,16 +81,16 @@ public class OwnerProperty extends Scene{
 		 vbox.getChildren().add(title);
 		 vbox.getChildren().add(addProperty);
 		 vbox.getChildren().add(returnview);
-		 vbox.getChildren().add(tableView);
+		 vbox.getChildren().add(listView);
 		 
 		 
 		 vbox.setSpacing(10);
 			vbox.setPadding(new Insets(100, 300, 20, 300));
 			vbox.setAlignment(Pos.TOP_CENTER);
 
-
+		
 			container.setContent(vbox);
-
+			
 			container.setPannable(true);
 			container.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 			container.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);

@@ -46,7 +46,7 @@ public class Main {
             "null",
             "null"
         );
-        connection.DAOCreateNewMission(testProp, LocalDateTime.now(), Mission.setDuration(testProp.getPropertySurface()));
+      //  connection.DAOCreateNewMission(testProp, LocalDateTime.now(), Mission.setDuration(testProp.getPropertySurface()));
     }
 
     public static void testProperty() throws SQLException, InterruptedException, ExecutionException {

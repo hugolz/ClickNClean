@@ -50,7 +50,7 @@ public class ConnectionController {
 			case CLEANER:
 				Cleaner cleaner = db.DAOReadCleaner(user.getKey());
 
-				window.setScene(new CleanerWelcome(new ScrollPane(), window, cleaner));
+				//window.setScene(new CleanerWelcome(new ScrollPane(), window, cleaner));
 				break;
 			case OWNER :
 				System.out.println("okkkkkkkk");

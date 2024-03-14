@@ -123,7 +123,7 @@ CREATE TABLE `mission_proposal` (
   `id_mission` int NOT NULL,
   `id_cleaner` int NOT NULL,
   `starting_hour` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 

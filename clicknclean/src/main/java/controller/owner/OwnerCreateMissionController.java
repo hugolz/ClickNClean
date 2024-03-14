@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import javax.swing.JOptionPane;
 
 import javafx.scene.control.ScrollPane;
+import model.Mission;
 import model.Owner;
 import model.Property;
 import tools.Db;
@@ -37,7 +38,7 @@ public class OwnerCreateMissionController {
 		}
 		
 		try {
-			db.DAOCreateNewMission(property, dateTime);
+			Mission mission= db.DAOCreateNewMission(property, dateTime);
 		}
 		catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "L'ajout de mission a échoué");
