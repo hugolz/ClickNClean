@@ -69,12 +69,7 @@ public class CleanerMain extends Scene {
 		// header.getStyleClass().addAll("hbox");
 		header.getChildren().addAll(profileButton, notificationButton, inboxButton);
 
-
 		container.getChildren().addAll(header, planningButton, archivedMissionsButton, disconnectButton);
-
-		// container.setPannable(true);
-		// container.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-		// container.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 
 		this.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
 		this.getStylesheets()
