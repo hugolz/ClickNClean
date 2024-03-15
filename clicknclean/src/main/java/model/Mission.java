@@ -7,48 +7,42 @@ import java.util.HashMap;
 
 public class Mission {
     Property property;
-    LocalDateTime missionDate;
+    LocalDateTime missionDateTime;
     double duration;
     double cost;
     double commission;
-    String ownerId;
-    String cleanerId;
+    int ownerId;
+    int cleanerId;
     ArrayList<Cleaner> cleanerList;
-    String startTime;
     MissionStatus state;
-    HashMap<Cleaner, LocalDateTime> missionProposals;
 
     public Mission(
         Property property,
-        LocalDateTime missionDate,
+        LocalDateTime missionDateTime,
         double duration,
         double cost,
         double commission,
-        String ownerId,
-        String cleanerId,
-        String startTime,
-        MissionStatus state,
-        HashMap<Cleaner, LocalDateTime> missionProposals
+        int ownerId,
+        int cleanerId,
+        MissionStatus state
     ) {
         this.property = property;
-        this.missionDate = missionDate;
+        this.missionDateTime = missionDateTime;
         this.duration = setDuration(property.getPropertySurface());
         this.cost = cost;
         this.commission = commission;
         this.ownerId = ownerId;
         this.cleanerId = cleanerId;
-        this.startTime = startTime;
         this.state = state;
-        this.missionProposals = missionProposals;
 
     }
 
     public LocalDateTime getMissionDate() {
-        return missionDate;
+        return missionDateTime;
     }
 
-    public void setMissionDate(LocalDateTime missionDate) {
-        this.missionDate = missionDate;
+    public void setMissionDate(LocalDateTime missionDateTime) {
+        this.missionDateTime = missionDateTime;
     }
 
     public double getDuration() {
@@ -88,25 +82,16 @@ public class Mission {
         return commission;
     }
 
-    public String getOwnerId() {
+    public int getOwnerId() {
         return ownerId;
     }
 
-    public String getCleanerId() {
+    public int getCleanerId() {
         return cleanerId;
     }
 
-    public void setCleanerId(String cleanerId) {
+    public void setCleanerId(int cleanerId) {
         this.cleanerId = cleanerId;
-    }
-
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
     }
 
     public MissionStatus getState() {
@@ -116,16 +101,5 @@ public class Mission {
     public void setState(MissionStatus state) {
         this.state = state;
     }
-
-    public HashMap<Cleaner, LocalDateTime> getMissionProposals() {
-        return missionProposals;
-    }
-
-    public void addMissionProposals(Cleaner cleaner, LocalDateTime startingHour) {
-        this.missionProposals.put(cleaner, startingHour);
-    }
-
-    
-
 
 }

@@ -23,64 +23,7 @@ public class Admin extends User {
         this.adminId = adminId;
     }
 
-
-
-    // -------------------------------------------------------------------------------------------------------------------------
-    // Manage users
-
-
-
-    /**
-     * @Method Suspends a user's access to all features
-     */
-    public void suspendUser(int userID) {
-        Db connection = new Db();
-        connection.DAOSuspendUser(userID, true);
-        connection.disconnect();
-        connection = null;
-    }
-
-    /**
-     * @Method restore a user's access to all features
-     */
-    public void restoreUser(int userID) {
-        Db connection = new Db();
-        connection.DAOSuspendUser(userID, false);
-        connection.disconnect();
-        connection = null;
-    }
-
-    public void cancelMission(int missionID) {
-        // Insert code here
-    }
-
-    /**
-     * @Method resolves a dispute
-     * @param missionID
-     * @param userWinner
-     * 1 --> Cleaner wins
-     * 2 --> Owner wins
-     */
-    public void resoveDispute(int missionID, int userWinner) {
-        Db connection = new Db();
-        switch (userWinner) {
-        case 1 : {
-            connection.DAOResolveDispute(missionID, 7);
-            break;
-        }
-
-        case 2 : {
-            connection.DAOResolveDispute(missionID, 8);
-            break;
-        }
-        default : {
-            System.out.println("Dispute has failed to be resolved on  mission : " + missionID + ", dispute status : " + userWinner);
-        }
-        connection.disconnect();
-        connection  = null;
-            // SEND ACTIVITY TO ADD HERE !!
-        }
-    }
+    
 
     // -------------------------------------------------------------------------------------------------------------------------
     // Searching features

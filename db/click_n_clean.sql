@@ -90,7 +90,9 @@ CREATE TABLE `dispute` (
   `id_cleaner` int UNSIGNED NOT NULL,
   `id_mission` int UNSIGNED NOT NULL,
   `id_dispute_creator` int UNSIGNED NOT NULL,
-  `id_admin` int UNSIGNED DEFAULT NULL
+  `id_admin` int UNSIGNED DEFAULT NULL,
+  `decision_type` int UNSIGNED DEFAULT '0'
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
@@ -104,7 +106,7 @@ CREATE TABLE `mission` (
   `date_start` datetime NOT NULL,
   `cost` double NOT NULL DEFAULT '0',
   `duration` double NOT NULL,
-  `commision` double NOT NULL DEFAULT '0',
+  `commission` double NOT NULL DEFAULT '0',
   `state` int NOT NULL,
   `before_photo` varchar(50) DEFAULT NULL,
   `after_photo` varchar(50) DEFAULT NULL,
@@ -123,7 +125,7 @@ CREATE TABLE `mission_proposal` (
   `id_mission` int NOT NULL,
   `id_cleaner` int NOT NULL,
   `starting_hour` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
