@@ -49,7 +49,9 @@ public class ConnectionController {
           
 			case CLEANER:
 				Cleaner cleaner = db.DAOReadCleaner(user.getKey());
+
 				window.setScene(new CleanerWelcome(new ScrollPane(), window, cleaner));
+
 				break;
 			case OWNER :
 				Owner owner = db.DAOReadOwner(user.getKey());

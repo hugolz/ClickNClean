@@ -36,7 +36,7 @@ public class CreatePropertyController {
 		}
 		
 		if (houseNumber.isEmpty() || label.isEmpty() || postCode.isEmpty() || city.isEmpty()
-		        || surface==0 || accesCode.isEmpty() || keyBoxCode.isEmpty() || specialInstruction.isEmpty()) {
+		        || surface==0) {
 
 			JOptionPane.showMessageDialog(null, "Champs non remplis !");
 			return;

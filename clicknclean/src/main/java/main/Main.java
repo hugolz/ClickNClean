@@ -51,7 +51,9 @@ public class Main {
             "null",
             "null"
         );
+
         connection.DAOCreateNewMission(testProp, LocalDateTime.now());
+
     }
 
     public static void testProperty() throws SQLException, InterruptedException, ExecutionException {
