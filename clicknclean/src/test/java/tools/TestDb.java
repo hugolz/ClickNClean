@@ -9,12 +9,14 @@ import model.Cleaner;
 import model.CleanerExperience;
 import model.Owner;
 import model.OwnerMotivation;
+import model.Property;
 import model.User;
 import model.UserStatus;
 import model.Activity;
 
 import java.net.ConnectException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class TestDb {
@@ -262,9 +264,51 @@ public class TestDb {
 
         } catch (Exception e) {
 
-            System.err.println("[ERROR] Failled to fetch activities for id: " + cleanerId + " due to: " + e);
+            System.err.println("[ERROR] Failed to fetch activities for id: " + cleanerId + " due to: " + e);
 
         }
 
     }
+
+
+    @Test
+    public void readMission() throws Exception {
+        int propertyId = 0;
+        int missionId = 0;
+
+        try {
+            Db connection = new Db();
+            Address address = new Address("28 av yves thepot 29000 quimper", 47.988373, -4.088107);
+            propertyId = connection.DAOCreateNewProperty(address, 60, null, null, null, 4);
+            System.out.println("[SUCCESS] Succeed to create an address and property");
+        } 
+        catch (Exception e) {
+            System.err.println("[ERROR] Failed to create an address and property for property : " + propertyId + "due to: " + e);
+        }
+
+        try {
+            Db connection = new Db();
+            Property property = connection.DAOReadProperty(propertyId);
+            System.out.println("[SUCCESS] Succeed to read a property");
+        }
+        catch (Exception e) {
+            System.err.println("[ERROR] Failed to read a property for property : " + propertyId + " due to: " + e);
+        }
+
+        try {
+            Db connection = new Db();
+            Property property = connection.DAOReadProperty(propertyId);
+            missionId = connection.DAOCreateNewMission(property, LocalDateTime.now());
+            connection.DAOReadMission(missionId);
+            System.out.println("[SUCCESS] Succeed to create and read a mission");
+        }
+        catch (Exception e) {
+            System.err.println("[ERROR] Failed to create or read a new Mission: " + missionId + "due to: " + e);
+        }
+    
+        
+        
+        
+        
+    } 
 }

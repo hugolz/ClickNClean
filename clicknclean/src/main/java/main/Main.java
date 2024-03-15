@@ -17,6 +17,11 @@ import model.User;
 import model.UserStatus;
 
 public class Main {
+
+    
+
+
+
     public static void testReview() throws SQLException, InterruptedException, ExecutionException {
         Db connection = new Db();
         connection.DAOCreateNewReview("Super", 5., 5, 1 );
@@ -46,7 +51,9 @@ public class Main {
             "null",
             "null"
         );
-      //  connection.DAOCreateNewMission(testProp, LocalDateTime.now(), Mission.setDuration(testProp.getPropertySurface()));
+
+        connection.DAOCreateNewMission(testProp, LocalDateTime.now());
+
     }
 
     public static void testProperty() throws SQLException, InterruptedException, ExecutionException {
@@ -104,7 +111,10 @@ public class Main {
 
     };
 
-    public static void main(String[] args) throws SQLException, InterruptedException, ExecutionException {
+    public static void main(String[] args) throws Exception {
         new Window().run();
+        Db con = new Db();
+        Address address = new Address("28 av yves thepot 29000 quimper", 47.988373, -4.088107);
+        con.DAOCreateNewProperty(address, 0, null, null, null, 6);
     }
 }
