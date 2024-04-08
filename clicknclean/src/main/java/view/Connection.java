@@ -15,6 +15,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 public class Connection extends Scene {
     public Connection(ScrollPane container, Window window) {
@@ -32,29 +34,33 @@ public class Connection extends Scene {
         TextField loginInputField = new TextField();
         PasswordField passwordInputField = new PasswordField();
 
-        EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+        passwordInputField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent ke) {
+                if (ke.getCode().equals(KeyCode.ENTER)) {
+                    connectButton.fire();
+                }
+            }
+        });
+
+        connectButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 new ConnectionController(loginInputField.getText(), passwordInputField.getText(), window);
             }
-        };
+        });
 
-        connectButton.setOnAction(event);
 
-        EventHandler<ActionEvent> event2 = new EventHandler<ActionEvent>() {
+        newOwner.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 new AskRegistrationController("Owner", window);
             }
-        };
+        });
 
-        newOwner.setOnAction(event2);
-
-        EventHandler<ActionEvent> event3 = new EventHandler<ActionEvent>() {
+        newCleaner.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 new AskRegistrationController("Cleaner", window);
             }
-        };
-
-        newCleaner.setOnAction(event3);
+        });
 
         VBox vbox = new VBox();
         vbox.getChildren().add(loginLabel);

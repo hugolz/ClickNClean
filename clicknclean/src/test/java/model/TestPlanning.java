@@ -54,6 +54,5 @@ public class TestPlanning {
         } catch (Exception e) {
             System.err.println("[SUCCESS]" + e);
         }
-
     }
 }

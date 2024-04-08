@@ -22,6 +22,7 @@ import model.UserStatus;
 public class CleanerProfile extends Scene {
     public CleanerProfile(VBox container, Window window, Cleaner cleaner) {
         super(container, 800, 600);
+        window.setTitle("Profile");
         System.out.println("CleanerProfile constructor");
         Button backButton = new Button("Back");
 
@@ -41,6 +42,7 @@ public class CleanerProfile extends Scene {
         ChoiceBox<CleanerExperience> experienceChoice = new ChoiceBox<CleanerExperience>();
 
         Button updateButton = new Button("Save");
+        Label updateConfirmation = new Label("");
 
         nameEdit.setText(cleaner.getName());
         surnnameEdit.setText(cleaner.getSurname());
@@ -82,8 +84,9 @@ public class CleanerProfile extends Scene {
                     /* String */ biographyEdit.getText(),
                     /* String */ motivationEdit.getText(),
                     /* CleanerExperience */ experienceChoice.getValue()
-
                 );
+                updateConfirmation.setText("La requete de mise à jour des données a échoué");
+
             }
         });
 
@@ -96,7 +99,7 @@ public class CleanerProfile extends Scene {
                                        new HBox(new Label("biography: "), biographyEdit),
                                        new HBox(new Label("motivation: "), motivationEdit),
                                        new HBox(new Label("experience: "), experienceChoice),
-                                       updateButton);
+                                       updateButton, updateConfirmation);
 
         this.getStylesheets()
         .add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));

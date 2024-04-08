@@ -36,7 +36,7 @@ public class ConnectionController {
 			return;
 		}
 
-		
+
 
 		try {
 			switch (user.getValue()) {
@@ -47,11 +47,13 @@ public class ConnectionController {
 				new AdminMainController(window, admin, 0, 0, 0, 0, 0, "");
 				System.err.println(user.getKey());
 				break;
-          
+
 			case CLEANER:
 				Cleaner cleaner = db.DAOReadCleaner(user.getKey());
 
-				//window.setScene(new CleanerWelcome(new ScrollPane(), window, cleaner));
+
+				window.setScene(new CleanerMain (new VBox(), window, cleaner));
+
 
 				break;
 			case OWNER :

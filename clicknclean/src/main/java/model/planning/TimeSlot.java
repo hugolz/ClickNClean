@@ -30,7 +30,7 @@ public class TimeSlot {
     }
 
     public LocalDateTime getLocalDateTime() {
-        return datetime;
+        return this.datetime;
     }
 
     public void setLocalDateTime(LocalDateTime datetime) {

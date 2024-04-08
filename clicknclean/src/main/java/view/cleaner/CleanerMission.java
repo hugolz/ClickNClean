@@ -15,6 +15,7 @@ import model.Cleaner;
 public class CleanerMission extends Scene {
 	public CleanerMission(VBox container, Window window, Cleaner cleaner) {
 		super(container, 800, 600);
+		window.setTitle("Missions");
 		System.out.println("CleanerMission constructor");
 		Button backButton = new Button("Back");
 

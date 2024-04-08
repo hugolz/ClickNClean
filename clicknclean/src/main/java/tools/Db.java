@@ -53,7 +53,7 @@ public class Db {
 		this.dbName = "click_n_clean";
 
 		this.login = "root";
-		this.password = "root";
+		this.password = "";
 
 		this.strUrl = "jdbc:mysql://localhost:3306/" + dbName
 		              + "?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Europe/Paris";
@@ -282,33 +282,33 @@ public class Db {
 		return reviews;
 	}
 
-/*---------------------------------- Read properties methods -----------------------------------------------*/
+	/*---------------------------------- Read properties methods -----------------------------------------------*/
 
-public Property DAOReadProperty(int propertyId)
-throws InterruptedException, ExecutionException, Exception {
-	String query = "SELECT * FROM property WHERE id_property = "
-				   + propertyId;
+	public Property DAOReadProperty(int propertyId)
+	throws InterruptedException, ExecutionException, Exception {
+		String query = "SELECT * FROM property WHERE id_property = "
+		               + propertyId;
 
-	ResultSet rSet = this.stRead.executeQuery(query);
-	if (rSet.next()) {
-		Property property = new Property(
-			rSet.getInt("id_property"),
-			new Address(
-				rSet.getString("address_display"),
-				rSet.getDouble("latitude"),
-				rSet.getDouble("longitude")),
-			rSet.getInt("surface"),
-			rSet.getInt("id_owner"),
-			rSet.getString("acces_code"),
-			rSet.getString("key_box_code"),
-			rSet.getString("special_instruction"));
+		ResultSet rSet = this.stRead.executeQuery(query);
+		if (rSet.next()) {
+			Property property = new Property(
+			    rSet.getInt("id_property"),
+			    new Address(
+			        rSet.getString("address_display"),
+			        rSet.getDouble("latitude"),
+			        rSet.getDouble("longitude")),
+			    rSet.getInt("surface"),
+			    rSet.getInt("id_owner"),
+			    rSet.getString("acces_code"),
+			    rSet.getString("key_box_code"),
+			    rSet.getString("special_instruction"));
 			System.out.println(property);
 			return property;
+		}
+		rSet.close();
+		throw new Exception("Cannot find a property for id : " + propertyId);
+
 	}
-	rSet.close();
-	throw new Exception("Cannot find a property for id : " + propertyId);
-	
-}
 
 	public ArrayList<Property> DAOReadOwnerProperties(int id_owner)
 	throws InterruptedException, ExecutionException, Exception {
@@ -453,34 +453,34 @@ throws InterruptedException, ExecutionException, Exception {
 
 	public Dispute DAOReadDispute(int disputeId) throws Exception {
 		String query = "SELECT *, "
-							+ "(SELECT CONCAT(surname,' ',name) "  
-							+ "FROM user JOIN dispute "
-							+ "ON dispute.id_owner = user.id_user) owner_display,"
-							+ "(SELECT CONCAT(surname,' ',name)  "
-							+ "FROM user JOIN dispute "
-							+ "ON dispute.id_cleaner = user.id_user) cleaner_display "
-						+ "FROM dispute WHERE id_dispute = " + disputeId + ";";
+		               + "(SELECT CONCAT(surname,' ',name) "
+		               + "FROM user JOIN dispute "
+		               + "ON dispute.id_owner = user.id_user) owner_display,"
+		               + "(SELECT CONCAT(surname,' ',name)  "
+		               + "FROM user JOIN dispute "
+		               + "ON dispute.id_cleaner = user.id_user) cleaner_display "
+		               + "FROM dispute WHERE id_dispute = " + disputeId + ";";
 
-			ResultSet rSet = stRead.executeQuery(query);
-			if (rSet.next()) {
-				
-				Dispute dispute = new Dispute(
-					rSet.getInt("id_dispute"), 
-					rSet.getString("content"), 
-					rSet.getString("decision"), 
-					rSet.getString("owner_display"),
-					rSet.getString("cleaner_display"),
-					rSet.getInt("id_owner"), 
-					rSet.getInt("id_cleaner"), 
-					rSet.getInt("id_mission"), 
-					rSet.getInt("id_dispute_creator"), 
-					rSet.getInt("id_admin"),
-					DisputeType.fromInt(rSet.getInt("decision_type")));
-				rSet.close();
-				return dispute;	
-			}
+		ResultSet rSet = stRead.executeQuery(query);
+		if (rSet.next()) {
+
+			Dispute dispute = new Dispute(
+			    rSet.getInt("id_dispute"),
+			    rSet.getString("content"),
+			    rSet.getString("decision"),
+			    rSet.getString("owner_display"),
+			    rSet.getString("cleaner_display"),
+			    rSet.getInt("id_owner"),
+			    rSet.getInt("id_cleaner"),
+			    rSet.getInt("id_mission"),
+			    rSet.getInt("id_dispute_creator"),
+			    rSet.getInt("id_admin"),
+			    DisputeType.fromInt(rSet.getInt("decision_type")));
 			rSet.close();
-			throw new SQLException("No dispute with id = " + disputeId);
+			return dispute;
+		}
+		rSet.close();
+		throw new SQLException("No dispute with id = " + disputeId);
 	}
 
 
@@ -488,34 +488,34 @@ throws InterruptedException, ExecutionException, Exception {
 	public Mission DAOReadMission(int missionId) throws InterruptedException, ExecutionException, Exception {
 		Statement  st2 = conn.createStatement();
 		String query = "SELECT * FROM mission JOIN property ON mission.id_property = property.id_property WHERE id_mission =" + missionId;
-			Property missionProperty = null;
+		Property missionProperty = null;
 
-			ResultSet rSet2 = st2.executeQuery(query);
-			if (rSet2.next()) {
-				ArrayList<Property> propList = DAOReadOwnerProperties(rSet2.getInt("id_owner"));
-				for (Property currentProp : propList) {
-					if (currentProp.getPropertyId() == rSet2.getInt("id_property")) {
-						missionProperty = currentProp;
-						break;
-					}
+		ResultSet rSet2 = st2.executeQuery(query);
+		if (rSet2.next()) {
+			ArrayList<Property> propList = DAOReadOwnerProperties(rSet2.getInt("id_owner"));
+			for (Property currentProp : propList) {
+				if (currentProp.getPropertyId() == rSet2.getInt("id_property")) {
+					missionProperty = currentProp;
+					break;
 				}
-				if (missionProperty == null)  throw new Exception("The property of the mission is not in owner's properties list");
-
-				
-				Mission mission = new Mission(
-					missionProperty, 
-					rSet2.getTimestamp("date_start").toLocalDateTime(),
-					rSet2.getDouble("duration"),
-					rSet2.getDouble("cost"),
-					rSet2.getDouble("commission"),
-					rSet2.getInt("id_owner"),					
-					rSet2.getInt("id_cleaner"),
-					MissionStatus.fromInt(rSet2.getInt("state")));
-				rSet2.close();	
-				return mission;
 			}
+			if (missionProperty == null)  throw new Exception("The property of the mission is not in owner's properties list");
+
+
+			Mission mission = new Mission(
+			    missionProperty,
+			    rSet2.getTimestamp("date_start").toLocalDateTime(),
+			    rSet2.getDouble("duration"),
+			    rSet2.getDouble("cost"),
+			    rSet2.getDouble("commission"),
+			    rSet2.getInt("id_owner"),
+			    rSet2.getInt("id_cleaner"),
+			    MissionStatus.fromInt(rSet2.getInt("state")));
 			rSet2.close();
-			throw new SQLException("No mission with id=" + missionId);
+			return mission;
+		}
+		rSet2.close();
+		throw new SQLException("No mission with id=" + missionId);
 	}
 
 	public void DAOWritePlanning(Planning planning, int id_user) {
@@ -595,7 +595,8 @@ throws InterruptedException, ExecutionException, Exception {
 	    int hourlyRate,
 	    String biography,
 	    String motivation,
-	    CleanerExperience experience) throws Exception {
+	    CleanerExperience experience
+	) throws Exception {
 		String query = "SELECT * FROM cleaner WHERE id_cleaner = " + cleanerId;
 		Statement st = this.conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
 
@@ -677,7 +678,7 @@ throws InterruptedException, ExecutionException, Exception {
 
 	public void DAOResolveDispute(int disputeId, MissionStatus state, String decision) throws Exception {
 		Dispute dispute = DAOReadDispute(disputeId);
-	
+
 		try {
 			int type = 0;
 			if (state == MissionStatus.RESOLVED_DISPUTE_CLEANER_IS_RIGHT) {
@@ -685,37 +686,37 @@ throws InterruptedException, ExecutionException, Exception {
 			} else if (state == MissionStatus.RESOLVED_DISPUTE_OWNER_IS_RIGHT) {
 				type = 2;
 			}
-	
+
 			String strQuery = "UPDATE dispute SET decision = ?, "
-					+ "decision_type = ?, "
-					+ "id_admin = 1 "
-					+ "WHERE id_dispute = ?";  
-	
+			                  + "decision_type = ?, "
+			                  + "id_admin = 1 "
+			                  + "WHERE id_dispute = ?";
+
 			try (PreparedStatement preparedStatement = conn.prepareStatement(strQuery)) {
 				preparedStatement.setString(1, decision);
 				preparedStatement.setInt(2, type);
 				preparedStatement.setInt(3, disputeId);
-	
+
 				preparedStatement.executeUpdate();
 			}
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
-	
+
 		try {
-			String strQuery = "UPDATE mission SET state = ? WHERE id_mission = ?";  
-	
+			String strQuery = "UPDATE mission SET state = ? WHERE id_mission = ?";
+
 			try (PreparedStatement preparedStatement = conn.prepareStatement(strQuery)) {
-				preparedStatement.setInt(1, state.asInt());  
+				preparedStatement.setInt(1, state.asInt());
 				preparedStatement.setInt(2, dispute.getMissionId());
-	
+
 				preparedStatement.executeUpdate();
 			}
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
 	}
-	
+
 
 	public void disconnect() {
 		try {
@@ -735,6 +736,7 @@ throws InterruptedException, ExecutionException, Exception {
 		double duration = Mission.setDuration(property.getPropertySurface());
 
 		String strQuery = "INSERT INTO `mission` "
+
 		+ "(`date_start`, `cost`, `duration`, `commision`, `state`, `id_owner`, `id_property`) "
 		+ "VALUES (?, ?, ?, ?, ?, ?, ?);";
 
@@ -746,11 +748,6 @@ throws InterruptedException, ExecutionException, Exception {
 		preparedStatement.setInt(5, MissionStatus.PUBLISHED.asInt());
 		preparedStatement.setInt(6, property.getOwnerId());
 		preparedStatement.setInt(7, property.getPropertyId());
-		System.out.println(property.getOwnerId());
-		System.out.println(property.getPropertyId());
-		System.out.println(localDateTime);
-		System.out.println(MissionStatus.PUBLISHED.asInt());
-		
 		preparedStatement.executeUpdate();
 		
 		ResultSet rSet = preparedStatement.getGeneratedKeys();
@@ -866,36 +863,32 @@ throws InterruptedException, ExecutionException, Exception {
 	    String keyBoxCode,
 	    String specialInstruction,
 	    int ownerId) throws SQLException {
-		
+
 		int id = 0;
 
-			String strQuery = "INSERT INTO `property` "
-			+ "(`address_display`, `latitude`, `longitude`, `surface`, `id_owner`, `acces_code`, `key_box_code`, `special_instruction`) "
-			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		String strQuery = "INSERT INTO `property` "
+		                  + "(`address_display`, `latitude`, `longitude`, `surface`, `id_owner`, `acces_code`, `key_box_code`, `special_instruction`) "
+		                  + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-			try (PreparedStatement preparedStatement = conn.prepareStatement(strQuery, Statement.RETURN_GENERATED_KEYS)) {
-				preparedStatement.setString(1, propertyAddress.asString());
-				preparedStatement.setDouble(2, propertyAddress.getLatitude());
-				preparedStatement.setDouble(3, propertyAddress.getLongitude());
-				preparedStatement.setDouble(4, propertySurface);
-				preparedStatement.setInt(5, ownerId);
-				preparedStatement.setString(6, accesCode);
-				preparedStatement.setString(7, keyBoxCode);
-				preparedStatement.setString(8, specialInstruction);
+		try (PreparedStatement preparedStatement = conn.prepareStatement(strQuery, Statement.RETURN_GENERATED_KEYS)) {
+			preparedStatement.setString(1, propertyAddress.asString());
+			preparedStatement.setDouble(2, propertyAddress.getLatitude());
+			preparedStatement.setDouble(3, propertyAddress.getLongitude());
+			preparedStatement.setDouble(4, propertySurface);
+			preparedStatement.setInt(5, ownerId);
+			preparedStatement.setString(6, accesCode);
+			preparedStatement.setString(7, keyBoxCode);
+			preparedStatement.setString(8, specialInstruction);
 
-				preparedStatement.executeUpdate();
-				
-				ResultSet rSet = preparedStatement.getGeneratedKeys();
-				if (rSet.next()) {
-					id = rSet.getInt(1);
-					System.out.println("Id property : " + id);
-					}
-				}
-				return id;
-	
-				
+			preparedStatement.executeUpdate();
+			ResultSet rSet = preparedStatement.getGeneratedKeys();
+			if (rSet.next()) {
+				id = rSet.getInt(1);
+				System.out.println("Id property : " + id);
+			}
+		}
+		return id;
 	}
-			
 
 	/*--------------------------------------CREATE REVIEW-------------------------------------------------------------- */
 	public void DAOCreateNewReview(String content, double/* menton */ grade, int userReceivingId, int missionId) {
