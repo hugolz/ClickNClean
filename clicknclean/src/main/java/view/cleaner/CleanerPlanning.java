@@ -2,6 +2,7 @@ package view.cleaner;
 
 import view.Window;
 import java.io.File;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,12 +19,14 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import model.Cleaner;
+import model.Mission;
 import model.planning.TimeSlot;
 import tools.Db;
 
 public class CleanerPlanning extends Scene {
     public CleanerPlanning(VBox container, Window window, Cleaner cleaner) {
         super(container, 800, 600);
+        window.setTitle("Planning view");
         System.out.println("CleanerPlanning constructor");
         Button backButton = new Button("Back");
 
@@ -51,8 +54,20 @@ public class CleanerPlanning extends Scene {
             updateButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent ev) {
-                    // Db db  = new Db();
-                    // Mission mission = db.missio
+                    if (t.getIdMission() == -1) {
+                        System.out.println("Mission id is -1, cancel fetch");
+                        return;
+                    }
+                    Db db  = new Db();
+                    Mission mission;
+                    try {
+                        mission = db.DAOReadMission(t.getIdMission());
+                    } catch (Exception e) {
+                        System.err.println("[ERROR] An error occured while fetching mission" + t.getIdMission() + " from db : " + e);
+                        return;
+                    }
+
+                    System.out.println(mission.toString());
                 }
             });
 
