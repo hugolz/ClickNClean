@@ -1,7 +1,6 @@
 package model;
 
 public enum MissionStatus {
-
     PUBLISHED(1),
     PROPOSED(2),
     CONFIRMED_AND_PAYED(3),
@@ -42,9 +41,6 @@ public enum MissionStatus {
         case 8:
             return MissionStatus.RESOLVED_DISPUTE_OWNER_IS_RIGHT;
 
-        
-           
-        
         default:
             throw new Exception("Given status could not be converted into MissionStatus: " + status);
         }

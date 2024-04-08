@@ -33,7 +33,6 @@ public class CleanerProfileController {
         Db db = new Db();
 
         try {
-
             db.DAOUpdateUser(
                 cleaner.getCleanerId(),
                 new_name,
@@ -42,7 +41,8 @@ public class CleanerProfileController {
                 new_phoneNbr,
                 new_birthDate,
                 new_sus,
-                new_status);
+                new_status
+            );
 
             db.DAOUpdateCleaner(
                 cleaner.getCleanerId(),
@@ -51,7 +51,8 @@ public class CleanerProfileController {
                 new_hourlyRate,
                 new_biography,
                 new_motivation,
-                new_experience);
+                new_experience
+            );
         } catch (Exception e) {
             System.err.println("[ERROR] An error occured while updating Cleaner: " + e);
             return;
@@ -59,6 +60,7 @@ public class CleanerProfileController {
 
 
         Cleaner new_cleaner;
+
         try {
             new_cleaner = db.DAOReadCleaner(cleaner.getCleanerId());
         } catch (Exception e) {

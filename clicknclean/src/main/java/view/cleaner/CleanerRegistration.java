@@ -124,8 +124,8 @@ public class CleanerRegistration extends Scene {
 		Button registerPhotoLive = new Button("Parcourir");
 
 		experienceChoiceBox.setItems(FXCollections.observableArrayList(
-		                                 CleanerExperience.NONE, CleanerExperience.LESS_1_YEARS, CleanerExperience.BETWEEN_1_3,
-		                                 CleanerExperience.MORE_3_YEARS));
+		                                 CleanerExperience.NONE, CleanerExperience.LESS_1_YEARS,
+		                                 CleanerExperience.BETWEEN_1_3, CleanerExperience.MORE_3_YEARS));
 
 		EventHandler<ActionEvent> eventphoto = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {

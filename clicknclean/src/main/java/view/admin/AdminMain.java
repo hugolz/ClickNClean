@@ -41,7 +41,7 @@ public class AdminMain extends Scene {
         Label welcomeMessageLabel = new Label("Bienvenue " + admin.getSurname());
         Label confirmCleanerLabel = new Label("Cleaners en attente de confirmation :");
 
-/*----------------------------------------Display cleaners -----------------------------------------------*/
+        /*----------------------------------------Display cleaners -----------------------------------------------*/
 
         MenuButton menuButton = new MenuButton("Sélectionnez un Cleaner");
 
@@ -72,9 +72,9 @@ public class AdminMain extends Scene {
             MenuItem displayContainer = new MenuItem();
 
             Label display = new Label("Nom :" + currentCleaner.getSurname() + " " + currentCleaner.getName()
-            + "\nDate de naissance : " + currentCleaner.getBirthDate()
-            + "\nExpérience : " + CleanerExperience.asString(currentCleaner.getExperience())
-            + "\nMotivation :  " + currentCleaner.getMotivation());
+                                      + "\nDate de naissance : " + currentCleaner.getBirthDate()
+                                      + "\nExpérience : " + currentCleaner.getExperience().toString()
+                                      + "\nMotivation :  " + currentCleaner.getMotivation());
             displayContainer.setGraphic(display);
 
             cleanerBlockContainer.getItems().addAll(displayContainer, acceptContainer, blockContainer);
@@ -82,14 +82,14 @@ public class AdminMain extends Scene {
         }
 
 
-/*----------------------------------------Display disputes -----------------------------------------------*/
+        /*----------------------------------------Display disputes -----------------------------------------------*/
         Label displayDisputeLabel = new Label("Litiges à gérer");
 
         MenuButton menuButton2 = new MenuButton("Sélectionnez un litige");
 
-        for (Pair<Dispute, Mission> currentLitigation: disputeList) {
+        for (Pair<Dispute, Mission> currentLitigation : disputeList) {
             Menu disputeBlockContainer = new Menu(
-                "Client : " + currentLitigation.getKey().getOwnerDisplay() 
+                "Client : " + currentLitigation.getKey().getOwnerDisplay()
                 + "\nCleaner : " + currentLitigation.getKey().getCleanerDisplay());
 
             MenuItem decisionContainer = new MenuItem();
@@ -103,13 +103,13 @@ public class AdminMain extends Scene {
             Button accept = new Button("Donner raison au Cleaner");
             accept.setOnAction(e -> {
                 try {
-                    handleDispute(window, 
-                        admin, 
-                        currentLitigation.getKey().getDisputeId(), 
-                        currentLitigation.getKey().getCleanerId(), 
-                        currentLitigation.getKey().getOwnerId(), 
-                        1, 
-                        decision.getText());
+                    handleDispute(window,
+                    admin,
+                    currentLitigation.getKey().getDisputeId(),
+                    currentLitigation.getKey().getCleanerId(),
+                    currentLitigation.getKey().getOwnerId(),
+                    1,
+                    decision.getText());
                 } catch (Exception e1) {
                     System.out.println("Failed to execute handleCleaner in AdminMain. Error : " + e1);
                 }
@@ -120,13 +120,13 @@ public class AdminMain extends Scene {
             Button block = new Button("Donner raison au client");
             block.setOnAction(e -> {
                 try {
-                    handleDispute(window, 
-                        admin, 
-                        currentLitigation.getKey().getDisputeId(), 
-                        currentLitigation.getKey().getCleanerId(), 
-                        currentLitigation.getKey().getOwnerId(), 
-                        99, 
-                        decision.getText());
+                    handleDispute(window,
+                    admin,
+                    currentLitigation.getKey().getDisputeId(),
+                    currentLitigation.getKey().getCleanerId(),
+                    currentLitigation.getKey().getOwnerId(),
+                    99,
+                    decision.getText());
                 } catch (Exception e1) {
                     System.out.println("Failed to execute handleCleaner in AdminMain. Error : " + e1);
                 }
@@ -136,18 +136,18 @@ public class AdminMain extends Scene {
             MenuItem displayContainer2 = new MenuItem();
 
             Label display2 = new Label("Plainte :" + currentLitigation.getKey().getContent()
-            + "\nMission :"
-                + "\n\t Date : " + currentLitigation.getValue().getMissionDate()
-                + "\n\t Prix : " + currentLitigation.getValue().getCost()
-                + "\n\t Status : " + currentLitigation.getValue().getState());
+                                       + "\nMission :"
+                                       + "\n\t Date : " + currentLitigation.getValue().getMissionDate()
+                                       + "\n\t Prix : " + currentLitigation.getValue().getCost()
+                                       + "\n\t Status : " + currentLitigation.getValue().getState());
             displayContainer2.setGraphic(display2);
-            
+
             disputeBlockContainer.getItems().addAll(displayContainer2, acceptContainer2, blockContainer2, decisionContainer);
             menuButton2.getItems().add(disputeBlockContainer);
         }
 
 
-/*----------------------------------------------------------------------------------------------------------------- */
+        /*----------------------------------------------------------------------------------------------------------------- */
 
         MenuBar bar = new MenuBar();
         Menu disconnect = new Menu("Déconnexion");
@@ -190,7 +190,7 @@ public class AdminMain extends Scene {
         container.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
         this.getStylesheets()
-                .add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
+        .add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
     }
     public void handleCleaner(Window win, Admin ad, int cleanerId, int isConfirmed) throws Exception {
         new AdminMainController(win, ad, 1, 0, cleanerId, 0, isConfirmed, "");
@@ -199,8 +199,7 @@ public class AdminMain extends Scene {
     public void handleDispute(Window win, Admin ad, int disputeId, int cleanerId, int ownerId, int winner, String decision) throws Exception {
         if (decision.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vous devez renseigner votre décision");
-        }
-        else new AdminMainController(win, ad, 2, disputeId, cleanerId, ownerId, winner, decision );
-       
+        } else new AdminMainController(win, ad, 2, disputeId, cleanerId, ownerId, winner, decision );
+
     }
 }

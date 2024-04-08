@@ -8,7 +8,6 @@ import java.io.File;
 import javax.swing.Scrollable;
 
 import controller.LogoutController;
-import controller.cleaner.CleanerInboxController;
 import controller.cleaner.CleanerNotificationController;
 import controller.cleaner.CleanerProfileController;
 import controller.cleaner.CleanerPlanningController;
@@ -25,10 +24,10 @@ import javafx.scene.layout.VBox;
 public class CleanerMain extends Scene {
 	public CleanerMain(VBox container, Window window, Cleaner cleaner) {
 		super(container, 800, 600);
+		window.setTitle("Main menu");
 		System.out.println("CleanerWelcome constructor");
 		Button profileButton = new Button("Profil");
 		Button notificationButton = new Button("Notification");
-		Button inboxButton = new Button("Messages");
 		Button disconnectButton = new Button("Se déconnecter");
 		Button planningButton = new Button("View planning");
 		Button archivedMissionsButton = new Button("View old missions");
@@ -41,11 +40,6 @@ public class CleanerMain extends Scene {
 		notificationButton.setOnAction(new EventHandler<ActionEvent> () {
 			public void handle(ActionEvent ev) {
 				new CleanerNotificationController(window, cleaner);
-			}
-		});
-		inboxButton.setOnAction(new EventHandler<ActionEvent> () {
-			public void handle(ActionEvent ev) {
-				new CleanerInboxController(window, cleaner);
 			}
 		});
 		disconnectButton.setOnAction(new EventHandler<ActionEvent> () {
@@ -67,14 +61,9 @@ public class CleanerMain extends Scene {
 		VBox header = new VBox();
 		header.setId("header");
 		// header.getStyleClass().addAll("hbox");
-		header.getChildren().addAll(profileButton, notificationButton, inboxButton);
-
+		header.getChildren().addAll(profileButton, notificationButton);
 
 		container.getChildren().addAll(header, planningButton, archivedMissionsButton, disconnectButton);
-
-		// container.setPannable(true);
-		// container.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-		// container.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 
 		this.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
 		this.getStylesheets()
