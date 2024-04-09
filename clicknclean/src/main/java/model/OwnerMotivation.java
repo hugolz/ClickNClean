@@ -25,4 +25,17 @@ public enum OwnerMotivation {
     public int asInt() {
         return this.motivation;
     }
+
+    public String toString() {
+        switch (this.motivation) {
+        case 1:
+            return "Maison principale";
+        case 2:
+            return "Chambre d'ami";
+        case 3:
+            return "Inventaire";
+        default:
+            return "Given experience doesn't match with cleaner experience" + this.motivation;
+        }
+    }
 }
