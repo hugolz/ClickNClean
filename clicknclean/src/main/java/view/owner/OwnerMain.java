@@ -27,6 +27,7 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
+import model.Mission;
 import model.Owner;
 
 public class OwnerMain extends Scene {
@@ -38,6 +39,7 @@ public class OwnerMain extends Scene {
 
 		Label missionInProgress = new Label("Vos missions en cours :");
 		Label missionCome = new Label("Vos missions à venir");
+		Label missionConfirm = new Label("Confirmer la mission :");
 		
 		MenuBar bar = new MenuBar();
 		Menu profile = new Menu("Profil");
@@ -57,14 +59,18 @@ public class OwnerMain extends Scene {
 		
 		MenuItem addDispute = new MenuItem("Commencer un litige");
 		
-
-
-
 		profile.getItems().addAll(seeProfile, disconnect);
 		property.getItems().addAll(seeProperty, addProperty);
 		mission.getItems().addAll(seeMission, addMission);
 		dispute.getItems().addAll(addDispute);
 		bar.getMenus().addAll(profile, property, mission, dispute);
+		
+		//listview with confirm cleaner for mission create
+		
+		//listview for mission to come
+		
+		//listview confirm mission completed by the cleaner
+		
 
 		EventHandler<ActionEvent> eventDisconnect = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
@@ -160,8 +166,10 @@ public class OwnerMain extends Scene {
 		VBox vbox = new VBox();
 		vbox.getChildren().add(bar);
 		vbox.getChildren().add(welcomeMessage);
+		vbox.getChildren().add(missionConfirm);
 		vbox.getChildren().add(missionInProgress);
 		vbox.getChildren().add(missionCome);
+		
 
 
 

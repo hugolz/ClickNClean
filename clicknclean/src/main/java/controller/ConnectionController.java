@@ -7,6 +7,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.util.Pair;
 
 import model.Cleaner;
+import model.Mission;
 import model.Owner;
 import model.Admin;
 
@@ -50,12 +51,15 @@ public class ConnectionController {
 			case CLEANER:
 				Cleaner cleaner = db.DAOReadCleaner(user.getKey());
 
+
 				window.setScene(new CleanerMain (new VBox(), window, cleaner));
+
 
 				break;
 			case OWNER :
 				Owner owner = db.DAOReadOwner(user.getKey());
 
+				
 				window.setScene(new OwnerMain(new ScrollPane(), window, owner));
 				break;
 			}

@@ -736,23 +736,24 @@ public class Db {
 		double duration = Mission.setDuration(property.getPropertySurface());
 
 		String strQuery = "INSERT INTO `mission` "
-		                  + "(`date_start`, `cost`, `duration`, `commission`, `state`, `id_owner`, `id_property`) "
-		                  + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+		+ "(`date_start`, `cost`, `duration`, `commision`, `state`, `id_owner`, `id_property`) "
+		+ "VALUES (?, ?, ?, ?, ?, ?, ?);";
 
 		try (PreparedStatement preparedStatement = conn.prepareStatement(strQuery, Statement.RETURN_GENERATED_KEYS)) {
-			preparedStatement.setObject(1, localDateTime);
-			preparedStatement.setDouble(2, 0.0);
-			preparedStatement.setDouble(3, duration);
-			preparedStatement.setDouble(4, 0.0);
-			preparedStatement.setInt(5, MissionStatus.PUBLISHED.asInt());
-			preparedStatement.setInt(6, property.getOwnerId());
-			preparedStatement.setInt(7, property.getPropertyId());
-
-			preparedStatement.executeUpdate();
-			ResultSet rSet = preparedStatement.getGeneratedKeys();
-			if (rSet.next()) {
-				id = rSet.getInt(1);
-				System.out.println("Id mission : " + id);
+		preparedStatement.setObject(1, localDateTime); 
+		preparedStatement.setDouble(2, 0.0);
+		preparedStatement.setDouble(3, duration);
+		preparedStatement.setDouble(4, 0.0);
+		preparedStatement.setInt(5, MissionStatus.PUBLISHED.asInt());
+		preparedStatement.setInt(6, property.getOwnerId());
+		preparedStatement.setInt(7, property.getPropertyId());
+		preparedStatement.executeUpdate();
+		
+		ResultSet rSet = preparedStatement.getGeneratedKeys();
+		if (rSet.next()) {
+			id = rSet.getInt(1);
+			System.out.println("Id mission : " + id);
 			}
 		}
 		return id;
@@ -887,10 +888,7 @@ public class Db {
 			}
 		}
 		return id;
-
-
 	}
-
 
 	/*--------------------------------------CREATE REVIEW-------------------------------------------------------------- */
 	public void DAOCreateNewReview(String content, double/* menton */ grade, int userReceivingId, int missionId) {

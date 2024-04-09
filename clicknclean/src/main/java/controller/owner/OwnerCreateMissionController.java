@@ -15,22 +15,23 @@ import model.Property;
 import tools.Db;
 import view.Window;
 import view.owner.OwnerMain;
+import view.owner.OwnerMission;
 
 public class OwnerCreateMissionController {
 
 	public OwnerCreateMissionController(LocalDate date, int hour, int minute, Property property, Window window, Owner owner) throws SQLException, Exception {
 
 		Db db = new Db();
-
-		if (date == null || hour == 0 || minute == 34 || property == null) {
+		int idMission;
+		
+		if (date==null || hour==0 || minute==34 || property==null) {
 
 			JOptionPane.showMessageDialog(null, "Champs non remplis !");
 			return;
-		}
-
-
-		LocalTime time = LocalTime.parse("" + hour + ":" + minute + ":00");
-		LocalDateTime dateTime = LocalDateTime.parse("" + date + "T" + time + "");
+		}		
+		
+		LocalTime time = LocalTime.parse(hour+":"+minute+":00.00");
+		LocalDateTime dateTime = LocalDateTime.parse(date+"T"+time);
 
 		if (date.isBefore(LocalDate.now())) {
 			JOptionPane.showMessageDialog(null, "La date est déjà passée !");
@@ -38,14 +39,17 @@ public class OwnerCreateMissionController {
 		}
 
 		try {
-			// ????????????????
-			// Mission  missionId = db.DAOCreateNewMission(property, dateTime);
-		} catch (Exception e) {
+
+		idMission = db.DAOCreateNewMission(property, dateTime); 
+		}
+		catch (Exception e) {
+
 			JOptionPane.showMessageDialog(null, "L'ajout de mission a échoué");
 			return;
 		}
-		JOptionPane.showMessageDialog(null, "Ajout réussi ! Vous allez être redirigez vers la page d'acceuil !");
-		window.setScene(new OwnerMain(new ScrollPane(), window, owner));
+		JOptionPane.showMessageDialog(null, "Ajout réussi ! \nVous allez être redirigez vers la page des Missions !");
+		Mission mission = db.DAOReadMission(idMission);
+		window.setScene(new OwnerMission(new ScrollPane(), window, owner));
 		db.disconnect();
 
 
