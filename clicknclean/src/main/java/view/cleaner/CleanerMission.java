@@ -1,4 +1,3 @@
-
 package view.cleaner;
 
 import view.Window;
@@ -28,6 +27,5 @@ public class CleanerMission extends Scene {
 		container.getChildren().add(backButton);
 
 		this.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
-
 	}
 }

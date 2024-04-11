@@ -9,8 +9,8 @@ import view.owner.OwnerMain;
 import view.owner.OwnerProfile;
 
 public class OwnerProfileController {
-	public OwnerProfileController(Window window, Owner owner) throws SQLException, Exception {
-		
+	public OwnerProfileController(Window window, Owner owner) {
+
 		window.setScene(new OwnerProfile(new ScrollPane(), window, owner));
 	}
 

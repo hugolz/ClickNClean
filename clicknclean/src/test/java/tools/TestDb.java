@@ -179,7 +179,8 @@ public class TestDb {
                                 experience,
                                 isConfirmed,
                                 photoProfile,
-                                photoLive);
+                                photoLive
+                            );
         } catch (Exception e) {
             assert 1 == 0; // Idk how to trigger a panic yet
         }
@@ -263,11 +264,8 @@ public class TestDb {
             System.out.println("[SUCCESS] Read " + activities.size() + " activities for cleaner with id: " + cleanerId);
 
         } catch (Exception e) {
-
             System.err.println("[ERROR] Failed to fetch activities for id: " + cleanerId + " due to: " + e);
-
         }
-
     }
 
 
@@ -281,8 +279,7 @@ public class TestDb {
             Address address = new Address("28 av yves thepot 29000 quimper", 47.988373, -4.088107);
             propertyId = connection.DAOCreateNewProperty(address, 60, null, null, null, 4);
             System.out.println("[SUCCESS] Succeed to create an address and property");
-        } 
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println("[ERROR] Failed to create an address and property for property : " + propertyId + "due to: " + e);
         }
 
@@ -290,8 +287,7 @@ public class TestDb {
             Db connection = new Db();
             Property property = connection.DAOReadProperty(propertyId);
             System.out.println("[SUCCESS] Succeed to read a property");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println("[ERROR] Failed to read a property for property : " + propertyId + " due to: " + e);
         }
 
@@ -301,14 +297,8 @@ public class TestDb {
             missionId = connection.DAOCreateNewMission(property, LocalDateTime.now());
             connection.DAOReadMission(missionId);
             System.out.println("[SUCCESS] Succeed to create and read a mission");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println("[ERROR] Failed to create or read a new Mission: " + missionId + "due to: " + e);
         }
-    
-        
-        
-        
-        
-    } 
+    }
 }

@@ -58,7 +58,7 @@ public class OwnerMain extends Scene {
 		MenuItem addMission = new MenuItem("Proposer une Mission");
 		
 		MenuItem addDispute = new MenuItem("Commencer un litige");
-		
+
 		profile.getItems().addAll(seeProfile, disconnect);
 		property.getItems().addAll(seeProperty, addProperty);
 		mission.getItems().addAll(seeMission, addMission);
@@ -85,17 +85,11 @@ public class OwnerMain extends Scene {
 
 		EventHandler<ActionEvent> eventViewProfil = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				try {
-					new OwnerProfileController(window, owner);
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
+				new OwnerProfileController(window, owner);
 			}
 		};
 		seeProfile.setOnAction(eventViewProfil);
-		
+
 		EventHandler<ActionEvent> eventSeeProperty = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
@@ -104,11 +98,11 @@ public class OwnerMain extends Scene {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+
 			}
 		};
 		seeProperty.setOnAction(eventSeeProperty);
-		
+
 		EventHandler<ActionEvent> eventAddProperty = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
@@ -117,11 +111,11 @@ public class OwnerMain extends Scene {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+
 			}
 		};
 		addProperty.setOnAction(eventAddProperty);
-		
+
 		EventHandler<ActionEvent> eventNewMission = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
@@ -130,11 +124,11 @@ public class OwnerMain extends Scene {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+
 			}
 		};
 		addMission.setOnAction(eventNewMission);
-		
+
 		EventHandler<ActionEvent> eventSeeMission = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
@@ -143,12 +137,12 @@ public class OwnerMain extends Scene {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+
 			}
 		};
 		seeMission.setOnAction(eventSeeMission);
-		
-		
+
+
 		EventHandler<ActionEvent> eventAddDispute = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
@@ -157,7 +151,7 @@ public class OwnerMain extends Scene {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+
 			}
 		};
 		addDispute.setOnAction(eventAddDispute);
@@ -171,16 +165,11 @@ public class OwnerMain extends Scene {
 		vbox.getChildren().add(missionCome);
 		
 
-
-
-
 		vbox.setSpacing(10);
 		vbox.setPadding(new Insets(100, 300, 20, 300));
 		vbox.setAlignment(Pos.TOP_CENTER);
 
-
 		container.setContent(vbox);
-	
 
 		container.setPannable(true);
 		container.setVbarPolicy(ScrollBarPolicy.ALWAYS);

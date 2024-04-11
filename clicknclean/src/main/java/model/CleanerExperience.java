@@ -42,14 +42,14 @@ public enum CleanerExperience {
     // }
 
     public String toString() {
-        switch (this.experience) {
-        case 1:
+        switch (this) {
+        case NONE:
             return "Aucune expérience";
-        case 2:
+        case LESS_1_YEARS:
             return "Moins d'un an d'expérience en ménages";
-        case 3:
+        case BETWEEN_1_3:
             return "1 à 3 ans d'expérience";
-        case 4:
+        case MORE_3_YEARS:
             return "plus de 3 ans d'expérience";
         default:
             return "Given experience doesn't match with cleaner experience" + this.experience;
