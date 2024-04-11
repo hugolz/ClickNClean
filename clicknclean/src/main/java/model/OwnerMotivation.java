@@ -27,12 +27,12 @@ public enum OwnerMotivation {
     }
 
     public String toString() {
-        switch (this.motivation) {
-        case 1:
+        switch (this) {
+        case MAIN_HOME:
             return "Maison principale";
-        case 2:
+        case GUEST_ROOM:
             return "Chambre d'ami";
-        case 3:
+        case INVENTORY:
             return "Inventaire";
         default:
             return "Given experience doesn't match with cleaner experience" + this.motivation;

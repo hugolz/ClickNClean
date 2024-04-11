@@ -53,7 +53,10 @@ public class OwnerRegistrationController {
 		}
 
 		JOptionPane.showMessageDialog(null, "Inscription réussi ! Vous allez être redirigez vers votre page d'acceuil !");
+
+		// ??????????????????? we already have a DB instance
 		Db connection = new Db();
+		// Why isn't this in a try ?
 		Owner currentOwner = connection.DAOReadOwner(currentOwnerId);
 		window.setScene(new OwnerMain(new ScrollPane(), window, currentOwner));
 

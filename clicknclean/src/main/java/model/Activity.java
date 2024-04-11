@@ -97,7 +97,4 @@ public class Activity {
     public void setAdminId(int adminId) {
         this.adminId = adminId;
     }
-
-
-
 }
