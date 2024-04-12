@@ -39,7 +39,6 @@ public class ConnectionController {
 
 		try {
 			switch (user.getValue()) {
-
 			case ADMIN:
 				Admin admin = db.DAOReadAdmin(user.getKey());
 				// TODO: scene for ADMIN_WELCOME

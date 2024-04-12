@@ -38,7 +38,6 @@ public enum CleanerExperience {
     //         return CleanerExperience.NONE;
     //     case "Aucune expérience":
     //     }
-
     // }
 
     public String toString() {

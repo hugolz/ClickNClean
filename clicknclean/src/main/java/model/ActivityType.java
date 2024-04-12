@@ -3,13 +3,13 @@ package model;
 import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 
 public enum ActivityType {
-    WELCOME_CLEANER(1), // for cleaner
-    CLEANER_WAITING_TO_BE_CONFIRMED(2), // for admin
-    CLEANER_ACCOUNT_CONFIRMED(3), // for cleaner
-    PROPERTY_IS_PUBLISHED(4), // for owner
-    NEW_MISSION_AVAILABLE(5), // for cleaner
-    CLEANER_OFFERS_SERVICE(6), //  for owner
-    PROPOSAL_ACCEPTED(7), // for cleaner
+    WELCOME_CLEANER(1), // for cleaner DONE
+    CLEANER_WAITING_TO_BE_CONFIRMED(2), // for admin DONE
+    CLEANER_ACCOUNT_CONFIRMED(3), // for cleaner DONE
+    PROPERTY_IS_PUBLISHED(4), // for owner DONE
+    NEW_MISSION_AVAILABLE(5), // for cleaner DONE
+    CLEANER_OFFERS_SERVICE(6), // for owner TODO once quentin pushed his code of cleanermain.java
+    PROPOSAL_ACCEPTED(7), // for cleaner TODO once lina pushed her code of ownermain.java
     MISSION_CANCELED(8), // for cleaner AND owner
     MISSION_FINISHED_BY_CLEANER(9), // for owner
     DISPUTE_OPENED(10), // for cleaner AND owner AND admin
