@@ -2,6 +2,7 @@ package view.owner;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import controller.owner.AskNewMissionController;
 import controller.owner.OwnerAskAddProperty;
@@ -12,10 +13,14 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.VBox;
+import model.Mission;
 import model.Owner;
+import model.Property;
+import tools.Db;
 import view.Window;
 
 public class OwnerMission extends Scene {
@@ -25,10 +30,18 @@ public class OwnerMission extends Scene {
 		 System.out.println("OwnerMission constructor");
 		 
 		 Label title = new Label("Vos Missions :");
+		 Label missionCome = new Label("Mission à venir");
 		 Button addMission = new Button("Proposer une mission");
 		 Button returnview = new Button("Retour");
 		 
 		 
+		 ListView<String> listViewMissionCome = new ListView<String>();
+		 
+		/* listViewMissionCome.getItems().add("Date de la mission "+ mission.getMissionDate()
+	        		+ "\nCleaner : " + mission.getCleanerId()
+	                + "\nPrix : " + mission.getCost()) ;*/
+		 
+		
 		 
 		 EventHandler<ActionEvent> eventNewMission = new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent e) {
@@ -63,6 +76,8 @@ public class OwnerMission extends Scene {
 		 vbox.getChildren().add(title);
 		 vbox.getChildren().add(addMission);
 		 vbox.getChildren().add(returnview);
+		 vbox.getChildren().add(missionCome);
+		 vbox.getChildren().add(listViewMissionCome);
 		 
 		 
 		 

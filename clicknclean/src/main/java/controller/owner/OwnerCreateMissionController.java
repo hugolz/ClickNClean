@@ -17,6 +17,7 @@ import model.Property;
 import tools.Db;
 import view.Window;
 import view.owner.OwnerMain;
+import view.owner.OwnerMission;
 
 public class OwnerCreateMissionController {
 
@@ -68,8 +69,7 @@ public class OwnerCreateMissionController {
 			}
 		}
 		window.setScene(new OwnerMain(new ScrollPane(), window, owner));
+
 		db.disconnect();
-
 	}
-
 }
