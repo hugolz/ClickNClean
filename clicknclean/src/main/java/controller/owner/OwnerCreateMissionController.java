@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import javax.swing.JOptionPane;
 
 import javafx.scene.control.ScrollPane;
+import model.ActivityType;
 import model.Mission;
 import model.Owner;
 import model.Property;
@@ -41,14 +42,14 @@ public class OwnerCreateMissionController {
 		try {
 
 		idMission = db.DAOCreateNewMission(property, dateTime); 
+		db.DAOaddActivity(ActivityType.NEW_MISSION_AVAILABLE, null, owner.getOwnerID(), null, idMission, null, null);
 		}
 		catch (Exception e) {
 
 			JOptionPane.showMessageDialog(null, "L'ajout de mission a échoué");
 			return;
 		}
-		JOptionPane.showMessageDialog(null, "Ajout réussi ! \nVous allez être redirigez vers la page des Missions !");
-		Mission mission = db.DAOReadMission(idMission);
+		JOptionPane.showMessageDialog(null, "Ajout réussi ! \nVous allez être redirigé vers la page des Missions !");
 		window.setScene(new OwnerMission(new ScrollPane(), window, owner));
 		db.disconnect();
 

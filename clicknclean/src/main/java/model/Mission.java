@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Mission {
+	int missionId;
     Property property;
     LocalDateTime missionDateTime;
     double duration;
@@ -17,6 +18,7 @@ public class Mission {
     MissionStatus state;
 
     public Mission(
+    	int missionId,
         Property property,
         LocalDateTime missionDateTime,
         double duration,
@@ -26,6 +28,7 @@ public class Mission {
         int cleanerId,
         MissionStatus state
     ) {
+    	this.missionId = missionId;
         this.property = property;
         this.missionDateTime = missionDateTime;
         this.duration = setDuration(property.getPropertySurface());
@@ -73,6 +76,10 @@ public class Mission {
 
         return duration;
     }
+    
+    public int getMissionId() {
+    	return missionId;
+    }
 
     public double getCost() {
         return cost;
@@ -101,5 +108,12 @@ public class Mission {
     public void setState(MissionStatus state) {
         this.state = state;
     }
+
+	public Property getProperty() {
+		// TODO Auto-generated method stub
+		return property;
+	}
+	
+
 
 }

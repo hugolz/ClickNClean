@@ -75,7 +75,7 @@ public class OwnerProperty extends Scene{
 
 			};
 			returnview.setOnAction(eventReturn);
-		 
+		
 		 
 		 VBox vbox = new VBox();
 		 vbox.getChildren().add(title);
