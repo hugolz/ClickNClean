@@ -21,7 +21,7 @@ public class CleanerMission extends Scene {
 
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ev) {
-				window.setScene(new CleanerMain(new VBox(), window, cleaner));
+				
 			}
 		});
 

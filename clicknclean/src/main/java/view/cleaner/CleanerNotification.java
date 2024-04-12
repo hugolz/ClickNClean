@@ -3,6 +3,7 @@ package view.cleaner;
 import view.Window;
 import java.io.File;
 
+import controller.cleaner.CleanerConnected;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -19,7 +20,11 @@ public class CleanerNotification extends Scene {
 
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent ev) {
-				window.setScene(new CleanerMain(new VBox(), window, cleaner));
+				try {
+					new CleanerConnected(new VBox(), window, cleaner, 0);
+				} catch (Exception e) {
+					System.err.println("Couldn't call the next controller for error : " + e);
+				}
 			}
 		});
 

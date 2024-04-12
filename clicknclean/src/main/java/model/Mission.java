@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Mission {
+    int missionId;
     Property property;
     LocalDateTime missionDateTime;
     double duration;
@@ -17,6 +18,7 @@ public class Mission {
     MissionStatus state;
 
     public Mission(
+        int missionId, 
         Property property,
         LocalDateTime missionDateTime,
         double duration,
@@ -25,7 +27,8 @@ public class Mission {
         int ownerId,
         int cleanerId,
         MissionStatus state
-    ) {
+    ) { 
+        this.missionId = missionId;
         this.property = property;
         this.missionDateTime = missionDateTime;
         this.duration = setDuration(property.getPropertySurface());
@@ -37,7 +40,15 @@ public class Mission {
 
     }
 
-    public LocalDateTime getMissionDate() {
+    public Property getProperty() {
+        return property;
+    }
+
+    public int getMissionId() {
+        return missionId;
+    }
+
+    public LocalDateTime getMissionDateTime() {
         return missionDateTime;
     }
 
