@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 import javafx.scene.control.ScrollPane;
+import model.ActivityType;
 import model.Address;
 import model.Owner;
 import tools.Db;
@@ -50,12 +51,13 @@ public class CreatePropertyController {
 		
 		try {
 			db.DAOCreateNewProperty(address, surface, accesCode, keyBoxCode, specialInstruction, ownerId);
+			db.DAOaddActivity(ActivityType.PROPERTY_IS_PUBLISHED, null, owner.getOwnerID(), null, null, null, null); 
 		}
 		catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "L'ajout de propriété a échoué");
 			return;
 		}
-		JOptionPane.showMessageDialog(null, "Ajout réussi ! Vous allez être redirigez vers votre page des propriétés !");
+		JOptionPane.showMessageDialog(null, "Ajout réussi ! Vous allez être redirigé vers votre page des Propriétés !");
 		window.setScene(new OwnerProperty(new ScrollPane(), window, owner));
 		db.disconnect();
 		

@@ -58,7 +58,7 @@ public class ConnectionController {
 				break;
 			case OWNER :
 				Owner owner = db.DAOReadOwner(user.getKey());
-
+				System.out.println("je suis bien connecté");
 				
 				window.setScene(new OwnerMain(new ScrollPane(), window, owner));
 				break;
@@ -66,7 +66,7 @@ public class ConnectionController {
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Internal error: Could not find a given " + user.getValue()
 
-			                              + "for user: " + user.getKey() + "SQL error: " + e);
+			                              + "for user: " + user.getKey() + "\nSQL error: " + e);
 		}
 	}
 }
