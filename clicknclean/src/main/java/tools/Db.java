@@ -14,11 +14,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-
-import com.mysql.cj.x.protobuf.MysqlxPrepare.Prepare;
-import com.mysql.cj.protocol.Resultset;
-
-
 import javafx.util.Pair;
 import model.Activity;
 import model.ActivityType;
@@ -245,6 +240,65 @@ public class Db {
 		rSet.close();
 
 		throw new Exception("Could not find any owner with the given id");
+	}
+
+	public ArrayList<Mission> DAOReadMissionOwner(int ownerId) throws InterruptedException, ExecutionException, Exception {
+		Statement  st2 = conn.createStatement();
+		ArrayList<Mission> missions = new ArrayList<Mission>();
+		String query = "SELECT * FROM mission JOIN property ON mission.id_property = property.id_property WHERE mission.id_owner =" + ownerId;
+		//Property missionProperty = null;
+
+
+		ResultSet rSet = conn.createStatement() .executeQuery(query);
+
+		while (rSet.next()) {
+			ArrayList<Property> propList = DAOReadOwnerProperties(rSet.getInt("id_owner"));
+			Property missionProperty = null;
+			for (Property currentProp : propList) {
+				if (currentProp.getPropertyId() == rSet.getInt("id_property")) {
+					missionProperty = currentProp;
+					break;
+				}
+			}
+
+
+			if (missionProperty == null)  throw new Exception("The property of the mission is not in owner's properties list");
+
+			//while (rSet.next()) {
+
+			Mission mission = new Mission(
+			    // rSet.getInt("id_mission"),
+			    missionProperty,
+			    rSet.getTimestamp("date_start").toLocalDateTime(),
+			    rSet.getDouble("duration"),
+			    rSet.getDouble("cost"),
+			    rSet.getDouble("commission"),
+			    rSet.getInt("id_owner"),
+			    rSet.getInt("id_cleaner"),
+			    MissionStatus.fromInt(rSet.getInt("state"))
+			);
+			missions.add(mission);
+		}
+		rSet.close();
+
+		return missions;
+	}
+
+	public ArrayList<Integer> DAOListCleaners()
+	throws Exception {
+		ArrayList<Integer> cleaners = new ArrayList<Integer>();
+
+		String query = "SELECT id_cleaner from cleaner;";
+
+		ResultSet rSet = this.stRead.executeQuery(query);
+		while (rSet.next()) {
+			cleaners.add(rSet.getInt("id_cleaner"));
+		}
+
+		rSet.close();
+
+		return cleaners;
+
 	}
 
 	public ArrayList<Review> DAOReadOwnerReviews(int id_owner)

@@ -40,7 +40,6 @@ public class ConnectionController {
 
 		try {
 			switch (user.getValue()) {
-
 			case ADMIN:
 				Admin admin = db.DAOReadAdmin(user.getKey());
 				// TODO: scene for ADMIN_WELCOME
@@ -58,8 +57,6 @@ public class ConnectionController {
 				break;
 			case OWNER :
 				Owner owner = db.DAOReadOwner(user.getKey());
-				System.out.println("je suis bien connecté");
-				
 				window.setScene(new OwnerMain(new ScrollPane(), window, owner));
 				break;
 			}

@@ -11,7 +11,12 @@ import view.owner.OwnerProfile;
 public class OwnerProfileController {
 	public OwnerProfileController(Window window, Owner owner) {
 
-		window.setScene(new OwnerProfile(new ScrollPane(), window, owner));
+		try {
+
+			window.setScene(new OwnerProfile(new ScrollPane(), window, owner));
+		} catch (Exception e) {
+			System.out.println("[ERROR] " + e  );
+		}
 	}
 
 }
