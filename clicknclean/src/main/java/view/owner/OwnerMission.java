@@ -30,12 +30,27 @@ public class OwnerMission extends Scene {
 		 System.out.println("OwnerMission constructor");
 		 
 		 Label title = new Label("Vos Missions :");
-		 Label missionCome = new Label("Mission à venir");
+		 Label missionCome = new Label("Récapitulatif des missions proposées :");
 		 Button addMission = new Button("Proposer une mission");
 		 Button returnview = new Button("Retour");
 		 
+		 ListView<String> listView = new ListView<String>();
+		 Db db = new Db();
+		 ArrayList<Mission> mission = db.DAOReadMissionOwner(owner.getOwnerID());
+		
+		 System.out.println(mission.size());
+		 for (int i=0; i< mission.size(); i++) {
+		        listView.getItems().add("Mission : "+ i + 
+		        						"\nDate : "+ mission.get(i).getMissionDate()+
+		        						"\nDurée : "+ mission.get(i).getDuration()+ " h"+
+		        						"\nPrix : "+ mission.get(i).getCost()+" €"+
+		        						"\nPropriété : "+mission.get(i).getProperty().getPropertyAddress().asString()
+		        						
+		        						);
+			 }
 		 
-		 ListView<String> listViewMissionCome = new ListView<String>();
+		 
+		 
 		 
 		/* listViewMissionCome.getItems().add("Date de la mission "+ mission.getMissionDate()
 	        		+ "\nCleaner : " + mission.getCleanerId()
@@ -77,7 +92,7 @@ public class OwnerMission extends Scene {
 		 vbox.getChildren().add(addMission);
 		 vbox.getChildren().add(returnview);
 		 vbox.getChildren().add(missionCome);
-		 vbox.getChildren().add(listViewMissionCome);
+		 vbox.getChildren().add(listView);
 		 
 		 
 		 

@@ -48,7 +48,7 @@ public class Db {
 		this.dbName = "click_n_clean";
 
 		this.login = "root";
-		this.password = "";
+		this.password = "root";
 
 		this.strUrl = "jdbc:mysql://localhost:3306/" + dbName
 		              + "?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Europe/Paris";
@@ -557,6 +557,7 @@ public class Db {
 
 
 			Mission mission = new Mission(
+				rSet2.getInt("id_mission"),	
 			    missionProperty,
 			    rSet2.getTimestamp("date_start").toLocalDateTime(),
 			    rSet2.getDouble("duration"),
@@ -854,7 +855,7 @@ public class Db {
 
 	/*--------------------------------------MANAGE ACTIVITY--------------------------------------------------------------------- */
 
-	public void DAOaddActivity(ActivityType type, int targetUser, Integer ownerId, Integer cleanerId,
+	public void DAOaddActivity(ActivityType type, Integer targetUser, Integer ownerId, Integer cleanerId,
 	                           Integer missionId, Integer disputeId, Integer adminId) {
 
 		try {
@@ -956,4 +957,140 @@ public class Db {
 			System.err.println(e.getMessage());
 		}
 	}
+	
+	/*--------------------------------------READ MISSION BY OWNER------------------------------------------------------------- */
+	
+	public ArrayList<Mission> DAOReadMissionOwner(int ownerId) throws InterruptedException, ExecutionException, Exception {
+		Statement  st2 = conn.createStatement();
+		ArrayList<Mission> missions = new ArrayList<Mission>();
+		String query = "SELECT * FROM mission JOIN property ON mission.id_property = property.id_property WHERE mission.id_owner =" + ownerId;
+		//Property missionProperty = null;
+		
+		
+		ResultSet rSet = st2.executeQuery(query);
+		
+		while (rSet.next()) {
+			ArrayList<Property> propList = DAOReadOwnerProperties(rSet.getInt("id_owner"));
+			Property missionProperty = null;
+			for (Property currentProp : propList) {
+				if (currentProp.getPropertyId() == rSet.getInt("id_property")) {
+					missionProperty = currentProp;
+					break;
+				}
+			}
+		
+			
+		if (missionProperty == null)  throw new Exception("The property of the mission is not in owner's properties list");
+
+		//while (rSet.next()) {
+			
+			Mission mission = new Mission(rSet.getInt("id_mission"),
+										  missionProperty,
+										  rSet.getTimestamp("date_start").toLocalDateTime(),
+										  rSet.getDouble("duration"),
+										  rSet.getDouble("cost"),
+										  rSet.getDouble("commision"),
+										  rSet.getInt("id_owner"),
+										  rSet.getInt("id_cleaner"),
+										  MissionStatus.fromInt(rSet.getInt("state"))
+											);
+			missions.add(mission);
+		}
+		rSet.close();
+		
+		//}
+		return missions;
+	}
+	
+	/*--------------------------------------READ MISSION BY OWNER WHEN CLEANER IS NULL------------------------------------------------------------- */
+	public ArrayList<Mission> DAOReadMissionOwner1(int ownerId) throws InterruptedException, ExecutionException, Exception {
+		Statement  st2 = conn.createStatement();
+		ArrayList<Mission> missions = new ArrayList<Mission>();
+		String query = "SELECT * FROM mission JOIN property ON mission.id_property = property.id_property WHERE mission.id_cleaner IS NULL AND mission.id_owner =" + ownerId+";";
+		//Property missionProperty = null;
+		
+		
+		ResultSet rSet = st2.executeQuery(query);
+		
+		while (rSet.next()) {
+			ArrayList<Property> propList = DAOReadOwnerProperties(rSet.getInt("id_owner"));
+			Property missionProperty = null;
+			for (Property currentProp : propList) {
+				if (currentProp.getPropertyId() == rSet.getInt("id_property")) {
+					missionProperty = currentProp;
+					break;
+				}
+			}
+		
+			
+		if (missionProperty == null)  throw new Exception("The property of the mission is not in owner's properties list");
+
+		//while (rSet.next()) {
+			
+			Mission mission = new Mission(rSet.getInt("id_mission"),
+										  missionProperty,
+										  rSet.getTimestamp("date_start").toLocalDateTime(),
+										  rSet.getDouble("duration"),
+										  rSet.getDouble("cost"),
+										  rSet.getDouble("commision"),
+										  rSet.getInt("id_owner"),
+										  rSet.getInt("id_cleaner"),
+										  MissionStatus.fromInt(rSet.getInt("state"))
+											);
+			missions.add(mission);
+		}
+		rSet.close();
+		
+		//}
+		return missions;
+	}
+	
+	
+	/*--------------------------------------READ CLEANER IN MISSION PROPOSAL------------------------------------------------------------- */
+	public ArrayList<Cleaner> DAOReadMissionProposal(int missionId) throws InterruptedException, ExecutionException, Exception {
+		Statement  st = conn.createStatement();
+		ArrayList<Cleaner> cleaners = new ArrayList<Cleaner>();
+		String query = "SELECT * FROM mission_proposal JOIN user ON mission_proposal.id_cleaner = user.id_user JOIN cleaner ON mission_proposal.id_cleaner = cleaner.id_cleaner JOIN mission ON mission.id_mission = mission_proposal.id_mission WHERE mission.id_mission="+missionId+";";
+		
+		ResultSet rSet = st.executeQuery(query);
+		Planning planning = this.DAOReadPlanning(rSet.getInt("id_user"));
+		
+		while (rSet.next()) {
+			
+
+			Cleaner cleaner = new Cleaner(
+				    rSet.getInt("id_cleaner"),
+				    new Address(
+				        rSet.getString("address_display"),
+				        rSet.getDouble("latitude"),
+				        rSet.getDouble("longitude")),
+				    rSet.getInt("km_range"),
+				    rSet.getInt("hourly_rate"),
+				    rSet.getString("biography"),
+				    rSet.getString("photo_identity"),
+				    rSet.getString("photo_profile"),
+				    rSet.getString("photo_live"),
+				    rSet.getString("motivation"),
+				    CleanerExperience.fromInt(rSet.getInt("experience")),
+				    rSet.getBoolean("confirmed"),
+				    rSet.getString("name"),
+				    rSet.getString("password"),
+				    rSet.getString("surname"),
+				    rSet.getString("email"),
+				    rSet.getString("phone_number"),
+				    rSet.getDate("birth_date").toLocalDate(),
+				    rSet.getBoolean("suspended"),
+				    new ArrayList<Integer>(), // reviews,
+				    planning);
+
+			cleaners.add(cleaner);
+		}
+			
+		rSet.close();
+		return cleaners;
+		
+	}
+	  
 }
+
+  

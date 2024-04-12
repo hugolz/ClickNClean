@@ -57,15 +57,13 @@ public class ConnectionController {
 				break;
 			case OWNER :
 				Owner owner = db.DAOReadOwner(user.getKey());
-
-
 				window.setScene(new OwnerMain(new ScrollPane(), window, owner));
 				break;
 			}
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Internal error: Could not find a given " + user.getValue()
 
-			                              + "for user: " + user.getKey() + "SQL error: " + e);
+			                              + "for user: " + user.getKey() + "\nSQL error: " + e);
 		}
 	}
 }
