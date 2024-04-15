@@ -26,10 +26,8 @@ public class CleanerRegistrationController {
 	    String name,
 	    String surname,
 	    String email,
-
 	    String rawPassword,
 	    String rawConfirmpassword,
-
 	    String phone,
 	    LocalDate birthDate,
 	    String houseNumber,
@@ -40,18 +38,16 @@ public class CleanerRegistrationController {
 	    int hourlyRate,
 	    String biography,
 	    String motivation,
-
 	    CleanerExperience experience,
-
 	    String photo,
 	    String idPhoto,
 	    String photoLive,
-	    Window window) {
+	    Window window) throws Exception {
 
 		System.out.println(
-		    "bd" + birthDate +
-		    "km: " + km +
-		    "rate: " + hourlyRate
+		    "bd " + birthDate +
+		    " km: " + km +
+		    " rate: " + hourlyRate
 
 		);
 
@@ -67,8 +63,7 @@ public class CleanerRegistrationController {
 
 		if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || rawPassword.isEmpty()
 		        || rawConfirmpassword.isEmpty() || phone.isEmpty() || birthDate == null || address == null || km == 0
-		        || hourlyRate == 0 || biography.isEmpty() || motivation.isEmpty() || photo.isEmpty()
-		        || idPhoto.isEmpty()) {
+		        || hourlyRate == 0 || biography.isEmpty() || motivation.isEmpty()) {
 
 			JOptionPane.showMessageDialog(null, "Champs non remplis !");
 			return;
@@ -160,11 +155,9 @@ public class CleanerRegistrationController {
 			JOptionPane.showMessageDialog(null, "Could not read newly created cleaner due to: " + e);
 			return;
 		}
-		window.setScene(new CleanerMain(new VBox(), window, currentCleaner));
-
+		new CleanerConnected(new VBox(), window, currentCleaner, 0);
 		// db.close();
 	}
-
 	public boolean isEmailAdress(String email) {
 		Pattern p = Pattern
 		            .compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$");

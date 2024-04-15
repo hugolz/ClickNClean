@@ -48,7 +48,7 @@ public class Db {
 		this.dbName = "click_n_clean";
 
 		this.login = "root";
-		this.password = "";
+		this.password = "root";
 
 		this.strUrl = "jdbc:mysql://localhost:3306/" + dbName
 		              + "?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Europe/Paris";
@@ -496,7 +496,46 @@ public class Db {
 		throw new SQLException("No dispute with id = " + disputeId);
 	}
 
+public ArrayList<Mission> DAOReadMissions()
+	throws InterruptedException, ExecutionException, Exception {
+		ArrayList<Mission> missions = new ArrayList<Mission>();
+			Statement  st2 = conn.createStatement();
+		String query = "SELECT * FROM mission JOIN property ON mission.id_property = property.id_property";
+		Property missionProperty = null;
 
+		ResultSet rSet2 = st2.executeQuery(query);
+		if (rSet2.next()) {
+			ArrayList<Property> propList = DAOReadOwnerProperties(rSet2.getInt("id_owner"));
+			for (Property currentProp : propList) {
+				if (currentProp.getPropertyId() == rSet2.getInt("id_property")) {
+					missionProperty = currentProp;
+					break;
+				}
+			}
+			if (missionProperty == null)  throw new Exception("The property of the mission is not in owner's properties list");
+
+
+			Mission mission = new Mission(
+				rSet2.getInt("id_mission"),
+			    missionProperty,
+			    rSet2.getTimestamp("date_start").toLocalDateTime(),
+			    rSet2.getDouble("duration"),
+			    rSet2.getDouble("cost"),
+			    rSet2.getDouble("commission"),
+			    rSet2.getInt("id_owner"),
+			    rSet2.getInt("id_cleaner"),
+			    MissionStatus.fromInt(rSet2.getInt("state")));
+			rSet2.close();
+			missions.add(mission);
+		}
+		rSet2.close();
+		return missions;
+		
+	}
+
+
+
+	
 
 	public Mission DAOReadMission(int missionId) throws InterruptedException, ExecutionException, Exception {
 		Statement  st2 = conn.createStatement();
@@ -773,7 +812,22 @@ public class Db {
 		return id;
 	}
 
+	public void DAOCreateNewMissionProposal(int missionId, int cleanerId, LocalDateTime hour ) throws SQLException {
+		LocalDateTime startingTime = hour.withHour(15).withMinute(0).withSecond(0).withNano(0);
 
+		String strQuery = "INSERT INTO `mission_proposal` "
+
+		+ "(`id_mission`, `id_cleaner`, `starting_hour`) "
+		+ "VALUES (?, ?, ?);";
+
+		PreparedStatement pstmt = conn.prepareStatement(strQuery);
+		pstmt.setInt(1, missionId);
+		pstmt.setInt(2, cleanerId);
+		pstmt.setObject(3, startingTime); 
+
+		pstmt.executeUpdate();
+		
+	}
 
 	/*--------------------------------------TOOLS METHODS--------------------------------------------------------------------- */
 
@@ -784,7 +838,6 @@ public class Db {
 		LocalDate accountDate = LocalDate.now();
 		Date sqlBirthDate = Date.valueOf(birthDate);
 		Date sqlAccountdate = Date.valueOf(accountDate);
-
 		String pwd_hash = User.sha3256Hashing(pwd);
 
 		try {

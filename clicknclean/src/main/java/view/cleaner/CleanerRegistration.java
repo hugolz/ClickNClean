@@ -152,31 +152,38 @@ public class CleanerRegistration extends Scene {
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 
-				new CleanerRegistrationController(
-				    nameInputField.getText(),
-				    surnameInputField.getText(),
-				    emailInputField.getText(),
+				try {
+					new CleanerRegistrationController(
+					    nameInputField.getText(),
+					    surnameInputField.getText(),
+					    emailInputField.getText(),
 
-				    passwordInputField.getText(),
-				    confirmpasswordInputField.getText(),
+					    passwordInputField.getText(),
+					    confirmpasswordInputField.getText(),
 
-				    phoneInputField.getText(),
-				    birthDateInputField.getValue(),
-				    houseNumberInputField.getText(),
-				    labelInputField.getText(),
-				    postCodeInputField.getText(),
-				    cityInputField.getText(),
-				    Integer.valueOf(kmInputField.getText(), 10),
-				    Integer.valueOf(hourlyRateInputField.getText(), 10),
-				    biographyInputField.getText(),
-				    motivationInputField.getText(),
+					    phoneInputField.getText(),
+					    birthDateInputField.getValue(),
+					    houseNumberInputField.getText(),
+					    labelInputField.getText(),
+					    postCodeInputField.getText(),
+					    cityInputField.getText(),
+					    Integer.valueOf(kmInputField.getText(), 10),
+					    Integer.valueOf(hourlyRateInputField.getText(), 10),
+					    biographyInputField.getText(),
+					    motivationInputField.getText(),
 
-				    experienceChoiceBox.getValue(),
+					    experienceChoiceBox.getValue(),
 
-				    registerPhoto.getText(),
-				    registerIdPhoto.getText(),
-				    registerIdPhoto.getText(),
-				    window);
+					    registerPhoto.getText(),
+					    registerIdPhoto.getText(),
+					    registerIdPhoto.getText(),
+					    window);
+
+				
+			
+				} catch (Exception e1) {
+					System.err.println("Couldn't register Cleaner due to : " + e1.getMessage());
+				}
 
 			}
 		};

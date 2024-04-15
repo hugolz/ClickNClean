@@ -1,18 +1,24 @@
 package controller;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
 import javax.swing.JOptionPane;
 
 import controller.admin.AdminMainController;
+import controller.cleaner.CleanerConnected;
 import javafx.scene.control.ScrollPane;
 import javafx.util.Pair;
 
 import model.Cleaner;
 import model.Mission;
+import model.MissionStatus;
 import model.Owner;
 import model.Admin;
 
 import model.UserStatus;
 import tools.Db;
+import tools.MissionDisplay;
 import javafx.scene.layout.VBox;
 import view.Window;
 import view.admin.AdminMain;
@@ -42,17 +48,13 @@ public class ConnectionController {
 			switch (user.getValue()) {
 			case ADMIN:
 				Admin admin = db.DAOReadAdmin(user.getKey());
-				// TODO: scene for ADMIN_WELCOME
 				new AdminMainController(window, admin, 0, 0, 0, 0, 0, "");
 				System.err.println(user.getKey());
 				break;
 
 			case CLEANER:
 				Cleaner cleaner = db.DAOReadCleaner(user.getKey());
-
-
-				window.setScene(new CleanerMain (new VBox(), window, cleaner));
-
+				new CleanerConnected(new VBox(), window, cleaner, 0);
 
 				break;
 			case OWNER :

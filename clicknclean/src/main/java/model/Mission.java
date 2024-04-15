@@ -18,7 +18,7 @@ public class Mission {
     MissionStatus state;
 
     public Mission(
-        int missionId,
+        int missionId, 
         Property property,
         LocalDateTime missionDateTime,
         double duration,
@@ -27,7 +27,7 @@ public class Mission {
         int ownerId,
         int cleanerId,
         MissionStatus state
-    ) {
+    ) { 
         this.missionId = missionId;
         this.property = property;
         this.missionDateTime = missionDateTime;
@@ -40,7 +40,15 @@ public class Mission {
 
     }
 
-    public LocalDateTime getMissionDate() {
+    public Property getProperty() {
+        return property;
+    }
+
+    public int getMissionId() {
+        return missionId;
+    }
+
+    public LocalDateTime getMissionDateTime() {
         return missionDateTime;
     }
 

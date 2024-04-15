@@ -25,7 +25,6 @@ import view.Window;
 import controller.admin.AdminMainController;
 
 import java.io.File;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -137,7 +136,7 @@ public class AdminMain extends Scene {
 
             Label display2 = new Label("Plainte :" + currentLitigation.getKey().getContent()
                                        + "\nMission :"
-                                       + "\n\t Date : " + currentLitigation.getValue().getMissionDate()
+                                       + "\n\t Date : " + currentLitigation.getValue().getMissionDateTime()
                                        + "\n\t Prix : " + currentLitigation.getValue().getCost()
                                        + "\n\t Status : " + currentLitigation.getValue().getState());
             displayContainer2.setGraphic(display2);
