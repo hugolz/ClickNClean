@@ -39,6 +39,14 @@ CREATE TABLE `activity` (
   `id_target` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
+--
+-- Dumping data for table `activity`
+--
+
+INSERT INTO `activity` (`id_activity`, `type`, `read`, `id_owner`, `id_cleaner`, `id_mission`, `id_dispute`, `id_admin`, `id_target`) VALUES
+(1, 4, 0, NULL, NULL, NULL, NULL, NULL, 3),
+(2, 5, 0, NULL, NULL, 1, NULL, NULL, 2);
+
 -- --------------------------------------------------------
 --
 -- Structure de la table `admin`
@@ -122,6 +130,14 @@ CREATE TABLE `mission` (
   `id_property` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
+
+--
+-- Déchargement des données de la table `mission`
+--
+
+INSERT INTO `mission` (`id_mission`, `date_start`, `cost`, `duration`, `commission`, `state`, `before_photo`, `after_photo`, `id_owner`, `id_cleaner`, `id_property`) VALUES
+(1, "2040-01-01 08:00:00", 0, 3.5, 0, 1, NULL, NULL, 3, NULL, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -183,6 +199,14 @@ CREATE TABLE `property` (
   `key_box_code` varchar(10) DEFAULT NULL,
   `special_instruction` varchar(80) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Déchargement des données de la table `property`
+--
+
+INSERT INTO `property` (`id_property`, `address_display`, `latitude`, `longitude`, `surface`, `id_owner`, `acces_code`, `key_box_code`, `special_instruction`) VALUES
+(1, "28 av yves thepot 29000 quimper", 47.988373, -4.088107, 100, 3, null, null, null);
+
 
 -- --------------------------------------------------------
 

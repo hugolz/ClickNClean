@@ -2,6 +2,7 @@ package model;
 
 
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -18,7 +19,7 @@ public class Mission {
     MissionStatus state;
 
     public Mission(
-        int missionId, 
+        int missionId,
         Property property,
         LocalDateTime missionDateTime,
         double duration,
@@ -27,7 +28,7 @@ public class Mission {
         int ownerId,
         int cleanerId,
         MissionStatus state
-    ) { 
+    ) {
         this.missionId = missionId;
         this.property = property;
         this.missionDateTime = missionDateTime;
@@ -37,19 +38,14 @@ public class Mission {
         this.ownerId = ownerId;
         this.cleanerId = cleanerId;
         this.state = state;
-
-    }
-
-    public Property getProperty() {
-        return property;
     }
 
     public int getMissionId() {
         return missionId;
     }
 
-    public LocalDateTime getMissionDateTime() {
-        return missionDateTime;
+    public LocalDate getMissionDate() {
+        return missionDateTime.toLocalDate();
     }
 
     public void setMissionDate(LocalDateTime missionDateTime) {
@@ -59,9 +55,6 @@ public class Mission {
     public double getDuration() {
         return duration;
     }
-
-
-
 
     /**
      * Changes duration using mission's property surface
@@ -83,10 +76,6 @@ public class Mission {
         else if (surface > 100) duration = 4.;
 
         return duration;
-    }
-
-    public int getMissionId() {
-        return missionId;
     }
 
     public Property getProperty() {

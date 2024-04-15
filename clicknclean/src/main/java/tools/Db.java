@@ -48,7 +48,7 @@ public class Db {
 		this.dbName = "click_n_clean";
 
 		this.login = "root";
-		this.password = "root";
+		this.password = "";
 
 		this.strUrl = "jdbc:mysql://localhost:3306/" + dbName
 		              + "?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Europe/Paris";
@@ -496,10 +496,10 @@ public class Db {
 		throw new SQLException("No dispute with id = " + disputeId);
 	}
 
-public ArrayList<Mission> DAOReadMissions()
+	public ArrayList<Mission> DAOReadMissions()
 	throws InterruptedException, ExecutionException, Exception {
 		ArrayList<Mission> missions = new ArrayList<Mission>();
-			Statement  st2 = conn.createStatement();
+		Statement  st2 = conn.createStatement();
 		String query = "SELECT * FROM mission JOIN property ON mission.id_property = property.id_property";
 		Property missionProperty = null;
 
@@ -516,7 +516,7 @@ public ArrayList<Mission> DAOReadMissions()
 
 
 			Mission mission = new Mission(
-				rSet2.getInt("id_mission"),
+			    rSet2.getInt("id_mission"),
 			    missionProperty,
 			    rSet2.getTimestamp("date_start").toLocalDateTime(),
 			    rSet2.getDouble("duration"),
@@ -530,12 +530,7 @@ public ArrayList<Mission> DAOReadMissions()
 		}
 		rSet2.close();
 		return missions;
-		
 	}
-
-
-
-	
 
 	public Mission DAOReadMission(int missionId) throws InterruptedException, ExecutionException, Exception {
 		Statement  st2 = conn.createStatement();
@@ -817,16 +812,16 @@ public ArrayList<Mission> DAOReadMissions()
 
 		String strQuery = "INSERT INTO `mission_proposal` "
 
-		+ "(`id_mission`, `id_cleaner`, `starting_hour`) "
-		+ "VALUES (?, ?, ?);";
+		                  + "(`id_mission`, `id_cleaner`, `starting_hour`) "
+		                  + "VALUES (?, ?, ?);";
 
 		PreparedStatement pstmt = conn.prepareStatement(strQuery);
 		pstmt.setInt(1, missionId);
 		pstmt.setInt(2, cleanerId);
-		pstmt.setObject(3, startingTime); 
+		pstmt.setObject(3, startingTime);
 
 		pstmt.executeUpdate();
-		
+
 	}
 
 	/*--------------------------------------TOOLS METHODS--------------------------------------------------------------------- */
@@ -1014,6 +1009,28 @@ public ArrayList<Mission> DAOReadMissions()
 		return missions;
 	}
 
+
+	public void DAOOwnerMissionSetCleaner(int missionId, int cleanerId) throws Exception {
+		String strQuery = "UPDATE mission SET id_cleaner = ?, "
+		                  + "state = ? "
+		                  + "WHERE id_mission = ?";
+
+		try (PreparedStatement preparedStatement = conn.prepareStatement(strQuery)) {
+			preparedStatement.setString(1, "" + cleanerId);
+			preparedStatement.setInt(2, MissionStatus.CLEANER_VALIDATED.asInt());
+			preparedStatement.setInt(3, missionId);
+
+			preparedStatement.executeUpdate();
+		}
+
+		String sql = "DELETE FROM mission_proposal WHERE id_mission = ?";
+		try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+			preparedStatement.setString(1, "" + missionId);
+
+			preparedStatement.executeUpdate();
+		}
+	}
+
 	/*--------------------------------------READ MISSION BY OWNER WHEN CLEANER IS NULL------------------------------------------------------------- */
 	public ArrayList<Mission> DAOReadMissionOwner1(int ownerId) throws InterruptedException, ExecutionException, Exception {
 		Statement  st2 = conn.createStatement();
@@ -1039,16 +1056,17 @@ public ArrayList<Mission> DAOReadMissions()
 
 			//while (rSet.next()) {
 
-			Mission mission = new Mission(rSet.getInt("id_mission"),
-			                              missionProperty,
-			                              rSet.getTimestamp("date_start").toLocalDateTime(),
-			                              rSet.getDouble("duration"),
-			                              rSet.getDouble("cost"),
-			                              rSet.getDouble("commission"),
-			                              rSet.getInt("id_owner"),
-			                              rSet.getInt("id_cleaner"),
-			                              MissionStatus.fromInt(rSet.getInt("state"))
-			                             );
+			Mission mission = new Mission(
+			    rSet.getInt("id_mission"),
+			    missionProperty,
+			    rSet.getTimestamp("date_start").toLocalDateTime(),
+			    rSet.getDouble("duration"),
+			    rSet.getDouble("cost"),
+			    rSet.getDouble("commission"),
+			    rSet.getInt("id_owner"),
+			    rSet.getInt("id_cleaner"),
+			    MissionStatus.fromInt(rSet.getInt("state"))
+			);
 			missions.add(mission);
 		}
 		rSet.close();
@@ -1060,16 +1078,15 @@ public ArrayList<Mission> DAOReadMissions()
 
 	/*--------------------------------------READ CLEANER IN MISSION PROPOSAL------------------------------------------------------------- */
 	public ArrayList<Cleaner> DAOReadMissionProposal(int missionId) throws InterruptedException, ExecutionException, Exception {
-		Statement  st = conn.createStatement();
+		Statement st = conn.createStatement();
 		ArrayList<Cleaner> cleaners = new ArrayList<Cleaner>();
 		String query = "SELECT * FROM mission_proposal JOIN user ON mission_proposal.id_cleaner = user.id_user JOIN cleaner ON mission_proposal.id_cleaner = cleaner.id_cleaner JOIN mission ON mission.id_mission = mission_proposal.id_mission WHERE mission.id_mission=" + missionId + ";";
 
 		ResultSet rSet = st.executeQuery(query);
-		Planning planning = this.DAOReadPlanning(rSet.getInt("id_user"));
+
+		// Planning planning = this.DAOReadPlanning(rSet.getInt("id_user"));
 
 		while (rSet.next()) {
-
-
 			Cleaner cleaner = new Cleaner(
 			    rSet.getInt("id_cleaner"),
 			    new Address(
@@ -1093,7 +1110,8 @@ public ArrayList<Mission> DAOReadMissions()
 			    rSet.getDate("birth_date").toLocalDate(),
 			    rSet.getBoolean("suspended"),
 			    new ArrayList<Integer>(), // reviews,
-			    planning);
+			    new Planning(new ArrayList<TimeSlot>())
+			);
 
 			cleaners.add(cleaner);
 		}

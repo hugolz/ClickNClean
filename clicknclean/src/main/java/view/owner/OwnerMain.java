@@ -22,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
+import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
@@ -39,17 +40,17 @@ public class OwnerMain extends Scene {
 	public OwnerMain(ScrollPane container, Window window, Owner owner) throws SQLException, Exception {
 		super(container, 800, 600);
 		System.out.println("OwnerMain constructor");
-		
+
 		Db db = new Db();
 		VBox vbox = new VBox();
-		 
+
 
 		Label welcomeMessage = new Label("Bienvenu " + owner.getName() + " !");
 
 		Label missionInProgress = new Label("Mission en attente de Cleaner :");
 		Label missionCome = new Label("Vos missions à venir");
-		
-		
+
+
 		MenuBar bar = new MenuBar();
 		Menu profile = new Menu("Profil");
 		Menu property = new Menu("Propriétés");
@@ -66,7 +67,7 @@ public class OwnerMain extends Scene {
 
 		MenuItem seeMission = new MenuItem("Voir les Missions");
 		MenuItem addMission = new MenuItem("Proposer une Mission");
-		
+
 		MenuItem addDispute = new MenuItem("Commencer un litige");
 
 		profile.getItems().addAll(seeProfile, disconnect);
@@ -74,20 +75,20 @@ public class OwnerMain extends Scene {
 		mission.getItems().addAll(seeMission, addMission);
 		dispute.getItems().addAll(addDispute);
 		bar.getMenus().addAll(profile, property, mission, dispute, notif);
-		
-		
-		 ArrayList<Mission> missionProp = db.DAOReadMissionOwner1(owner.getOwnerID());
-		 
-		
-	
-		
-		//listview for mission to come
-		 ListView<String> listView = new ListView<String>();
-		 
 
-		
+
+		ArrayList<Mission> missionProp = db.DAOReadMissionOwner1(owner.getOwnerID());
+
+
+
+
+		//listview for mission to come
+		ListView<String> listView = new ListView<String>();
+
+
+
 		//listview confirm mission completed by the cleaner
-		
+
 
 		EventHandler<ActionEvent> eventDisconnect = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
@@ -172,35 +173,56 @@ public class OwnerMain extends Scene {
 			}
 		};
 		addDispute.setOnAction(eventAddDispute);
-		
-		
 
-		
+
+
+
 		vbox.getChildren().add(bar);
 		vbox.getChildren().add(welcomeMessage);
 		vbox.getChildren().add(missionInProgress);
-		
-		
-		for (int i=0; i< missionProp.size(); i++) {
-			System.out.println("test boucle 1"+i);
-			//ArrayList<Cleaner> cleaners = db.DAOReadMissionProposal(missionProp.get(i).getMissionId());
-			//for (int j=0; j< cleaners.size(); j++) {
-				//System.out.println("test boucle 2"+j);
-			 vbox.getChildren().add(new Label("Mission : "+ i + 
-						"\nDate : "+ missionProp.get(i).getMissionDate()+
-						"\nDurée : "+ missionProp.get(i).getDuration()+ " h"+
-						"\nPrix : "+ missionProp.get(i).getCost()+" €"+
-						"\nPropriété : "+missionProp.get(i).getProperty().getPropertyAddress().asString())
-	        											);
-			MenuButton menuButton = new MenuButton("Sélectionnez un Cleaner"); 
+
+
+		for (int i = 0; i < missionProp.size(); i++) {
+			System.out.println("test boucle 1 " + i);
+			Mission m = missionProp.get(i) ;
+
+			ArrayList<Cleaner> cleaners = db.DAOReadMissionProposal(m.getMissionId());
+			vbox.getChildren().add(
+			    new Label(
+			        "Mission : " + i +
+			        "\nDate : " + m.getMissionDate() +
+			        "\nDurée : " + m.getDuration() + " h" +
+			        "\nPrix : " + m.getCost() + " €" +
+			        "\nPropriété : " + m.getProperty().getPropertyAddress().asString()
+			    )
+			);
+			MenuButton menuButton = new MenuButton("Sélectionnez un Cleaner");
 			Menu cleanerBlockContainer = new Menu();
+			for (int j = 0; j < cleaners.size(); j++) {
+				System.out.println("test boucle 2" + j);
+				Cleaner c = cleaners.get(j);
+
+				MenuItem mi = new MenuItem();
+				Button b = new Button("" + c.getCleanerId());
+
+				b.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent e) {
+						// TODO: call a controller to set the mission's cleaner to j
+
+						new controller.owner.OwnerSetMissionCleaner(window, owner, m.getMissionId(), c.getCleanerId());
+					}
+				});
+
+				mi.setGraphic(b);
+
+				cleanerBlockContainer.getItems().add(mi);
+			}
 			menuButton.getItems().add(cleanerBlockContainer);
-	        vbox.getChildren().add(menuButton);
-			//}
-		 }
-		
+			vbox.getChildren().add(menuButton);
+		}
+
 		vbox.getChildren().add(missionCome);
-		
+
 
 		vbox.setSpacing(10);
 		vbox.setPadding(new Insets(100, 300, 20, 300));

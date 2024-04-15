@@ -191,6 +191,7 @@ public class AdminMain extends Scene {
         this.getStylesheets()
         .add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
     }
+
     public void handleCleaner(Window win, Admin ad, int cleanerId, int isConfirmed) throws Exception {
         new AdminMainController(win, ad, 1, 0, cleanerId, 0, isConfirmed, "");
     }
@@ -199,6 +200,5 @@ public class AdminMain extends Scene {
         if (decision.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vous devez renseigner votre décision");
         } else new AdminMainController(win, ad, 2, disputeId, cleanerId, ownerId, winner, decision );
-
     }
 }

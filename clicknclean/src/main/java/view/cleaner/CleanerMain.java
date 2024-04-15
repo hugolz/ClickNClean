@@ -43,13 +43,13 @@ public class CleanerMain extends Scene {
 		Button planningButton = new Button("View planning");
 		Button archivedMissionsButton = new Button("View old missions");
 		ListView<Pane> viewsContainer = new ListView<>();
-		
+
 		if  (!missions.isEmpty()) {
 			for (MissionDisplay currentMission : missions) {
 				VBox oneViewContainer = new VBox();
 				Button proposeMission = new Button("Proposer mes services");
 				Text missionContent = new Text("Mission de " + currentMission.getOwnerFirstName() + ":"
-					+ "\n" + currentMission.getDuration() + "heure(s), le " + currentMission.getDate());
+				                               + "\n" + currentMission.getDuration() + "heure(s), le " + currentMission.getDate());
 				oneViewContainer.getChildren().addAll(missionContent, proposeMission);
 				viewsContainer.getItems().add(oneViewContainer);
 
@@ -58,7 +58,7 @@ public class CleanerMain extends Scene {
 						try {
 							new CleanerConnected(new VBox(), window, cleaner, currentMission.getMissionId());
 						} catch (Exception e) {
-							System.err.println("Error");
+							System.err.println("Error: " + e);
 						}
 					}
 				});
@@ -94,9 +94,9 @@ public class CleanerMain extends Scene {
 		VBox header = new VBox();
 		header.setId("header");
 		// header.getStyleClass().addAll("hbox");
-	
+
 		VBox mainField = new VBox();
-		mainField.getChildren().add(viewsContainer);	
+		mainField.getChildren().add(viewsContainer);
 		header.getChildren().addAll(profileButton, notificationButton);
 		mainField.setSpacing(10);
 		container.getChildren().addAll(header, planningButton, archivedMissionsButton, disconnectButton, mainField);

@@ -18,7 +18,7 @@ import model.UserStatus;
 
 public class Main {
 
-    
+
 
 
 
@@ -114,7 +114,5 @@ public class Main {
     public static void main(String[] args) throws Exception {
         new Window().run();
         Db con = new Db();
-        Address address = new Address("28 av yves thepot 29000 quimper", 47.988373, -4.088107);
-        con.DAOCreateNewProperty(address, 0, null, null, null, 6);
     }
 }
