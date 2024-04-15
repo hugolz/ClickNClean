@@ -73,9 +73,16 @@ CREATE TABLE `cleaner` (
   `photo_profile` varchar(36) NOT NULL,
   `photo_live` varchar(36) NOT NULL,
   `motivation` varchar(250) NOT NULL,
-  `experience` varchar(250) NOT NULL,
+  `experience` int NOT NULL,
   `confirmed` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Déchargement des données de la table `cleaner`
+--
+
+INSERT INTO `cleaner` (`id_cleaner`, `address_display`, `latitude`, `longitude`, `km_range`, `hourly_rate`, `biography`, `photo_identity`, `photo_profile`, `photo_live`, `motivation`, `experience`, `confirmed`) VALUES
+(2, '28 av yves thepot 29000 quimper', 47.988373, -4.088107, 0, 0, 'A cool cleaner biography', 'null', 'null', 'null', 'This should be an acceptable motivation', 1, 1);
 
 -- --------------------------------------------------------
 --
@@ -137,6 +144,13 @@ CREATE TABLE `owner` (
   `id_owner` int UNSIGNED NOT NULL,
   `type_service` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Déchargement des données de la table `owner`
+--
+
+INSERT INTO `owner` (`id_owner`, `type_service`) VALUES
+(3, 1);
 
 -- --------------------------------------------------------
 
@@ -228,7 +242,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `name`, `password`, `surname`, `email`, `phone_number`, `birth_date`, `account_date`, `suspended`, `status`) VALUES
-(1, 'NomAdmin', 'fb0aff9960bdd8512c1251da49c2771a29c5d2e32998f2379104bf4bfbcba612', 'PrenomAdmin', 'admin@admin.fr', '0000000000', '2024-03-13', '2024-03-06', 0, 1);
+(1, 'NomAdmin', 'fb0aff9960bdd8512c1251da49c2771a29c5d2e32998f2379104bf4bfbcba612', 'PrenomAdmin', 'admin@admin.fr', '0000000000', '1970-01-01', '1970-01-01', 0, 1),
+(2, 'NomCleaner', '84d6d0bc649e64593040df1519800d82b89a46b76fc58a9bbecd651be008eddc', 'PrenomCleaner', 'cleaner@cleaner.fr', '0000000000', '1970-01-01', '1970-01-01', 0, 2),
+(3, 'NomOwner', '94c190aaf502a2a0f6e86008abbedaf4153e4b16250869f2e6a4a270993ac81c', 'PrenomOwner', 'owner@owner.fr', '0000000000', '1970-01-01', '1970-01-01 ', 0, 3);
 
 --
 -- Index pour les tables déchargées

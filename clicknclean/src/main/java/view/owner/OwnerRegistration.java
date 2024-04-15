@@ -50,27 +50,14 @@ public class OwnerRegistration extends Scene {
 		PasswordField confirmpasswordInputField = new PasswordField();
 		TextField phoneInputField = new TextField();
 		DatePicker birthDateInputField = new DatePicker();
-		ChoiceBox<String> ownerMotivationChoiceBox = new ChoiceBox<>();
+		ChoiceBox<OwnerMotivation> ownerMotivationChoiceBox = new ChoiceBox<>();
 
-		ObservableList<String> options = FXCollections.observableArrayList(
-		                                     "Résidence principale", "Courte durée", "Etat des lieux");
+		ObservableList<OwnerMotivation> options = FXCollections.observableArrayList(
+		            OwnerMotivation.MAIN_HOME, OwnerMotivation.GUEST_ROOM, OwnerMotivation.INVENTORY);
 		ownerMotivationChoiceBox.setItems(options);
 
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				OwnerMotivation om = null;
-				switch (ownerMotivationChoiceBox.getValue()) {
-				case "Résidence principale":
-					om = OwnerMotivation.MAIN_HOME;
-					break;
-				case "Courte durée":
-					om = OwnerMotivation.GUEST_ROOM;
-					break;
-				case "Etat des lieux":
-					om = OwnerMotivation.INVENTORY;
-					break;
-				}
-
 				try {
 					new OwnerRegistrationController(
 					    nameInputField.getText(),
@@ -80,7 +67,7 @@ public class OwnerRegistration extends Scene {
 					    confirmpasswordInputField.getText(),
 					    phoneInputField.getText(),
 					    birthDateInputField.getValue(),
-					    om,
+					    ownerMotivationChoiceBox.getValue(),
 					    window);
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block

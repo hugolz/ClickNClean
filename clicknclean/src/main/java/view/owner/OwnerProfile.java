@@ -26,6 +26,7 @@ import view.Window;
 import view.admin.AdminMain;
 
 public class OwnerProfile extends Scene {
+
 	public OwnerProfile(ScrollPane container, Window window, Owner owner)throws SQLException, Exception {
 		  super(container, 800, 600);
 		  
@@ -58,11 +59,11 @@ public class OwnerProfile extends Scene {
 													passwordInputField.getText(),
 													newPasswordInputField.getText(),
 													confirmpasswordInputField.getText() );
+
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block 
 					e1.printStackTrace();
 				}
-
 				}
 
 			};

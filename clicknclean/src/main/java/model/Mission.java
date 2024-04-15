@@ -63,16 +63,16 @@ public class Mission {
 
 
 
-/**
- * Changes duration using mission's property surface 
- *  → < 30m2 → 1h
-    → 30-40m2 → 2h
-    → 40-60m2 → 2h30
-    → 60-80m2 → 3h
-    → 80-100m2 → 3h30
-    → >100m2 → 4h
- * @param surface
- */
+    /**
+     * Changes duration using mission's property surface
+     *  → < 30m2 → 1h
+        → 30-40m2 → 2h
+        → 40-60m2 → 2h30
+        → 60-80m2 → 3h
+        → 80-100m2 → 3h30
+        → >100m2 → 4h
+     * @param surface
+     */
     public static double setDuration(int surface) {
         double duration = 0;
         if (surface <= 30) duration = 1.0;
@@ -83,6 +83,22 @@ public class Mission {
         else if (surface > 100) duration = 4.;
 
         return duration;
+    }
+
+    public int getMissionId() {
+        return missionId;
+    }
+
+    public Property getProperty() {
+        return property;
+    }
+
+    public LocalDateTime getMissionDateTime() {
+        return missionDateTime;
+    }
+
+    public ArrayList<Cleaner> getCleanerList() {
+        return cleanerList;
     }
 
     public double getCost() {

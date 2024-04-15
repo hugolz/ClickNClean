@@ -5,6 +5,7 @@ import view.Connection;
 import view.Window;
 import java.io.File;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import controller.owner.AskNewMissionController;
 import controller.owner.CreatePropertyController;
@@ -19,33 +20,42 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
+import model.Cleaner;
 import model.Mission;
 import model.Owner;
+import tools.Db;
 
 public class OwnerMain extends Scene {
 	public OwnerMain(ScrollPane container, Window window, Owner owner) throws SQLException, Exception {
 		super(container, 800, 600);
 		System.out.println("OwnerMain constructor");
+		
+		Db db = new Db();
+		VBox vbox = new VBox();
+		 
 
 		Label welcomeMessage = new Label("Bienvenu " + owner.getName() + " !");
 
-		Label missionInProgress = new Label("Vos missions en cours :");
+		Label missionInProgress = new Label("Mission en attente de Cleaner :");
 		Label missionCome = new Label("Vos missions à venir");
-		Label missionConfirm = new Label("Confirmer la mission :");
+		
 		
 		MenuBar bar = new MenuBar();
 		Menu profile = new Menu("Profil");
 		Menu property = new Menu("Propriétés");
 		Menu mission = new Menu("Mission");
 		Menu dispute = new Menu("Litige");
+		Menu notif = new Menu("Notification");
 
 
 		MenuItem seeProfile = new MenuItem("Voir le profil");
@@ -58,16 +68,23 @@ public class OwnerMain extends Scene {
 		MenuItem addMission = new MenuItem("Proposer une Mission");
 		
 		MenuItem addDispute = new MenuItem("Commencer un litige");
-		
+
 		profile.getItems().addAll(seeProfile, disconnect);
 		property.getItems().addAll(seeProperty, addProperty);
 		mission.getItems().addAll(seeMission, addMission);
 		dispute.getItems().addAll(addDispute);
-		bar.getMenus().addAll(profile, property, mission, dispute);
+		bar.getMenus().addAll(profile, property, mission, dispute, notif);
 		
-		//listview with confirm cleaner for mission create
+		
+		 ArrayList<Mission> missionProp = db.DAOReadMissionOwner1(owner.getOwnerID());
+		 
+		
+	
 		
 		//listview for mission to come
+		 ListView<String> listView = new ListView<String>();
+		 
+
 		
 		//listview confirm mission completed by the cleaner
 		
@@ -85,17 +102,11 @@ public class OwnerMain extends Scene {
 
 		EventHandler<ActionEvent> eventViewProfil = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				try {
-					new OwnerProfileController(window, owner);
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
+				new OwnerProfileController(window, owner);
 			}
 		};
 		seeProfile.setOnAction(eventViewProfil);
-		
+
 		EventHandler<ActionEvent> eventSeeProperty = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
@@ -104,11 +115,11 @@ public class OwnerMain extends Scene {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+
 			}
 		};
 		seeProperty.setOnAction(eventSeeProperty);
-		
+
 		EventHandler<ActionEvent> eventAddProperty = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
@@ -117,11 +128,11 @@ public class OwnerMain extends Scene {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+
 			}
 		};
 		addProperty.setOnAction(eventAddProperty);
-		
+
 		EventHandler<ActionEvent> eventNewMission = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
@@ -130,11 +141,11 @@ public class OwnerMain extends Scene {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+
 			}
 		};
 		addMission.setOnAction(eventNewMission);
-		
+
 		EventHandler<ActionEvent> eventSeeMission = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
@@ -143,12 +154,12 @@ public class OwnerMain extends Scene {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+
 			}
 		};
 		seeMission.setOnAction(eventSeeMission);
-		
-		
+
+
 		EventHandler<ActionEvent> eventAddDispute = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
@@ -157,30 +168,45 @@ public class OwnerMain extends Scene {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+
 			}
 		};
 		addDispute.setOnAction(eventAddDispute);
-
-
-		VBox vbox = new VBox();
-		vbox.getChildren().add(bar);
-		vbox.getChildren().add(welcomeMessage);
-		vbox.getChildren().add(missionConfirm);
-		vbox.getChildren().add(missionInProgress);
-		vbox.getChildren().add(missionCome);
+		
 		
 
-
-
+		
+		vbox.getChildren().add(bar);
+		vbox.getChildren().add(welcomeMessage);
+		vbox.getChildren().add(missionInProgress);
+		
+		
+		for (int i=0; i< missionProp.size(); i++) {
+			System.out.println("test boucle 1"+i);
+			//ArrayList<Cleaner> cleaners = db.DAOReadMissionProposal(missionProp.get(i).getMissionId());
+			//for (int j=0; j< cleaners.size(); j++) {
+				//System.out.println("test boucle 2"+j);
+			 vbox.getChildren().add(new Label("Mission : "+ i + 
+						"\nDate : "+ missionProp.get(i).getMissionDate()+
+						"\nDurée : "+ missionProp.get(i).getDuration()+ " h"+
+						"\nPrix : "+ missionProp.get(i).getCost()+" €"+
+						"\nPropriété : "+missionProp.get(i).getProperty().getPropertyAddress().asString())
+	        											);
+			MenuButton menuButton = new MenuButton("Sélectionnez un Cleaner"); 
+			Menu cleanerBlockContainer = new Menu();
+			menuButton.getItems().add(cleanerBlockContainer);
+	        vbox.getChildren().add(menuButton);
+			//}
+		 }
+		
+		vbox.getChildren().add(missionCome);
+		
 
 		vbox.setSpacing(10);
 		vbox.setPadding(new Insets(100, 300, 20, 300));
 		vbox.setAlignment(Pos.TOP_CENTER);
 
-
 		container.setContent(vbox);
-	
 
 		container.setPannable(true);
 		container.setVbarPolicy(ScrollBarPolicy.ALWAYS);
