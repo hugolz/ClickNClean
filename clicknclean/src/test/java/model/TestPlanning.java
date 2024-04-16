@@ -1,15 +1,14 @@
 package model;
+
 import org.junit.jupiter.api.Test;
 
-import com.mysql.cj.protocol.SocksProxySocketFactory;
-
-import model.planning.TimeSlot;
+import model.Address;
 import model.planning.Planning;
+import model.planning.TimeSlot;
 import tools.Db;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
-
 
 public class TestPlanning {
     @Test
@@ -20,20 +19,20 @@ public class TestPlanning {
                                 "Doe",
                                 "null",
                                 "John",
-                                null,
-                                null,
+                                "null",
+                                "null",
                                 LocalDate.now(),
                                 false,
-                                null,
                                 new Address("28", "av yves thepot", "29000", "quimper"),
                                 0, 0,
-                                null,
-                                null,
-                                null,
-                                null,
+                                "null",
+                                "null",
+                                "null",
+                                CleanerExperience.MORE_3_YEARS,
                                 false,
-                                null,
-                                null);
+                                "null",
+                                "null");
+            System.out.println("[SUCCESS] Wrote cleaner");
 
             ArrayList<TimeSlot> ts = new ArrayList<TimeSlot>();
 
@@ -44,14 +43,16 @@ public class TestPlanning {
             ts.add(new TimeSlot(LocalDateTime.now(), 5.5));
 
             Planning p = new Planning(ts);
-            connection.writePlanning(p, cleanerId);
+            connection.DAOWritePlanning(p, cleanerId);
+            System.out.println("[SUCCESS] Wrote planning");
 
-            Planning planning = connection.readPlanning(cleanerId);
+            Planning planning = connection.DAOReadPlanning(cleanerId);
+            System.out.println("[SUCCESS] Read cleaner");
 
-            assert p.equals(planning): "r/w plannings are not the same";
+            assert p.equals(planning) : "r/w plannings are not the same";
+            System.out.println("[SUCCESS] Planning ended successfully");
         } catch (Exception e) {
-            System.err.println(e);
+            System.err.println("[SUCCESS]" + e);
         }
-
     }
 }

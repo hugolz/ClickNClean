@@ -2,72 +2,70 @@ package model;
 
 
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Mission {
+    int missionId;
     Property property;
-    LocalDateTime missionDate;
+    LocalDateTime missionDateTime;
     double duration;
     double cost;
     double commission;
-    String ownerId;
-    String cleanerId;
+    int ownerId;
+    int cleanerId;
     ArrayList<Cleaner> cleanerList;
-    String startTime;
     MissionStatus state;
-    HashMap<Cleaner, LocalDateTime> missionProposals;
 
     public Mission(
+        int missionId,
         Property property,
-        LocalDateTime missionDate,
+        LocalDateTime missionDateTime,
         double duration,
         double cost,
         double commission,
-        String ownerId,
-        String cleanerId,
-        String startTime,
-        MissionStatus state,
-        HashMap<Cleaner, LocalDateTime> missionProposals
+        int ownerId,
+        int cleanerId,
+        MissionStatus state
     ) {
+        this.missionId = missionId;
         this.property = property;
-        this.missionDate = missionDate;
+        this.missionDateTime = missionDateTime;
         this.duration = setDuration(property.getPropertySurface());
         this.cost = cost;
         this.commission = commission;
         this.ownerId = ownerId;
         this.cleanerId = cleanerId;
-        this.startTime = startTime;
         this.state = state;
-        this.missionProposals = missionProposals;
-
     }
 
-    public LocalDateTime getMissionDate() {
-        return missionDate;
+    public int getMissionId() {
+        return missionId;
     }
 
-    public void setMissionDate(LocalDateTime missionDate) {
-        this.missionDate = missionDate;
+    public LocalDate getMissionDate() {
+        return missionDateTime.toLocalDate();
+    }
+
+    public void setMissionDate(LocalDateTime missionDateTime) {
+        this.missionDateTime = missionDateTime;
     }
 
     public double getDuration() {
         return duration;
     }
 
-
-
-
-/**
- * Changes duration using mission's property surface 
- *  → < 30m2 → 1h
-    → 30-40m2 → 2h
-    → 40-60m2 → 2h30
-    → 60-80m2 → 3h
-    → 80-100m2 → 3h30
-    → >100m2 → 4h
- * @param surface
- */
+    /**
+     * Changes duration using mission's property surface
+     *  → < 30m2 → 1h
+        → 30-40m2 → 2h
+        → 40-60m2 → 2h30
+        → 60-80m2 → 3h
+        → 80-100m2 → 3h30
+        → >100m2 → 4h
+     * @param surface
+     */
     public static double setDuration(int surface) {
         double duration = 0;
         if (surface <= 30) duration = 1.0;
@@ -80,6 +78,18 @@ public class Mission {
         return duration;
     }
 
+    public Property getProperty() {
+        return property;
+    }
+
+    public LocalDateTime getMissionDateTime() {
+        return missionDateTime;
+    }
+
+    public ArrayList<Cleaner> getCleanerList() {
+        return cleanerList;
+    }
+
     public double getCost() {
         return cost;
     }
@@ -88,25 +98,16 @@ public class Mission {
         return commission;
     }
 
-    public String getOwnerId() {
+    public int getOwnerId() {
         return ownerId;
     }
 
-    public String getCleanerId() {
+    public int getCleanerId() {
         return cleanerId;
     }
 
-    public void setCleanerId(String cleanerId) {
+    public void setCleanerId(int cleanerId) {
         this.cleanerId = cleanerId;
-    }
-
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
     }
 
     public MissionStatus getState() {
@@ -116,16 +117,5 @@ public class Mission {
     public void setState(MissionStatus state) {
         this.state = state;
     }
-
-    public HashMap<Cleaner, LocalDateTime> getMissionProposals() {
-        return missionProposals;
-    }
-
-    public void addMissionProposals(Cleaner cleaner, LocalDateTime startingHour) {
-        this.missionProposals.put(cleaner, startingHour);
-    }
-
-    
-
 
 }

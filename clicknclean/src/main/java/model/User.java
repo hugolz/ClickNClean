@@ -2,15 +2,16 @@ package model;
 
 import java.time.LocalDate;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 
 public class User {
 	private String name;
-	private String pwd;
 	private String surname;
 	private String email;
 	private String phoneNumber;
-	private LocalDate birthLocalDate;
-	private LocalDate accountLocalDate;
+	private LocalDate birthDate;
+	private LocalDate accountDate;
 	private boolean suspended;
 	private UserStatus status;
 	/*
@@ -27,17 +28,16 @@ public class User {
 	    String surname,
 	    String email,
 	    String phoneNumber,
-	    LocalDate birthLocalDate,
+	    LocalDate birthDate,
 	    boolean suspended,
 	    UserStatus status
 	) {
 		this.name = name;
-		this.pwd = pwd;
 		this.surname = surname;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
-		this.birthLocalDate = birthLocalDate;
-		this.accountLocalDate = LocalDate.now();
+		this.birthDate = birthDate;
+		this.accountDate = LocalDate.now();
 		this.suspended = suspended;
 		this.status = status;
 	}
@@ -50,18 +50,22 @@ public class User {
 	//Admin-friendly constructor
 	public User(
 	    String name,
-	    String pwd,
 	    String surname,
 	    String email,
 	    UserStatus status
 	) {
 		this.name = name;
-		this.pwd = pwd;
 		this.surname = surname;
 		this.email = email;
 		this.status = status;
 	}
 
+	public static String sha3256Hashing(String pwd) {
+		StringBuilder salted = new StringBuilder(pwd);
+		// salted.insert(3, 'P');
+		pwd = salted.toString();;
+		return  new DigestUtils("SHA3-256").digestAsHex(pwd);
+	}
 
 	public boolean isSuspended() {
 		return suspended;
@@ -77,14 +81,6 @@ public class User {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getPwd() {
-		return this.pwd;
-	}
-
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
 	}
 
 	public String getName() {
@@ -111,20 +107,20 @@ public class User {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public LocalDate getBirthLocalDate() {
-		return this.birthLocalDate;
+	public LocalDate getBirthDate() {
+		return this.birthDate;
 	}
 
-	public void setBirthLocalDate(LocalDate birthLocalDate) {
-		this.birthLocalDate = birthLocalDate;
+	public void setBirthDate(LocalDate birthDate) {
+		this.birthDate = birthDate;
 	}
 
-	public LocalDate getAccountLocalDate() {
-		return accountLocalDate;
+	public LocalDate getAccountDate() {
+		return this.accountDate;
 	}
 
-	public void  setAccountLocalDate(LocalDate accountLocalDate) {
-		this.accountLocalDate = accountLocalDate;
+	public void  setAccountLocalDate(LocalDate accountDate) {
+		this.accountDate = accountDate;
 	}
 
 	public UserStatus getStatus() {

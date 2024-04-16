@@ -1,0 +1,137 @@
+package view.owner;
+
+import java.io.File;
+import java.util.concurrent.ExecutionException;
+
+import view.Connection;
+import view.SceneId;
+import view.Window;
+import controller.owner.OwnerRegistrationController;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import model.OwnerMotivation;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.control.DatePicker;
+
+public class OwnerRegistration extends Scene {
+	public OwnerRegistration(ScrollPane container, Window window ) {
+		super(container, 800, 600);
+		System.out.println("OwnerRegistration constructor");
+		window.setTitle("Inscription");
+
+		Label title = new Label("S'inscire en tant que Demandeur :");
+		Label nameLabel = new Label("Nom :");
+		Label surnameLabel = new Label("Prénom :");
+		Label emailLabel = new Label("Mail :");
+		Label passwordLabel = new Label("Mot de passe :");
+		Label confirmpasswordLabel = new Label("Confirmer le mot de passe :");
+		Label phoneLabel = new Label("Téléphone :");
+		Label birthDateLabel = new Label("Date de naissance :");
+		Label ownerMotivationLabel = new Label("Type de prestation recherché :");
+		Button registerButton = new Button("Inscription");
+		Button returnview = new Button("Retour");
+
+		TextField nameInputField = new TextField();
+		TextField surnameInputField = new TextField();
+		TextField emailInputField = new TextField();
+		PasswordField passwordInputField = new PasswordField();
+		PasswordField confirmpasswordInputField = new PasswordField();
+		TextField phoneInputField = new TextField();
+		DatePicker birthDateInputField = new DatePicker();
+		ChoiceBox<OwnerMotivation> ownerMotivationChoiceBox = new ChoiceBox<>();
+
+		ObservableList<OwnerMotivation> options = FXCollections.observableArrayList(
+		            OwnerMotivation.MAIN_HOME, OwnerMotivation.GUEST_ROOM, OwnerMotivation.INVENTORY);
+		ownerMotivationChoiceBox.setItems(options);
+
+		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				try {
+					new OwnerRegistrationController(
+					    nameInputField.getText(),
+					    surnameInputField.getText(),
+					    emailInputField.getText(),
+					    passwordInputField.getText(),
+					    confirmpasswordInputField.getText(),
+					    phoneInputField.getText(),
+					    birthDateInputField.getValue(),
+					    ownerMotivationChoiceBox.getValue(),
+					    window);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (ExecutionException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		};
+
+		registerButton.setOnAction(event);
+
+		EventHandler<ActionEvent> eventReturn = new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				// window.displayConnectionView();
+				// window.setScene(SceneId.CONNECTION);
+				window.setScene(new Connection(new ScrollPane(), window));
+
+			}
+
+		};
+		returnview.setOnAction(eventReturn);
+
+		VBox vbox = new VBox();
+		vbox.getChildren().add(title);
+		vbox.getChildren().add(nameLabel);
+		vbox.getChildren().add(nameInputField);
+		vbox.getChildren().add(surnameLabel);
+		vbox.getChildren().add(surnameInputField);
+		vbox.getChildren().add(emailLabel);
+		vbox.getChildren().add(emailInputField);
+		vbox.getChildren().add(passwordLabel);
+		vbox.getChildren().add(passwordInputField);
+		vbox.getChildren().add(confirmpasswordLabel);
+		vbox.getChildren().add(confirmpasswordInputField);
+		vbox.getChildren().add(phoneLabel);
+		vbox.getChildren().add(phoneInputField);
+		vbox.getChildren().add(birthDateLabel);
+		vbox.getChildren().add(birthDateInputField);
+		vbox.getChildren().add(ownerMotivationLabel);
+		vbox.getChildren().add(ownerMotivationChoiceBox);
+		vbox.getChildren().add(registerButton);
+		vbox.getChildren().add(returnview);
+
+		vbox.setSpacing(10);
+		vbox.setPadding(new Insets(100, 300, 20, 300));
+
+		container.setContent(vbox);
+
+		container.setPannable(true);
+		container.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+		container.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+
+		nameLabel.setMaxWidth(Double.MAX_VALUE);
+		surnameLabel.setMaxWidth(Double.MAX_VALUE);
+		registerButton.setMaxWidth(Double.MAX_VALUE);
+		VBox.setVgrow(nameLabel, Priority.ALWAYS);
+		VBox.setVgrow(surnameLabel, Priority.ALWAYS);
+		VBox.setVgrow(registerButton, Priority.ALWAYS);
+
+		this.getStylesheets().add("file:///" + new File("src/main/css/style.css").getAbsolutePath().replace("\\", "/"));
+	}
+}

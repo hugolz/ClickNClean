@@ -5,7 +5,10 @@ import tools.Db;
 import java.time.LocalDate;
 
 public class Admin extends User {
+    private int adminId;
+
     public Admin(
+        int adminId,
         String name,
         String pwd,
         String surname,
@@ -17,72 +20,10 @@ public class Admin extends User {
         UserStatus status
     ) {
         super(name, pwd, surname, email, phoneNumber, birthLocalDate, suspended, status);
+        this.adminId = adminId;
     }
 
-    // -------------------------------------------------------------------------------------------------------------------------
-    // Manage users
-
-    /**
-     * @Method
-     *         Confirms cleaner profile whether ID and photo matches, motivations
-     *         are
-     *         ok
-     */
-    public void cleanerValidate() {
-        // Insert code here
-    }
-
-    /**
-     * @Method Suspends a user's access to all features
-     */
-    public void suspendUser(int userID) {
-        Db connection = new Db();
-        connection.DAOSuspendUser(userID, true);
-        connection.disconnect();
-        connection = null;
-    }
-
-    /**
-     * @Method restore a user's access to all features
-     */
-    public void restoreUser(int userID) {
-        Db connection = new Db();
-        connection.DAOSuspendUser(userID, false);
-        connection.disconnect();
-        connection = null;
-    }
-
-    public void cancelMission(int missionID) {
-        // Insert code here
-    }
-
-    /**
-     * @Method resolves a dispute
-     * @param missionID
-     * @param userWinner
-     * 1 --> Cleaner wins
-     * 2 --> Owner wins
-     */
-    public void resoveDispute(int missionID, int userWinner) {
-        Db connection = new Db();
-        switch (userWinner) {
-        case 1 : {
-            connection.DAOResolveDispute(missionID, 7);
-            break;
-        }
-
-        case 2 : {
-            connection.DAOResolveDispute(missionID, 8);
-            break;
-        }
-        default : {
-            System.out.println("Dispute has failed to resolve on  mission : " + missionID + ", dispute status : " + userWinner);
-        }
-        connection.disconnect();
-        connection  = null;
-            // SEND ACTIVITY TO ADD HERE !!
-        }
-    }
+    
 
     // -------------------------------------------------------------------------------------------------------------------------
     // Searching features
@@ -150,6 +91,10 @@ public class Admin extends User {
     // ArrayList<Mission> result = new ArrayList<Mission>();
     // return result;
     // }
+
+    public int getAdminId() {
+        return this.adminId;
+    }
 
     public ArrayList<String> getSatisfactions(String userType) {
         // Insert code here
